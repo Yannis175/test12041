@@ -1,0 +1,24 @@
+.runTransformations
+.#---------------------------------------------------------------
+.input|xwiki/2.0
+.# Verify the result of a transformation is correctly escaped
+.#---------------------------------------------------------------
+{{html wiki="true"}}
+<div>{{testtextmacro}}<br/>{{/testtextmacro}}</div>
+{{/html}}
+.#-----------------------------------------------------
+.expect|xhtml/1.0
+.#-----------------------------------------------------
+<div>&lt;br/&gt;</div>
+.#-----------------------------------------------------
+.expect|html/5.0
+.#-----------------------------------------------------
+<div>&lt;br/&gt;</div>
+.#-----------------------------------------------------
+.expect|annotatedxhtml/1.0
+.#-----------------------------------------------------
+<!--startmacro:html|-|wiki="true"|-|<div>{{testtextmacro}}<br/>{{/testtextmacro}}</div>--><div>&lt;br/&gt;</div><!--stopmacro-->
+.#-----------------------------------------------------
+.expect|annotatedhtml/5.0
+.#-----------------------------------------------------
+<!--startmacro:html|-|wiki="true"|-|<div>{{testtextmacro}}<br/>{{/testtextmacro}}</div>--><div>&lt;br/&gt;</div><!--stopmacro-->

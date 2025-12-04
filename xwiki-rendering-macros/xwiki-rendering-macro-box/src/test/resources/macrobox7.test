@@ -1,0 +1,20 @@
+.runTransformations
+.#-----------------------------------------------------
+.input|xwiki/2.0
+.# Test the width parameter
+.#-----------------------------------------------------
+{{box width="100px"}}something{{/box}}
+.#-----------------------------------------------------
+.expect|event/1.0
+.#-----------------------------------------------------
+beginDocument
+beginMacroMarkerStandalone [box] [width=100px] [something]
+beginGroup [[class]=[box][style]=[width:100px]]
+beginMetaData [[non-generated-content]=[java.util.List<org.xwiki.rendering.block.Block>]]
+beginParagraph
+onWord [something]
+endParagraph
+endMetaData [[non-generated-content]=[java.util.List<org.xwiki.rendering.block.Block>]]
+endGroup [[class]=[box][style]=[width:100px]]
+endMacroMarkerStandalone [box] [width=100px] [something]
+endDocument

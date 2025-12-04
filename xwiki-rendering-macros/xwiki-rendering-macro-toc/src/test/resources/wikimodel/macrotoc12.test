@@ -1,0 +1,13 @@
+.runTransformations
+.#-----------------------------------------------------
+.input|xwiki/2.0
+.# Make sure local scope does not crash when used outside of a section (even if this use case does not make much sense)
+.#-----------------------------------------------------
+{{toc scope="local" /}}
+.#-----------------------------------------------------
+.expect|event/1.0
+.#-----------------------------------------------------
+beginDocument
+beginMacroMarkerStandalone [toc] [scope=local]
+endMacroMarkerStandalone [toc] [scope=local]
+endDocument

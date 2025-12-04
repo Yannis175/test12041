@@ -1,0 +1,2 @@
+org.xwiki.rendering.macro.html.TestTextMacro
+org.xwiki.rendering.macro.html.TestMetadataMacro
