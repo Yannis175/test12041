@@ -1,0 +1,28 @@
+.runTransformations
+.#---------------------------------------------------------------
+.input|xwiki/2.0
+.# Verify clean=false is forced in inner html macros
+.#---------------------------------------------------------------
+{{html clean=true wiki="true"}}
+<div>{{html clean=true}}<ul><li>standalone content</li></ul>{{/html}}</div>
+{{/html}}
+
+{{html clean=false wiki="true"}}
+<div>{{html clean=true}}<ul><li>standalone content</li></ul>{{/html}}</div>
+{{/html}}
+.#-----------------------------------------------------
+.expect|xhtml/1.0
+.#-----------------------------------------------------
+<div><ul><li>standalone content</li></ul></div><div><ul><li>standalone content</li></ul></div>
+.#-----------------------------------------------------
+.expect|html/5.0
+.#-----------------------------------------------------
+<div><ul><li>standalone content</li></ul></div><div><ul><li>standalone content</li></ul></div>
+.#-----------------------------------------------------
+.expect|annotatedxhtml/1.0
+.#-----------------------------------------------------
+<!--startmacro:html|-|clean="true" wiki="true"|-|<div>{{html clean=true}}<ul><li>standalone content</li></ul>{{/html}}</div>--><div><ul><li>standalone content</li></ul></div><!--stopmacro--><!--startmacro:html|-|clean="false" wiki="true"|-|<div>{{html clean=true}}<ul><li>standalone content</li></ul>{{/html}}</div>--><div><ul><li>standalone content</li></ul></div><!--stopmacro-->
+.#-----------------------------------------------------
+.expect|annotatedhtml/5.0
+.#-----------------------------------------------------
+<!--startmacro:html|-|clean="true" wiki="true"|-|<div>{{html clean=true}}<ul><li>standalone content</li></ul>{{/html}}</div>--><div><ul><li>standalone content</li></ul></div><!--stopmacro--><!--startmacro:html|-|clean="false" wiki="true"|-|<div>{{html clean=true}}<ul><li>standalone content</li></ul>{{/html}}</div>--><div><ul><li>standalone content</li></ul></div><!--stopmacro-->

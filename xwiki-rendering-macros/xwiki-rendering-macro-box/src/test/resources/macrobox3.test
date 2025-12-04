@@ -1,0 +1,20 @@
+.runTransformations
+.#-----------------------------------------------------
+.input|xwiki/2.0
+.# Verify AbstractBoxMacro remove first and last newline when in non inline mode
+.#-----------------------------------------------------
+{{testbox}}
+content
+{{/testbox}}
+.#-----------------------------------------------------
+.expect|event/1.0
+.#-----------------------------------------------------
+beginDocument
+beginMacroMarkerStandalone [testbox] [] [content]
+beginGroup [[class]=[box]]
+beginMetaData [[non-generated-content]=[java.util.List<org.xwiki.rendering.block.Block>]]
+onVerbatim [content] [false]
+endMetaData [[non-generated-content]=[java.util.List<org.xwiki.rendering.block.Block>]]
+endGroup [[class]=[box]]
+endMacroMarkerStandalone [testbox] [] [content]
+endDocument

@@ -1,0 +1,29 @@
+.runTransformations
+.#-----------------------------------------------------
+.input|xwiki/2.0
+.#-----------------------------------------------------
+Some inline {{box}}**box**{{/box}}
+.#-----------------------------------------------------
+.expect|event/1.0
+.#-----------------------------------------------------
+beginDocument
+beginParagraph
+onWord [Some]
+onSpace
+onWord [inline]
+onSpace
+beginMacroMarkerInline [box] [] [**box**]
+beginFormat [NONE] [[class]=[box]]
+beginMetaData [[non-generated-content]=[java.util.List<org.xwiki.rendering.block.Block>]]
+beginFormat [BOLD]
+onWord [box]
+endFormat [BOLD]
+endMetaData [[non-generated-content]=[java.util.List<org.xwiki.rendering.block.Block>]]
+endFormat [NONE] [[class]=[box]]
+endMacroMarkerInline [box] [] [**box**]
+endParagraph
+endDocument
+.#-----------------------------------------------------
+.expect|xwiki/2.0
+.#-----------------------------------------------------
+Some inline {{box}}**box**{{/box}}

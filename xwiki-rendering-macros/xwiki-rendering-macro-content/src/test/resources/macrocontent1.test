@@ -1,0 +1,20 @@
+.runTransformations
+.#-----------------------------------------------------
+.input|xwiki/2.1
+.# Add XHTML content in XWiki Syntax 2.1 content
+.#-----------------------------------------------------
+{{content syntax="xhtml/1.0"}}
+<p>test</p>
+{{/content}}
+.#-----------------------------------------------------
+.expect|event/1.0
+.#-----------------------------------------------------
+beginDocument
+beginMacroMarkerStandalone [content] [syntax=xhtml/1.0] [<p>test</p>]
+beginMetaData [[non-generated-content]=[java.util.List<org.xwiki.rendering.block.Block>][syntax]=[xhtml/1.0]]
+beginParagraph
+onWord [test]
+endParagraph
+endMetaData [[non-generated-content]=[java.util.List<org.xwiki.rendering.block.Block>][syntax]=[xhtml/1.0]]
+endMacroMarkerStandalone [content] [syntax=xhtml/1.0] [<p>test</p>]
+endDocument
