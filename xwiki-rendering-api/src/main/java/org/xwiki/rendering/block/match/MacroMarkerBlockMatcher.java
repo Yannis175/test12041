@@ -40,9 +40,9 @@ public class MacroMarkerBlockMatcher extends ClassBlockMatcher
     private List<String> macroIds;
 
     /**
-     * Match {@link MacroMarkerBlock}s having the passed ids.
+     * Create a matcher that matches MacroMarkerBlock instances whose id is one of the provided macro ids.
      *
-     * @param macroIds the macro ids to match
+     * @param macroIds the macro ids to match (varargs)
      */
     public MacroMarkerBlockMatcher(String... macroIds)
     {
@@ -50,6 +50,13 @@ public class MacroMarkerBlockMatcher extends ClassBlockMatcher
         this.macroIds = new ArrayList<>(Arrays.asList(macroIds));
     }
 
+    /**
+     * Checks whether the given block is a MacroMarkerBlock whose id is contained in this matcher's macro id list.
+     *
+     * @param block the block to test
+     * @return {@code true} if the block is a MacroMarkerBlock and its id is contained in this matcher's macro id list,
+     *         {@code false} otherwise
+     */
     @Override
     public boolean match(Block block)
     {

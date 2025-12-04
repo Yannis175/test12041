@@ -48,9 +48,11 @@ public class DefaultUntypedLinkReferenceParser extends AbstractUntypedReferenceP
     private ResourceReferenceTypeParser documentResourceReferenceTypeParser;
 
     /**
+     * Parse the given untyped link string into a document resource reference and mark it as untyped.
+     *
      * @param rawReference the untyped reference string to parse
-     * @return an untyped (isTyped returns {@code false}) document reference that needs to be resolved before being
-     *         used, since it could point to either a document or a space.
+     * @return a document {@link ResourceReference} whose typed flag is set to {@code false}, indicating it must be
+     *         resolved to the correct resource type before use
      */
     @Override
     protected ResourceReference getWikiResource(String rawReference)

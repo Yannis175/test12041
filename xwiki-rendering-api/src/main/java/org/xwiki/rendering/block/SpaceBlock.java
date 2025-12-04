@@ -32,24 +32,47 @@ import org.xwiki.rendering.listener.Listener;
  */
 public final class SpaceBlock extends AbstractBlock
 {
+    /**
+     * Signal a space token to the provided listener as part of block traversal.
+     *
+     * @param listener the listener to receive the space event
+     */
     @Override
     public void traverse(Listener listener)
     {
         listener.onSpace();
     }
 
+    /**
+     * Represent the block as a single space character.
+     *
+     * @return a single space character
+     */
     @Override
     public String toString()
     {
         return " ";
     }
 
+    /**
+     * Determine whether another object is equal to this SpaceBlock.
+     *
+     * @param obj the object to compare with this block
+     * @return {@code true} if {@code obj} is a {@code SpaceBlock} and is equal according to the superclass equality, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
         return obj instanceof SpaceBlock && super.equals(obj);
     }
 
+    /**
+     * Computes a hash code for this SpaceBlock instance.
+     *
+     * The result incorporates the superclass hash and the SpaceBlock class to distinguish this block type.
+     *
+     * @return the calculated hash code
+     */
     @Override
     public int hashCode()
     {

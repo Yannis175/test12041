@@ -78,7 +78,7 @@ public class MetaData
     private final Map<String, Object> metadata;
 
     /**
-     * Empty metaData.
+     * Create an empty MetaData instance backed by an insertion-order map.
      */
     public MetaData()
     {
@@ -86,7 +86,9 @@ public class MetaData
     }
 
     /**
-     * @param metaData the metadata to set
+     * Creates a MetaData instance containing a copy of the given map's entries, preserving their insertion order.
+     *
+     * @param metaData the map whose entries will be copied into the new MetaData
      */
     public MetaData(Map<String, Object> metaData)
     {
@@ -94,8 +96,12 @@ public class MetaData
     }
 
     /**
-     * @param key the key to the metadata element to add (e.g. "syntax")
-     * @param value the value of the metadata element to add (e.g. a Syntax object)
+     * Add or update a metadata entry with the given key and value.
+     *
+     * If an entry with the same key already exists, its value is replaced.
+     *
+     * @param key the metadata key (e.g. "syntax")
+     * @param value the metadata value (e.g. a Syntax object)
      */
     public void addMetaData(String key, Object value)
     {
@@ -103,7 +109,9 @@ public class MetaData
     }
 
     /**
-     * @param metaData the metadata to add
+     * Adds all entries from the given MetaData into this instance, preserving insertion order.
+     *
+     * @param metaData the metadata whose entries will be added; entries with keys that already exist overwrite current values
      */
     public void addMetaData(MetaData metaData)
     {
@@ -111,8 +119,10 @@ public class MetaData
     }
 
     /**
-     * @param key the key to the metadata element to retrieve (e.g. "syntax")
-     * @return the metadata corresponding to the passed key of null if no such metadata exist.
+     * Retrieve the metadata value for the given key.
+     *
+     * @param key the metadata key (for example, "syntax")
+     * @return the value associated with {@code key}, or {@code null} if no value is present
      */
     public Object getMetaData(String key)
     {
@@ -120,8 +130,10 @@ public class MetaData
     }
 
     /**
-     * @param key the key to the metadata element to check for
-     * @return true if there's a metadata with the passed key, false otherwise
+     * Checks whether metadata contains the specified key.
+     *
+     * @param key the metadata key to check
+     * @return `true` if metadata contains the given key, `false` otherwise
      * @since 3.0M3
      */
     public boolean contains(String key)
@@ -130,14 +142,22 @@ public class MetaData
     }
 
     /**
-     * @return all the metadata
+     * Get an unmodifiable view of all metadata entries.
+     *
+     * @return an unmodifiable map of metadata entries (in insertion order) where keys are metadata names and values are their associated objects
      */
     public Map<String, Object> getMetaData()
     {
         return Collections.unmodifiableMap(this.metadata);
     }
 
-    // Object
+    /**
+     * Determine whether this MetaData is equal to another object.
+     *
+     * @param obj the object to compare with this MetaData
+     * @return {@code true} if {@code obj} is a {@link MetaData} instance whose metadata mappings are equal to this
+     *         instance's mappings, {@code false} otherwise
+     */
 
     @Override
     public boolean equals(Object obj)
@@ -149,12 +169,22 @@ public class MetaData
         return obj instanceof MetaData && this.metadata.equals(((MetaData) obj).metadata);
     }
 
+    /**
+     * Compute a hash code for this MetaData instance based on its stored entries.
+     *
+     * @return an int hash code reflecting the contents (and insertion order) of the stored metadata
+     */
     @Override
     public int hashCode()
     {
         return this.metadata.hashCode();
     }
 
+    /**
+     * Produce a string representation of this MetaData including its internal metadata map.
+     *
+     * @return the string representation in the form "MetaData{metadata=...}"
+     */
     @Override
     public String toString()
     {

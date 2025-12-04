@@ -74,9 +74,11 @@ public abstract class AbstractChainingListener implements ChainingListener
     private final boolean imageRetroCompatibility;
 
     /**
-     * The default constructor.
-     * <p>
-     * Initialize {@link #listItemRetroCompatibility} field.
+     * Creates a new AbstractChainingListener and initializes retro-compatibility flags for legacy listener APIs.
+     *
+     * Initializes {@link #listItemRetroCompatibility} (whether the class hierarchy requires routing list-item
+     * calls to the old zero-argument variant) and {@link #imageRetroCompatibility} (whether the class hierarchy
+     * requires routing image calls to the old three-argument variant).
      */
     public AbstractChainingListener()
     {
@@ -85,11 +87,14 @@ public abstract class AbstractChainingListener implements ChainingListener
     }
 
     /**
-     * Checks if a method needs retro compatibility.
+     * Determine whether retro-compatibility wrappers are required for methods matching the given filter.
      *
-     * @param methodFilter a predicate to filter the methods
-     * @param oldParameterCount the number of parameters the old version of the method has
-     * @return true if there is a child class that implements the matched method(s) only with the old parameter count
+     * Inspects the class hierarchy from the concrete class up to AbstractChainingListener to detect a subclass
+     * that declares the matched methods only with the legacy parameter count.
+     *
+     * @param methodFilter a predicate selecting the methods to inspect
+     * @param oldParameterCount the parameter count of the legacy method variant to detect
+     * @return `true` if a subclass declares only the legacy-parameter variant of the matched methods, `false` otherwise
      * @since 14.2RC1
      */
     private boolean needsRetroCompatibility(Predicate<Method> methodFilter, int oldParameterCount)
@@ -118,7 +123,9 @@ public abstract class AbstractChainingListener implements ChainingListener
     }
 
     /**
-     * @param listenerChain see {@link #getListenerChain()}
+     * Sets the ListenerChain used to determine the next listener to invoke for events.
+     *
+     * @param listenerChain the ListenerChain to use for delegation, or {@code null} to clear the chain
      * @since 2.0M3
      */
     public void setListenerChain(ListenerChain listenerChain)
@@ -126,12 +133,22 @@ public abstract class AbstractChainingListener implements ChainingListener
         this.listenerChain = listenerChain;
     }
 
+    /**
+     * Retrieve the current listener chain used to obtain the next listener in the chain.
+     *
+     * @return the current {@link ListenerChain}, or {@code null} if no chain has been set
+     */
     @Override
     public ListenerChain getListenerChain()
     {
         return this.listenerChain;
     }
 
+    /**
+     * Delegates the "begin definition description" event to the next listener in the chain.
+     *
+     * If there is no next listener, this method does nothing.
+     */
     @Override
     public void beginDefinitionDescription()
     {
@@ -141,6 +158,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the start of a definition list event to the next listener in the chain.
+     *
+     * @param parameters a map of parameters for the definition list, or {@code null} if there are none
+     */
     @Override
     public void beginDefinitionList(Map<String, String> parameters)
     {
@@ -150,6 +172,9 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the beginning of a definition term event to the next listener in the chain.
+     */
     @Override
     public void beginDefinitionTerm()
     {
@@ -159,6 +184,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the start of document processing.
+     *
+     * @param metadata the document's metadata, or {@code null} if none
+     */
     @Override
     public void beginDocument(MetaData metadata)
     {
@@ -168,6 +198,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a "begin group" event to the next listener in the listener chain.
+     *
+     * @param parameters map of parameters associated with the group (may be {@code null})
+     */
     @Override
     public void beginGroup(Map<String, String> parameters)
     {
@@ -177,6 +212,12 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the start of a formatting span using the specified format and parameters.
+     *
+     * @param format the formatting type to begin
+     * @param parameters optional parameters for the format; may be null
+     */
     @Override
     public void beginFormat(Format format, Map<String, String> parameters)
     {
@@ -186,6 +227,13 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards the start-of-header event to the next listener in the listener chain.
+     *
+     * @param level the header level
+     * @param id an optional header identifier, or {@code null} if none
+     * @param parameters additional rendering parameters for the header
+     */
     @Override
     public void beginHeader(HeaderLevel level, String id, Map<String, String> parameters)
     {
@@ -195,6 +243,13 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a "begin link" event to the next listener in the chain.
+     *
+     * @param reference   the resource reference for the link
+     * @param freestanding {@code true} if the link is freestanding (not inline), {@code false} otherwise
+     * @param parameters  additional link parameters (may be {@code null})
+     */
     @Override
     public void beginLink(ResourceReference reference, boolean freestanding, Map<String, String> parameters)
     {
@@ -204,6 +259,12 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a "begin list" event to the next listener in the chain.
+     *
+     * @param type the kind of list being started
+     * @param parameters optional attributes for the list (may be {@code null})
+     */
     @Override
     public void beginList(ListType type, Map<String, String> parameters)
     {
@@ -213,6 +274,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signal the start of a list item to the next listener in the chain.
+     *
+     * If no next listener is present, this method performs no action.
+     */
     @Override
     public void beginListItem()
     {
@@ -222,6 +288,15 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the start of a list item, delegating the event to the next listener in the chain or to the legacy
+     * no-argument handler when retro compatibility is required.
+     *
+     * If retro compatibility is enabled, this invokes the no-argument beginListItem() on this instance; otherwise
+     * the call is forwarded to the next listener if one exists.
+     *
+     * @param parameters a map of parameters associated with the list item (may be empty or null)
+     */
     @Override
     public void beginListItem(Map<String, String> parameters)
     {
@@ -237,6 +312,14 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a macro marker begin event to the next listener in the chain.
+     *
+     * @param name the macro name
+     * @param parameters a map of macro parameters (name -> value)
+     * @param content the macro content, or {@code null} if none
+     * @param isInline {@code true} if the macro is inline, {@code false} if it is block-level
+     */
     @Override
     public void beginMacroMarker(String name, Map<String, String> parameters, String content, boolean isInline)
     {
@@ -246,6 +329,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the start-of-paragraph event to the next listener in the chain, if one exists.
+     *
+     * @param parameters paragraph parameters; may be null
+     */
     @Override
     public void beginParagraph(Map<String, String> parameters)
     {
@@ -255,6 +343,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the start of a quotation block to the next listener in the chain.
+     *
+     * @param parameters a map of parameters associated with the quotation block, or {@code null} if none
+     */
     @Override
     public void beginQuotation(Map<String, String> parameters)
     {
@@ -264,6 +357,9 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the start of a quotation line.
+     */
     @Override
     public void beginQuotationLine()
     {
@@ -273,6 +369,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a section-begin event to the next listener in the chain.
+     *
+     * @param parameters a map of section parameters (attributes such as id or other properties)
+     */
     @Override
     public void beginSection(Map<String, String> parameters)
     {
@@ -282,6 +383,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Notifies the listener that a table is beginning with the provided parameters.
+     *
+     * @param parameters a map of table parameters/attributes (e.g., style, id) to apply to the table
+     */
     @Override
     public void beginTable(Map<String, String> parameters)
     {
@@ -291,6 +397,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards the "begin table cell" event to the next listener in the chain when available.
+     *
+     * @param parameters a map of attributes for the table cell (may be null or empty)
+     */
     @Override
     public void beginTableCell(Map<String, String> parameters)
     {
@@ -300,6 +411,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the start of a table header cell.
+     *
+     * @param parameters a map of parameters for the table header cell (may be null or empty)
+     */
     @Override
     public void beginTableHeadCell(Map<String, String> parameters)
     {
@@ -309,6 +425,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the start of a table row.
+     *
+     * @param parameters a map of parameters associated with the table row
+     */
     @Override
     public void beginTableRow(Map<String, String> parameters)
     {
@@ -318,6 +439,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the begin-metadata event to the next listener in the chain, if one exists.
+     *
+     * @param metadata the document metadata associated with the event
+     */
     @Override
     public void beginMetaData(MetaData metadata)
     {
@@ -327,6 +453,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the start of a figure element to the next listener in the chain.
+     *
+     * @param parameters parameters associated with the figure element (may be {@code null})
+     */
     @Override
     public void beginFigure(Map<String, String> parameters)
     {
@@ -336,6 +467,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Notify the listener chain that a figure caption has begun.
+     *
+     * @param parameters a map of attributes for the figure caption
+     */
     @Override
     public void beginFigureCaption(Map<String, String> parameters)
     {
@@ -345,6 +481,9 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Notifies the next listener in the chain that a definition description has ended.
+     */
     @Override
     public void endDefinitionDescription()
     {
@@ -354,6 +493,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the end of a definition list to the next listener in the chain.
+     *
+     * @param parameters the parameters associated with the definition list
+     */
     @Override
     public void endDefinitionList(Map<String, String> parameters)
     {
@@ -363,6 +507,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Called when a definition term ends.
+     *
+     * Delegates the event to the next listener in the chain if one is available.
+     */
     @Override
     public void endDefinitionTerm()
     {
@@ -372,6 +521,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Notifies the next listener that document processing has finished.
+     *
+     * @param metadata the document's metadata
+     */
     @Override
     public void endDocument(MetaData metadata)
     {
@@ -381,6 +535,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the end of a group element to the next listener in the chain.
+     *
+     * @param parameters the parameters associated with the group element
+     */
     @Override
     public void endGroup(Map<String, String> parameters)
     {
@@ -390,6 +549,12 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the end of a formatting element to the listener chain.
+     *
+     * @param format the format that ended
+     * @param parameters additional parameters associated with the format, or {@code null} if none
+     */
     @Override
     public void endFormat(Format format, Map<String, String> parameters)
     {
@@ -399,6 +564,13 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Notifies the listener chain that a header has ended by delegating the event to the next listener.
+     *
+     * @param level the header level that ended
+     * @param id the header identifier, or {@code null} if none
+     * @param parameters additional header parameters, may be empty or {@code null}
+     */
     @Override
     public void endHeader(HeaderLevel level, String id, Map<String, String> parameters)
     {
@@ -408,6 +580,13 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Notifies the listener chain that a link element has ended.
+     *
+     * @param reference   the target reference of the link
+     * @param freestanding true if the link is freestanding (not surrounded by text), false otherwise
+     * @param parameters  the link parameters (may be empty or null)
+     */
     @Override
     public void endLink(ResourceReference reference, boolean freestanding, Map<String, String> parameters)
     {
@@ -417,6 +596,12 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the end-of-list event to the next listener in the listener chain.
+     *
+     * @param type       the type of the list being ended
+     * @param parameters optional parameters associated with the list
+     */
     @Override
     public void endList(ListType type, Map<String, String> parameters)
     {
@@ -426,6 +611,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the end of the current list item to the next listener in the chain.
+     *
+     * If no next listener is available this invocation has no effect.
+     */
     @Override
     public void endListItem()
     {
@@ -435,6 +625,14 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Ends the current list item, honoring legacy implementations when needed.
+     *
+     * If this listener requires list-item retro-compatibility, invokes the no-argument {@code endListItem()} on this
+     * instance; otherwise forwards the call with the provided parameters to the next listener in the chain if present.
+     *
+     * @param parameters parameters associated with the list item (may be empty or null)
+     */
     @Override
     public void endListItem(Map<String, String> parameters)
     {
@@ -450,6 +648,14 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the end of a macro marker event to the next listener in the chain.
+     *
+     * @param name the macro name
+     * @param parameters the macro parameters
+     * @param content the macro content
+     * @param isInline true if the macro marker is inline, false if it is block-level
+     */
     @Override
     public void endMacroMarker(String name, Map<String, String> parameters, String content, boolean isInline)
     {
@@ -459,6 +665,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the end of a paragraph event to the next listener in the chain, if any.
+     *
+     * @param parameters the paragraph parameters/attributes, or {@code null} if none
+     */
     @Override
     public void endParagraph(Map<String, String> parameters)
     {
@@ -468,6 +679,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the end of a quotation block to the next listener in the chain.
+     *
+     * @param parameters a map of quotation parameters (string keys and values), or {@code null} if none
+     */
     @Override
     public void endQuotation(Map<String, String> parameters)
     {
@@ -477,6 +693,9 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the end of a quotation line event to the next listener in the chain if one exists.
+     */
     @Override
     public void endQuotationLine()
     {
@@ -486,6 +705,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the end of a section.
+     *
+     * @param parameters additional parameters associated with the section
+     */
     @Override
     public void endSection(Map<String, String> parameters)
     {
@@ -495,6 +719,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the end-of-table event to the next listener in the chain.
+     *
+     * @param parameters the table parameters, if any
+     */
     @Override
     public void endTable(Map<String, String> parameters)
     {
@@ -504,6 +733,13 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Notify that the current table cell has ended.
+     *
+     * Delegates the end-of-cell event to the next listener in the chain, if any.
+     *
+     * @param parameters a map of attributes associated with the table cell (may be empty or null)
+     */
     @Override
     public void endTableCell(Map<String, String> parameters)
     {
@@ -513,6 +749,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the end of the current table header cell.
+     *
+     * @param parameters additional parameters associated with the table header cell
+     */
     @Override
     public void endTableHeadCell(Map<String, String> parameters)
     {
@@ -522,6 +763,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates the end-of-table-row event to the next listener in the chain, if any.
+     *
+     * @param parameters parameters associated with the table row
+     */
     @Override
     public void endTableRow(Map<String, String> parameters)
     {
@@ -531,6 +777,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signal the end of document metadata.
+     *
+     * @param metadata the metadata for the document
+     */
     @Override
     public void endMetaData(MetaData metadata)
     {
@@ -540,6 +791,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the end of a figure element.
+     *
+     * @param parameters map of figure parameters (attribute name to value)
+     */
     @Override
     public void endFigure(Map<String, String> parameters)
     {
@@ -549,6 +805,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Signals the end of a figure caption to the listener chain.
+     *
+     * @param parameters caption parameters (attributes) provided by the parser, or {@code null} if none
+     */
     @Override
     public void endFigureCaption(Map<String, String> parameters)
     {
@@ -558,6 +819,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards an empty-lines event to the next listener in the chain.
+     *
+     * @param count the number of consecutive empty lines encountered
+     */
     @Override
     public void onEmptyLines(int count)
     {
@@ -567,6 +833,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a horizontal line event to the next listener in the chain, if one exists.
+     *
+     * @param parameters rendering parameters associated with the horizontal line
+     */
     @Override
     public void onHorizontalLine(Map<String, String> parameters)
     {
@@ -576,6 +847,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates an identifier event to the next listener in the chain.
+     *
+     * @param name the identifier name
+     */
     @Override
     public void onId(String name)
     {
@@ -585,6 +861,13 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Handles an image event by delegating it to the next listener in the chain.
+     *
+     * @param reference   the image resource reference
+     * @param freestanding true if the image stands alone (not inline), false if inline
+     * @param parameters  additional image parameters (may be empty or null)
+     */
     @Override
     public void onImage(ResourceReference reference, boolean freestanding, Map<String, String> parameters)
     {
@@ -594,6 +877,19 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Handle an image event by delegating to the next listener in the chain or, for legacy implementations, to the
+     * older variant without an id.
+     *
+     * <p>If this listener class requires image retro-compatibility, the older `onImage(ResourceReference, boolean, Map)`
+     * variant is invoked on this instance; otherwise the event is forwarded to the next listener's
+     * `onImage(ResourceReference, boolean, String, Map)`.</p>
+     *
+     * @param reference   the resource reference for the image
+     * @param freestanding whether the image is freestanding (block) or inline
+     * @param id          the optional image id (may be null)
+     * @param parameters  additional image parameters
+     */
     @Override
     public void onImage(ResourceReference reference, boolean freestanding, String id, Map<String, String> parameters)
     {
@@ -609,6 +905,14 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Notifies the next listener in the chain that a macro has been encountered.
+     *
+     * @param id the macro name or identifier
+     * @param parameters the macro's parameters (name → value)
+     * @param content the macro content or body, or {@code null} if none
+     * @param inline {@code true} if the macro is inline, {@code false} if it is block-level
+     */
     @Override
     public void onMacro(String id, Map<String, String> parameters, String content, boolean inline)
     {
@@ -618,6 +922,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forward the new-line event to the next listener in the chain.
+     *
+     * If there is no next listener, this method does nothing.
+     */
     @Override
     public void onNewLine()
     {
@@ -627,6 +936,9 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Delegates a space event to the next listener in the listener chain, if one exists.
+     */
     @Override
     public void onSpace()
     {
@@ -636,6 +948,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a special-symbol event to the next listener in the chain.
+     *
+     * @param symbol the special symbol character encountered (for example a punctuation or formatting marker)
+     */
     @Override
     public void onSpecialSymbol(char symbol)
     {
@@ -645,6 +962,13 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a verbatim block event to the next listener in the chain.
+     *
+     * @param content    the verbatim text content
+     * @param inline     {@code true} if the verbatim content is inline, {@code false} if block-level
+     * @param parameters additional parameters associated with the verbatim event
+     */
     @Override
     public void onVerbatim(String content, boolean inline, Map<String, String> parameters)
     {
@@ -654,6 +978,11 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Called when a word token is encountered.
+     *
+     * @param word the textual content of the word token
+     */
     @Override
     public void onWord(String word)
     {
@@ -663,6 +992,12 @@ public abstract class AbstractChainingListener implements ChainingListener
         }
     }
 
+    /**
+     * Forwards a raw text event to the next listener in the chain if one is available.
+     *
+     * @param text   the raw text content
+     * @param syntax the syntax of the raw text
+     */
     @Override
     public void onRawText(String text, Syntax syntax)
     {

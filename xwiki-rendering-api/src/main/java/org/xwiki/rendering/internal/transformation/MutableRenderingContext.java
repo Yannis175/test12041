@@ -37,53 +37,58 @@ import org.xwiki.rendering.transformation.TransformationException;
 public interface MutableRenderingContext extends RenderingContext
 {
     /**
-     * Push a new rendering context.
-     *
-     * @param transformation the transformation being performed.
-     * @param context the transformation context.
-     */
+ * Pushes a new rendering context frame for the given transformation.
+ *
+ * Establishes a new context layer that will be active for subsequent transformation operations.
+ *
+ * @param transformation the transformation being performed
+ * @param context the transformation context associated with the transformation
+ */
     void push(Transformation transformation, TransformationContext context);
 
     /**
-     * Push a new rendering context.
-     *
-     * @param transformation the transformation being performed.
-     * @param xdom the complete XDOM being processed.
-     * @param syntax the current syntax.
-     * @param transformationId the id of the transformation.
-     * @param restricted true if the transformation is restricted.
-     * @param targetSyntax the syntax of the renderer
-     */
+         * Pushes a new rendering context frame containing the provided transformation state.
+         *
+         * @param transformation the transformation being executed
+         * @param xdom the complete XDOM currently being processed
+         * @param syntax the current source syntax
+         * @param transformationId identifier for the transformation instance
+         * @param restricted whether the transformation is running in restricted mode
+         * @param targetSyntax the syntax targeted by the renderer
+         */
     void push(Transformation transformation, XDOM xdom, Syntax syntax, String transformationId, boolean restricted,
         Syntax targetSyntax);
 
     /**
-     * Pop the rendering context.
-     */
+ * Remove the current rendering context frame.
+ *
+ * After this call the previous rendering context frame is restored.
+ */
     void pop();
 
     /**
-     * Helper to run a transformation while properly updating the rendering context.
-     *
-     * @param transformation the transformation to apply.
-     * @param context the transformation context.
-     * @param block the block to apply the transformation on.
-     * @throws TransformationException see {@link Transformation#transform(Block, TransformationContext)}.
-     */
+         * Execute the given transformation on the specified block using the provided transformation context, ensuring
+         * the rendering context is set appropriately for the operation.
+         *
+         * @param transformation the transformation to apply
+         * @param context the transformation context to use while applying the transformation
+         * @param block the block to transform
+         * @throws TransformationException if the transformation fails ({@link Transformation#transform(Block, TransformationContext)})
+         */
     void transformInContext(Transformation transformation, TransformationContext context, Block block)
         throws TransformationException;
 
     /**
-     * Set the current block.
-     *
-     * @param block the block current being processed by the transformation.
-     */
+ * Set the block currently being processed by the transformation.
+ *
+ * @param block the block that is now the current processing target
+ */
     void setCurrentBlock(Block block);
 
     /**
-     * Set the target syntax.
-     * 
-     * @param targetSyntax the target syntax
-     */
+ * Set the syntax to be used as the rendering target for subsequent transformations.
+ *
+ * @param targetSyntax the syntax to use as the rendering target
+ */
     void setTargetSyntax(Syntax targetSyntax);
 }

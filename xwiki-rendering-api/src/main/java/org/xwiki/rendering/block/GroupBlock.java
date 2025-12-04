@@ -34,8 +34,7 @@ import org.xwiki.rendering.listener.Listener;
 public class GroupBlock extends AbstractBlock
 {
     /**
-     * Create an empty group block with no children. This is useful when the user wants to call {@link #addChild(Block)}
-     * manually for adding children one by one after the block is constructed.
+     * Creates an empty GroupBlock with no children.
      */
     public GroupBlock()
     {
@@ -43,8 +42,7 @@ public class GroupBlock extends AbstractBlock
     }
 
     /**
-     * Create an empty group block with no children. This is useful when the user wants to call {@link #addChild(Block)}
-     * manually for adding children one by one after the block is constructed.
+     * Creates an empty GroupBlock initialized with the given parameters.
      *
      * @param parameters the parameters of the group
      */
@@ -54,7 +52,9 @@ public class GroupBlock extends AbstractBlock
     }
 
     /**
-     * @param blocks the children blocks of the group
+     * Creates a GroupBlock containing the specified child blocks.
+     *
+     * @param blocks the child blocks to include in the group
      */
     public GroupBlock(List<Block> blocks)
     {
@@ -62,20 +62,32 @@ public class GroupBlock extends AbstractBlock
     }
 
     /**
-     * @param blocks the children blocks of the group
-     * @param parameters the parameters of the group
+     * Creates a GroupBlock containing the specified child blocks and associated parameters.
+     *
+     * @param blocks the child blocks contained in this group
+     * @param parameters a map of parameter names to values applied to this group
      */
     public GroupBlock(List<Block> blocks, Map<String, String> parameters)
     {
         super(blocks, parameters);
     }
 
+    /**
+     * Notifies the listener of the start of this group.
+     *
+     * @param listener the listener to notify of the group's start, receiving this block's parameters
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginGroup(getParameters());
     }
 
+    /**
+     * Signals the end of this group to the provided listener.
+     *
+     * @param listener the listener to notify of the group end; receives this block's parameters
+     */
     @Override
     public void after(Listener listener)
     {

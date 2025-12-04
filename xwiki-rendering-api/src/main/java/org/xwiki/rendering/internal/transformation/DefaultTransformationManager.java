@@ -79,6 +79,14 @@ public class DefaultTransformationManager implements TransformationManager
     @Named("context")
     private Provider<ComponentManager> componentManagerProvider;
 
+    /**
+     * Execute all configured Transformations, in order, on the given XDOM block within the provided transformation context.
+     *
+     * @param block the XDOM block to transform
+     * @param context the transformation context that provides contextual data for the transformations
+     * @throws TransformationException if one or more transformations fail; the exception message aggregates each failed
+     *         transformation's class name and its stack trace
+     */
     @Override
     public void performTransformations(Block block, TransformationContext context) throws TransformationException
     {
@@ -107,7 +115,9 @@ public class DefaultTransformationManager implements TransformationManager
     }
 
     /**
-     * @return the ordered list of Transformations to execute
+     * Obtain the configured Transformation implementations, ordered by their execution priority.
+     *
+     * @return the ordered list of Transformation instances to execute
      */
     public List<Transformation> getTransformations()
     {
@@ -115,7 +125,13 @@ public class DefaultTransformationManager implements TransformationManager
     }
 
     /**
-     * @return the ordered list of Transformations to execute
+     * Build the list of Transformation instances corresponding to the provided ordered list of transformation hints.
+     *
+     * Unresolvable hints are ignored (a warning is logged) and do not abort resolution; the resulting list is
+     * sorted by each transformation's priority before being returned.
+     *
+     * @param transformationNames the ordered list of transformation names (hints) to resolve
+     * @return the list of resolved Transformations, ordered by priority
      */
     protected List<Transformation> getTransformations(List<String> transformationNames)
     {

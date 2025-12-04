@@ -56,13 +56,20 @@ public enum HeaderLevel
     LEVEL6;
 
     /**
-     * @return the header level as integer
+     * Header level as an integer between 1 and 6.
+     *
+     * @return the header level as an integer between 1 and 6
      */
     public int getAsInt()
     {
         return this.ordinal() + 1;
     }
 
+    /**
+     * Represent the header level as its numeric string.
+     *
+     * @return the header level number as a string ("1"–"6")
+     */
     @Override
     public String toString()
     {
@@ -70,10 +77,11 @@ public enum HeaderLevel
     }
 
     /**
-     * Convert provided integer into the corresponding header level enum entry.
+     * Converts an integer (1–6) to the corresponding HeaderLevel.
      *
-     * @param value the header level as integer
-     * @return the header level as enum entry
+     * @param value the header level as an integer (1 through 6)
+     * @return the corresponding HeaderLevel
+     * @throws IllegalArgumentException if {@code value} is not between 1 and 6
      */
     public static HeaderLevel parseInt(int value)
     {

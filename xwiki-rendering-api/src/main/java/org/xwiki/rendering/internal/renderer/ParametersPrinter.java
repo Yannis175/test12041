@@ -45,9 +45,9 @@ public class ParametersPrinter
     private String replacement;
 
     /**
-     * Default constructor.
-     * 
-     * @deprecated since 7.4.5 and 8.2RC1, use {@link #ParametersPrinter(char, String...) instead
+     * Creates a ParametersPrinter configured to escape only the double-quote character.
+     *
+     * @deprecated since 7.4.5 and 8.2RC1; use {@link #ParametersPrinter(char, String...)} instead.
      */
     @Deprecated
     public ParametersPrinter()
@@ -56,8 +56,12 @@ public class ParametersPrinter
     }
 
     /**
-     * @param escapeChar the character used to escape a meaningful string
-     * @param escapedStrings the meaningful strings to escape
+     * Create a ParametersPrinter configured with the given escape character and additional strings to escape.
+     *
+     * <p>Always treats the double-quote character (") as escapable in addition to the provided strings.</p>
+     *
+     * @param escapeChar the character used to prefix escaped tokens in parameter values
+     * @param escapedStrings additional literal strings that must be escaped when present in parameter values
      * @since 7.4.5
      * @since 8.2RC1
      */
@@ -76,6 +80,16 @@ public class ParametersPrinter
         setEscapeChar(escapeChar);
     }
 
+    /**
+     * Configure the character used to escape special tokens and rebuild the corresponding matcher and replacement.
+     *
+     * This sets the instance's escape character and prepares:
+     * - {@code replacement}: a string that prefixes matched tokens with the escape character (using a backreference).
+     * - {@code escaped}: a compiled {@link java.util.regex.Pattern} that matches either the escape character itself or
+     *   any of the tokens listed in {@link #escapedStrings}.
+     *
+     * @param escapeChar the character to use as the escape prefix for matched tokens
+     */
     private void setEscapeChar(char escapeChar)
     {
         this.escapeChar = escapeChar;
@@ -89,11 +103,13 @@ public class ParametersPrinter
     }
 
     /**
-     * Print the parameters as a String.
+     * Render a map of parameters into a single string where each entry is formatted as name="value".
      *
-     * @param parameters the parameters to print
-     * @param escapeChar the character used in front of a special character when need to escape it
-     * @return the printed parameters
+     * Values are escaped using the provided escape character.
+     *
+     * @param parameters the parameters to render; entries with null keys or values are skipped
+     * @param escapeChar the character used to prefix any escapable token inside parameter values
+     * @return the rendered parameters as a space-separated sequence of name="escapedValue" entries
      * @deprecated since 7.4.5 and 8.2RC1, use {@link #print(Map)} instead
      */
     @Deprecated
@@ -105,10 +121,10 @@ public class ParametersPrinter
     }
 
     /**
-     * Print the parameters as a String.
+     * Render the given parameters as a single string of space-separated name="value" pairs.
      *
-     * @param parameters the parameters to print
-     * @return the printed parameters
+     * @param parameters the map of parameter names to values; entries with a null key or null value are skipped
+     * @return the parameters formatted as space-separated name="escapedValue" pairs, or an empty string if none
      * @since 7.4.5
      * @since 8.2RC1
      */
@@ -132,13 +148,11 @@ public class ParametersPrinter
     }
 
     /**
-     * Print a parameter as a String.
+     * Format a single parameter as name="value", escaping characters according to the provided escape character.
      *
-     * @param parameterName the name of the parameter to print
-     * @param parameterValue the value of the parameter to print
-     * @param escapeChar the character used in front of a special character when need to escape it
-     * @return the printed parameter
-     * @deprecated since 7.4.5 and 8.2RC1, use {@link #print(String, String)} instead
+     * @param escapeChar the character prefixed to any matched token when escaping parameter values
+     * @return the formatted parameter, e.g. {@code name="escapedValue"}
+     * @deprecated since 7.4.5 and 8.2RC1; use {@link #print(String, String)} instead
      */
     @Deprecated
     public String print(String parameterName, String parameterValue, char escapeChar)
@@ -149,11 +163,11 @@ public class ParametersPrinter
     }
 
     /**
-     * Print a parameter as a String.
+     * Format a parameter into the form name="value", applying the configured escaping to the value.
      *
-     * @param parameterName the name of the parameter to print
-     * @param parameterValue the value of the parameter to print
-     * @return the printed parameter
+     * @param parameterName the parameter name
+     * @param parameterValue the parameter value; escapable characters in this value will be escaped
+     * @return the formatted parameter as {@code name="escapedValue"}
      * @since 7.4.5
      * @since 8.2RC1
      */

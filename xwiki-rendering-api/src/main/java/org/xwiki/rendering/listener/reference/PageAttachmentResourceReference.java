@@ -41,7 +41,9 @@ public class PageAttachmentResourceReference extends ResourceReference
     public static final String ANCHOR = "anchor";
 
     /**
-     * @param reference see {@link #getReference()}
+     * Create a new reference that identifies a page attachment.
+     *
+     * @param reference the reference string that identifies the attachment resource (page and attachment)
      */
     public PageAttachmentResourceReference(String reference)
     {
@@ -49,8 +51,9 @@ public class PageAttachmentResourceReference extends ResourceReference
     }
 
     /**
-     * @return the query string for specifying parameters that will be used in the rendered URL or null if no query
-     *         string has been specified. Example: {@code mydata1=5&mydata2=Hello}
+     * Retrieve the query string used to build the rendered URL.
+     *
+     * @return the query string used for the rendered URL, or {@code null} if none was specified. Example: {@code mydata1=5&mydata2=Hello}
      */
     public String getQueryString()
     {
@@ -58,7 +61,11 @@ public class PageAttachmentResourceReference extends ResourceReference
     }
 
     /**
-     * @param queryString see {@link #getQueryString()}
+     * Set the query string to include in the attachment reference URL.
+     *
+     * If {@code queryString} is empty, the query string parameter is not stored.
+     *
+     * @param queryString the query string portion of the URL (without the leading '?'); ignored if empty
      */
     public void setQueryString(String queryString)
     {
@@ -68,8 +75,9 @@ public class PageAttachmentResourceReference extends ResourceReference
     }
 
     /**
-     * @return the anchor name pointing to an anchor defined in the referenced attachment or null if no anchor has been
-     *         specified (in which case the reference points to the top of the attachment).
+     * Get the anchor within the referenced attachment.
+     *
+     * @return the anchor name pointing to an anchor defined in the referenced attachment, or `null` if no anchor has been specified (in which case the reference points to the top of the attachment)
      */
     public String getAnchor()
     {
@@ -77,7 +85,11 @@ public class PageAttachmentResourceReference extends ResourceReference
     }
 
     /**
-     * @param anchor see {@link #getAnchor()}
+     * Set the anchor fragment for this page attachment reference.
+     *
+     * If `anchor` is null or empty, the anchor parameter is not set.
+     *
+     * @param anchor the anchor fragment to set; ignored if null or empty
      */
     public void setAnchor(String anchor)
     {

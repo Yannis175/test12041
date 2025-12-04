@@ -63,6 +63,12 @@ public class DefaultListenerDescriptorManager implements ListenerDescriptorManag
      */
     private Map<Class<?>, ListenerDescriptor> descriptors = new ConcurrentHashMap<Class<?>, ListenerDescriptor>();
 
+    /**
+     * Retrieve or create and cache a listener descriptor for the specified listener class.
+     *
+     * @param type the listener class to inspect and build a descriptor for
+     * @return the ListenerDescriptor corresponding to the given listener class
+     */
     @Override
     public ListenerDescriptor getListenerDescriptor(Class<?> type)
     {
@@ -76,8 +82,15 @@ public class DefaultListenerDescriptorManager implements ListenerDescriptorManag
     }
 
     /**
-     * @param type the class of the listener
-     * @return the descriptor of the listener
+     * Builds a ListenerDescriptor by scanning the listener class's public methods for methods
+     * whose names start with "begin", "end", or "on" and grouping them into listener elements.
+     *
+     * For each matching method an element name is derived from the method name (prefix removed,
+     * first character lowercased) and the method is registered on the corresponding ListenerElement
+     * with its parameter signature.
+     *
+     * @param type the listener class to inspect
+     * @return the populated ListenerDescriptor for the given listener class
      */
     public ListenerDescriptor createDescriptor(Class<?> type)
     {
@@ -110,9 +123,16 @@ public class DefaultListenerDescriptorManager implements ListenerDescriptorManag
     }
 
     /**
-     * @param elementName the name of the element
-     * @param descriptor the descriptor in which to add the element
-     * @param method the method associated to the element
+     * Register a listener method under the given element name in the provided descriptor.
+     *
+     * If no element exists for the name, or the given method declares more parameters than the
+     * currently registered element, a new ListenerElement is created (its parameter list is set
+     * to the method's generic parameter types) and stored in the descriptor. The method is then
+     * attached to the element (begin/end/on slot) by calling addMethod.
+     *
+     * @param elementName the logical name of the element to register the method for
+     * @param descriptor the ListenerDescriptor to modify
+     * @param method the listener method to register; its generic parameter types are used for the element
      */
     private void addElement(String elementName, ListenerDescriptor descriptor, Method method)
     {
@@ -137,8 +157,14 @@ public class DefaultListenerDescriptorManager implements ListenerDescriptorManag
     }
 
     /**
-     * @param element the element
-     * @param method the method to add to the element
+     * Assigns the given listener method to the corresponding slot (begin, end, or on) of a ListenerElement.
+     *
+     * If the method name starts with "begin" it is attached to the element's begin slot; if it starts with
+     * "end" it is attached to the end slot; otherwise it is attached to the on slot. When multiple methods
+     * target the same slot, the method with the greater number of parameters is preferred.
+     *
+     * @param element the ListenerElement to update
+     * @param method the listener method to attach to the element
      */
     private void addMethod(ListenerElement element, Method method)
     {

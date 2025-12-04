@@ -48,9 +48,11 @@ public class LinkBlock extends AbstractBlock
     private boolean freestanding;
 
     /**
-     * @param childrenBlocks the nested children blocks
-     * @param reference the reference to the target resource to link to
-     * @param freestanding if true then the link is a free standing URI directly in the text
+     * Create a link block with the given child blocks and target reference.
+     *
+     * @param childrenBlocks the nested child blocks that form the link label/content
+     * @param reference the target resource reference for the link
+     * @param freestanding true when the link is a free-standing URI directly in the text
      * @since 2.5RC1
      */
     public LinkBlock(List<Block> childrenBlocks, ResourceReference reference, boolean freestanding)
@@ -59,10 +61,12 @@ public class LinkBlock extends AbstractBlock
     }
 
     /**
-     * @param childrenBlocks the nested children blocks
-     * @param reference the reference to the target resource to link to
-     * @param freestanding if true then the link is a free standing URI directly in the text
-     * @param parameters the parameters to set
+     * Create a LinkBlock that represents a link to a target resource.
+     *
+     * @param childrenBlocks the nested child blocks that form the link's content
+     * @param reference the target resource reference for the link
+     * @param freestanding {@code true} if the link is a free-standing URI appearing directly in the text
+     * @param parameters additional block parameters (may be empty)
      * @since 2.5RC1
      */
     public LinkBlock(List<Block> childrenBlocks, ResourceReference reference, boolean freestanding,
@@ -74,7 +78,9 @@ public class LinkBlock extends AbstractBlock
     }
 
     /**
-     * @return the reference to the target to link to
+     * Get the resource reference that identifies the link target.
+     *
+     * @return the resource reference pointing to the link target
      * @see org.xwiki.rendering.listener.reference.ResourceReference
      * @since 2.5RC1
      */
@@ -84,19 +90,29 @@ public class LinkBlock extends AbstractBlock
     }
 
     /**
-     * @return true if the link is a free standing URI directly in the text, false otherwise
+     * Indicates whether the link is a free-standing URI appearing directly in the text.
+     *
+     * @return `true` if the link is a free-standing URI, `false` otherwise.
      */
     public boolean isFreeStandingURI()
     {
         return this.freestanding;
     }
 
+    /**
+     * Notify the given listener that a link node is starting by invoking its beginLink method.
+     *
+     * @param listener the rendering listener to notify
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginLink(getReference(), isFreeStandingURI(), getParameters());
     }
 
+    /**
+     * Notify the listener that this link element has ended, passing the reference, freestanding flag, and parameters.
+     */
     @Override
     public void after(Listener listener)
     {
@@ -104,8 +120,13 @@ public class LinkBlock extends AbstractBlock
     }
 
     /**
-     * {@inheritDoc}
+     * Create a copy of this LinkBlock, applying the given BlockFilter to its children.
      *
+     * The returned LinkBlock contains a cloned ResourceReference so modifications to the clone's reference
+     * do not affect the original.
+     *
+     * @param blockFilter the filter to apply to child blocks during cloning
+     * @return a cloned LinkBlock with its ResourceReference cloned
      * @since 1.8RC2
      */
     @Override
@@ -116,6 +137,13 @@ public class LinkBlock extends AbstractBlock
         return clone;
     }
 
+    /**
+     * Indicates whether this LinkBlock is equal to the specified object.
+     *
+     * @param obj the object to compare with this LinkBlock
+     * @return `true` if the specified object is a LinkBlock, the superclass equality holds, and both the `reference`
+     *         and `freestanding` flag are equal; `false` otherwise.
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -135,6 +163,11 @@ public class LinkBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Compute a hash code for this LinkBlock that incorporates the superclass state, the link reference, and the freestanding flag.
+     *
+     * @return the hash code computed from the superclass hash, the link reference, and the freestanding flag
+     */
     @Override
     public int hashCode()
     {

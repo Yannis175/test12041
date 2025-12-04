@@ -33,9 +33,9 @@ public class ConversionException extends Exception
     private static final long serialVersionUID = 1L;
 
     /**
-     * Construct a new ParseException with the specified detail message.
+     * Create a new ConversionException with the specified detail message.
      *
-     * @param message The detailed message. This can later be retrieved by the Throwable.getMessage() method.
+     * @param message the detail message (may be null)
      */
     public ConversionException(String message)
     {
@@ -43,11 +43,10 @@ public class ConversionException extends Exception
     }
 
     /**
-     * Construct a new ParseException with the specified detail message and cause.
+     * Create a new ConversionException with the specified detail message and cause.
      *
-     * @param message The detailed message. This can later be retrieved by the Throwable.getMessage() method.
-     * @param throwable the cause. This can be retrieved later by the Throwable.getCause() method. (A null value is
-     *            permitted, and indicates that the cause is nonexistent or unknown.)
+     * @param message the detail message for this exception
+     * @param throwable the cause of this exception; may be {@code null}
      */
     public ConversionException(String message, Throwable throwable)
     {

@@ -37,7 +37,9 @@ public class EmptyLinesBlock extends AbstractBlock
     private int count;
 
     /**
-     * @param count the number of empty lines between 2 standalone Blocks
+     * Create an EmptyLinesBlock representing the gap of empty lines between two standalone blocks.
+     *
+     * @param count the number of empty lines between two standalone blocks
      */
     public EmptyLinesBlock(int count)
     {
@@ -46,7 +48,9 @@ public class EmptyLinesBlock extends AbstractBlock
     }
 
     /**
-     * @return the number of empty lines between 2 standalone Blocks
+     * Number of empty lines between two standalone blocks.
+     *
+     * @return the number of empty lines between two standalone blocks
      */
     public int getEmptyLinesCount()
     {
@@ -54,19 +58,33 @@ public class EmptyLinesBlock extends AbstractBlock
     }
 
     /**
-     * @param count the number of empty lines between 2 standalone Blocks
+     * Sets the number of empty lines between two standalone blocks.
+     *
+     * @param count the number of empty lines between two standalone blocks
      */
     public void setEmptyLinesCount(int count)
     {
         this.count = count;
     }
 
+    /**
+     * Notify the given listener of this block's number of empty lines during traversal.
+     *
+     * @param listener the traversal listener to be notified via {@code onEmptyLines(int)} with the current empty lines count
+     */
     @Override
     public void traverse(Listener listener)
     {
         listener.onEmptyLines(getEmptyLinesCount());
     }
 
+    /**
+     * Determine whether another object is equal to this EmptyLinesBlock.
+     *
+     * @param obj the object to compare with this block
+     * @return `true` if {@code obj} is the same reference or is an {@code EmptyLinesBlock} with the same empty
+     *         lines count and for which the superclass equality holds, `false` otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -81,6 +99,11 @@ public class EmptyLinesBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Compute a hash code based on the superclass hash and this block's empty lines count.
+     *
+     * @return the computed hash code
+     */
     @Override
     public int hashCode()
     {

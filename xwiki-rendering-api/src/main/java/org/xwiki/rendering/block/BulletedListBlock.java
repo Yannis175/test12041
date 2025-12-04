@@ -34,9 +34,9 @@ import org.xwiki.rendering.listener.Listener;
 public class BulletedListBlock extends AbstractBlock implements ListBLock
 {
     /**
-     * Construct a Bulleted List Block with no parameters.
+     * Create a bulleted list block containing the given child blocks.
      *
-     * @param childrenBlocks the blocks making the list
+     * @param childrenBlocks the child blocks that make up the list
      */
     public BulletedListBlock(List<Block> childrenBlocks)
     {
@@ -44,23 +44,36 @@ public class BulletedListBlock extends AbstractBlock implements ListBLock
     }
 
     /**
-     * Construct a Bulleted List Block with parameters.
+     * Create a bulleted list block containing the given child blocks and configured with the provided parameters.
      *
-     * @param childrenBlocks the blocks making the list
-     * @param parameters see {@link org.xwiki.rendering.block.AbstractBlock#getParameter(String)} for more details on
-     *            parameters
+     * @param childrenBlocks the blocks that form the list items
+     * @param parameters additional block parameters (see {@link org.xwiki.rendering.block.AbstractBlock#getParameter(String)})
      */
     public BulletedListBlock(List<Block> childrenBlocks, Map<String, String> parameters)
     {
         super(childrenBlocks, parameters);
     }
 
+    /**
+     * Signals the start of a bulleted list to the provided rendering listener.
+     *
+     * Notifies the listener to begin a bulleted list and passes this block's parameters.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginList(ListType.BULLETED, getParameters());
     }
 
+    /**
+     * Signal the end of a bulleted list to the given listener.
+     *
+     * Notifies the listener that a bulleted list has ended and provides this block's parameters.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void after(Listener listener)
     {

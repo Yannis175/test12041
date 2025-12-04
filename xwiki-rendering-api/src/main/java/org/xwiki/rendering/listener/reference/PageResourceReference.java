@@ -40,7 +40,9 @@ public class PageResourceReference extends ResourceReference
     public static final String ANCHOR = "anchor";
 
     /**
-     * @param reference see {@link #getReference()}
+     * Create a page resource reference from the given page reference string.
+     *
+     * @param reference the page reference string
      */
     public PageResourceReference(String reference)
     {
@@ -48,8 +50,9 @@ public class PageResourceReference extends ResourceReference
     }
 
     /**
-     * @return the query string for specifying parameters that will be used in the rendered URL or null if no query
-     *         string has been specified. Example: {@code mydata1=5&mydata2=Hello}
+     * Get the query string that will be appended to the rendered URL.
+     *
+     * @return the query string (for example {@code mydata1=5&mydata2=Hello}), or {@code null} if no query string has been specified.
      */
     public String getQueryString()
     {
@@ -57,7 +60,11 @@ public class PageResourceReference extends ResourceReference
     }
 
     /**
-     * @param queryString see {@link #getQueryString()}
+     * Set the query string for this page reference.
+     *
+     * If the supplied value is null or empty, no parameter is set and the reference remains unchanged.
+     *
+     * @param queryString the query string to associate with the page reference
      */
     public void setQueryString(String queryString)
     {
@@ -67,9 +74,9 @@ public class PageResourceReference extends ResourceReference
     }
 
     /**
-     * @return the anchor name pointing to an anchor defined in the referenced page or null if no anchor has been
-     *         specified (in which case the reference points to the top of the page). Note that in XWiki anchors are
-     *         automatically created for titles. Example: "TableOfContentAnchor"
+     * Get the anchor name within the referenced page.
+     *
+     * @return the anchor name (e.g., "TableOfContentAnchor"), or {@code null} if no anchor is specified (the reference points to the top of the page)
      */
     public String getAnchor()
     {
@@ -77,7 +84,9 @@ public class PageResourceReference extends ResourceReference
     }
 
     /**
-     * @param anchor see {@link #getAnchor()}
+     * Sets the anchor (fragment identifier) for this page reference.
+     *
+     * @param anchor the fragment identifier to set; if {@code null} or empty the anchor is not changed
      */
     public void setAnchor(String anchor)
     {

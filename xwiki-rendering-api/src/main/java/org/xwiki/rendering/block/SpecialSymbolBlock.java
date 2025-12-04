@@ -36,7 +36,9 @@ public class SpecialSymbolBlock extends AbstractBlock
     private char symbol;
 
     /**
-     * @param symbol the symbol
+     * Create a SpecialSymbolBlock representing the given non-alphanumeric, non-space symbol.
+     *
+     * @param symbol the symbol character to represent
      */
     public SpecialSymbolBlock(char symbol)
     {
@@ -44,13 +46,20 @@ public class SpecialSymbolBlock extends AbstractBlock
     }
 
     /**
-     * @return the symbol
+     * Get the symbol represented by this block.
+     *
+     * @return the symbol character stored in this block.
      */
     public char getSymbol()
     {
         return this.symbol;
     }
 
+    /**
+     * Notifies the given Listener that this block represents a special symbol.
+     *
+     * @param listener the listener to notify; its {@code onSpecialSymbol} method will be invoked with this block's symbol
+     */
     @Override
     public void traverse(Listener listener)
     {
@@ -58,8 +67,9 @@ public class SpecialSymbolBlock extends AbstractBlock
     }
 
     /**
-     * {@inheritDoc}
+     * Represent this block's symbol as a string.
      *
+     * @return the block's symbol as a String
      * @since 1.8RC2
      */
     @Override
@@ -68,6 +78,13 @@ public class SpecialSymbolBlock extends AbstractBlock
         return String.valueOf(getSymbol());
     }
 
+    /**
+     * Determine whether another object is equal to this block.
+     *
+     * @param obj the object to compare with
+     * @return {@code true} if {@code obj} is a {@link SpecialSymbolBlock} with equal superclass state and the same symbol,
+     *         {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -82,6 +99,11 @@ public class SpecialSymbolBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Compute a hash code that incorporates the superclass state and this block's symbol.
+     *
+     * @return the resulting hash code combining the superclass hash and the symbol value
+     */
     @Override
     public int hashCode()
     {

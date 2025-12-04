@@ -59,15 +59,21 @@ public interface RenderingConfiguration
     String getLinkLabelFormat();
 
     /**
-     * @return the list of InterWiki definitions. Each InterWiki definition is made of an alias and a base URL.
-     * @see org.xwiki.rendering.listener.reference.InterWikiResourceReference
-     */
+ * InterWiki mappings expressed as alias-to-base-URL properties.
+ *
+ * Each property key is an InterWiki alias and the corresponding property value is the base URL for that alias.
+ *
+ * @return the InterWiki definitions where each property maps an alias to its base URL
+ * @see org.xwiki.rendering.listener.reference.InterWikiResourceReference
+ */
     Properties getInterWikiDefinitions();
 
     /**
-     * @return the names of transformations to execute when rendering document content, ordered by transformation
-     *         priority (highest priority first)
-     * @since 3.3M1
-     */
+ * Provide the transformations' names in execution order for rendering document content (highest priority first).
+ *
+ * @return the names of transformations to execute when rendering document content, ordered by priority (highest priority
+ *         first)
+ * @since 3.3M1
+ */
     List<String> getTransformationNames();
 }

@@ -32,19 +32,31 @@ import org.xwiki.rendering.listener.Listener;
 public class QuotationLineBlock extends AbstractBlock
 {
     /**
-     * @param blocks the children of the quotation line
+     * Create a quotation line block containing the given child blocks.
+     *
+     * @param blocks the child blocks that compose this quotation line
      */
     public QuotationLineBlock(List<Block> blocks)
     {
         super(blocks);
     }
 
+    /**
+     * Signal the provided listener that a quotation line is starting.
+     *
+     * @param listener the listener to notify about the beginning of the quotation line
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginQuotationLine();
     }
 
+    /**
+     * Signals the end of this quotation line to the provided listener.
+     *
+     * @param listener the listener to notify that the quotation line has ended
+     */
     @Override
     public void after(Listener listener)
     {

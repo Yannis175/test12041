@@ -38,12 +38,23 @@ import org.xwiki.rendering.listener.reference.ResourceType;
 @Singleton
 public class PageResourceReferenceTypeParser extends AbstractURIResourceReferenceTypeParser
 {
+    /**
+     * Identify the resource type handled by this parser.
+     *
+     * @return the PAGE resource type
+     */
     @Override
     public ResourceType getType()
     {
         return ResourceType.PAGE;
     }
 
+    /**
+     * Creates a resource reference that represents a page from the given reference string.
+     *
+     * @param reference the page reference string to parse
+     * @return a ResourceReference representing the page (a PageResourceReference)
+     */
     @Override
     public ResourceReference parse(String reference)
     {

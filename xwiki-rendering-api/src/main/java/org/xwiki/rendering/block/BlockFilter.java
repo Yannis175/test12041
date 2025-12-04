@@ -38,10 +38,11 @@ import java.util.List;
 public interface BlockFilter
 {
     /**
-     * Filter provided block into zero or more block.
-     *
-     * @param block the block to filter.
-     * @return should never be null. The filtered blocks or empty list.
-     */
+ * Transform the given block into zero or more blocks to replace it.
+ *
+ * @param block the block to filter
+ * @return a non-null list of resulting blocks; an empty list removes the block, a single-element list may contain
+ *         the original block if no change is needed
+ */
     List<Block> filter(Block block);
 }

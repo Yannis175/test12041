@@ -55,9 +55,10 @@ public class ImageBlock extends AbstractBlock
     private String id;
 
     /**
-     * @param reference the image reference
-     * @param freestanding indicate if the image syntax is simple a full descriptive syntax (detail depending of the
-     *            syntax)
+     * Create an ImageBlock for the given image reference using no id and an empty parameter map.
+     *
+     * @param reference the image target reference
+     * @param freestanding true if the image is represented as a freestanding URI in the text, false otherwise
      * @since 2.5RC1
      */
     public ImageBlock(ResourceReference reference, boolean freestanding)
@@ -66,10 +67,11 @@ public class ImageBlock extends AbstractBlock
     }
 
     /**
-     * @param reference the image reference
-     * @param freestanding indicate if the image syntax is simple a full descriptive syntax (detail depending of the
-     *            syntax)
-     * @param parameters the custom parameters
+     * Create an ImageBlock with the given reference, freestanding flag, and parameters.
+     *
+     * @param reference the image target reference
+     * @param freestanding whether the image is represented as a freestanding URI in the source
+     * @param parameters custom parameters for the image (may be empty)
      * @since 2.5RC1
      */
     public ImageBlock(ResourceReference reference, boolean freestanding, Map<String, String> parameters)
@@ -78,11 +80,12 @@ public class ImageBlock extends AbstractBlock
     }
 
     /**
-     * @param reference the image reference
-     * @param freestanding indicate if the image syntax is simple a full descriptive syntax (detail depending of the
-     *            syntax)
-     * @param id the (automatically generated) id of the image
-     * @param parameters the custom parameters
+     * Create an ImageBlock with the specified reference, freestanding flag, optional id, and parameters.
+     *
+     * @param reference the image target reference
+     * @param freestanding {@code true} when the image is represented as a freestanding URI in the source text
+     * @param id an optional automatically generated id for the image, or {@code null} when none
+     * @param parameters custom parameters for the image
      * @since 14.2RC1
      */
     @Unstable
@@ -96,7 +99,9 @@ public class ImageBlock extends AbstractBlock
     }
 
     /**
-     * @return the reference to the image
+     * Gets the image's resource reference.
+     *
+     * @return the image's {@link org.xwiki.rendering.listener.reference.ResourceReference}
      * @see org.xwiki.rendering.listener.reference.ResourceReference
      * @since 2.5RC1
      */
@@ -106,7 +111,9 @@ public class ImageBlock extends AbstractBlock
     }
 
     /**
-     * @return true if the image is defined as a free standing URI directly in the text, false otherwise
+     * Indicates whether the image was written as a freestanding URI in the source text.
+     *
+     * @return `true` if the image is a freestanding URI in the text, `false` otherwise
      */
     public boolean isFreeStandingURI()
     {
@@ -114,7 +121,9 @@ public class ImageBlock extends AbstractBlock
     }
 
     /**
-     * @param id the id of the image to set
+     * Set the image id used when traversing or rendering; pass {@code null} to remove any existing id.
+     *
+     * @param id the image id, or {@code null} to unset it
      * @since 14.2RC1
      */
     @Unstable
@@ -124,7 +133,9 @@ public class ImageBlock extends AbstractBlock
     }
 
     /**
-     * @return the id of the image
+     * The optional identifier assigned to this image.
+     *
+     * @return the image id, or {@code null} if no id is set.
      * @since 14.2RC1
      */
     @Unstable
@@ -133,6 +144,14 @@ public class ImageBlock extends AbstractBlock
         return this.id;
     }
 
+    /**
+     * Emit an image event to the provided listener for this image block.
+     *
+     * If this image has a non-null id, the listener is notified with the id and parameters; otherwise the listener
+     * is notified with only the reference and parameters.
+     *
+     * @param listener the listener that will receive the image event
+     */
     @Override
     public void traverse(Listener listener)
     {
@@ -159,6 +178,13 @@ public class ImageBlock extends AbstractBlock
         return clone;
     }
 
+    /**
+     * Determines whether this ImageBlock is equal to another object.
+     *
+     * @param obj the object to compare against
+     * @return `true` if the given object is an {@code ImageBlock} and has equal superclass state, reference,
+     *         freestanding flag, and id; `false` otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -180,6 +206,11 @@ public class ImageBlock extends AbstractBlock
             .isEquals();
     }
 
+    /**
+     * Compute the hash code for this ImageBlock.
+     *
+     * @return the hash code computed from the superclass hash, the image reference, the freestanding flag, and the id
+     */
     @Override
     public int hashCode()
     {

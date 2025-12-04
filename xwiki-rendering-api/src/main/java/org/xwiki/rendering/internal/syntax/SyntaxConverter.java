@@ -44,6 +44,14 @@ public class SyntaxConverter extends AbstractConverter<Syntax>
     @Inject
     private SyntaxRegistry syntaxRegistry;
 
+    /**
+     * Convert a string representation to a {@link Syntax} instance.
+     *
+     * @param targetType the expected target type for the conversion
+     * @param value the value whose string form identifies the syntax; may be {@code null} or empty
+     * @return the resolved {@link Syntax}, or {@code null} if {@code value} is {@code null} or empty
+     * @throws ConversionException if the syntax string is not recognized
+     */
     @Override
     protected Syntax convertToType(Type targetType, Object value)
     {
@@ -56,6 +64,12 @@ public class SyntaxConverter extends AbstractConverter<Syntax>
         }
     }
 
+    /**
+     * Convert a {@link Syntax} to its identifier string.
+     *
+     * @param value the {@link Syntax} to convert; may be {@code null}
+     * @return {@code null} if {@code value} is {@code null}, otherwise the syntax's identifier string
+     */
     @Override
     protected String convertToString(Syntax value)
     {

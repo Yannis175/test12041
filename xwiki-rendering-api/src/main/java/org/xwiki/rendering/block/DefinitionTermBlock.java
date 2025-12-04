@@ -32,21 +32,31 @@ import org.xwiki.rendering.listener.Listener;
 public class DefinitionTermBlock extends AbstractBlock
 {
     /**
-     * Construct a Definition Term block.
+     * Create a definition-term block containing the given child blocks.
      *
-     * @param childrenBlocks the blocks making the Definition Term
+     * @param childrenBlocks the child blocks that make up the definition term
      */
     public DefinitionTermBlock(List<Block> childrenBlocks)
     {
         super(childrenBlocks);
     }
 
+    /**
+     * Signal the start of a definition term to the provided listener.
+     *
+     * @param listener the listener to notify of the beginning of the definition term
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginDefinitionTerm();
     }
 
+    /**
+     * Notifies the listener that processing of a definition term has ended.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void after(Listener listener)
     {

@@ -36,8 +36,10 @@ import org.xwiki.rendering.renderer.reference.link.LinkLabelGenerator;
 public class DefaultLinkLabelGenerator implements LinkLabelGenerator
 {
     /**
-     * {@inheritDoc}
+     * Generate a label for the given resource reference.
      *
+     * @param reference the resource reference to generate a label for
+     * @return the resource reference's raw string
      * @since 2.5RC1
      */
     @Override

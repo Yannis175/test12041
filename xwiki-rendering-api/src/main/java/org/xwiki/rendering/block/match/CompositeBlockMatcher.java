@@ -38,7 +38,12 @@ public class CompositeBlockMatcher implements BlockMatcher
     private List<BlockMatcher> matchers = new ArrayList<BlockMatcher>();
 
     /**
-     * @param matchers list of matchers to add
+     * Create a composite matcher that evaluates blocks against the provided matchers in sequence.
+     *
+     * The provided list's elements are added to the composite in iteration order; each matcher will be applied
+     * in that order when matching a block.
+     *
+     * @param matchers the matchers to include in the composite, in the order they should be applied
      */
     public CompositeBlockMatcher(List<BlockMatcher> matchers)
     {
@@ -46,7 +51,9 @@ public class CompositeBlockMatcher implements BlockMatcher
     }
 
     /**
-     * @param matchers vararg list of matchers to add
+     * Constructs a CompositeBlockMatcher that applies the provided matchers in sequence.
+     *
+     * @param matchers the matchers to aggregate, applied in the provided order
      */
     public CompositeBlockMatcher(BlockMatcher... matchers)
     {
@@ -55,6 +62,12 @@ public class CompositeBlockMatcher implements BlockMatcher
         }
     }
 
+    /**
+     * Checks whether all composed matchers accept the given block.
+     *
+     * @param block the block to test against the composed matchers
+     * @return true if every matcher returns true for the block, false otherwise
+     */
     @Override
     public boolean match(Block block)
     {

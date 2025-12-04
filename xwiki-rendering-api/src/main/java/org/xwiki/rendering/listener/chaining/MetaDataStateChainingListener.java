@@ -41,7 +41,9 @@ public class MetaDataStateChainingListener extends AbstractChainingListener
     private Deque<MetaData> metaDataStack = new ArrayDeque<MetaData>();
 
     /**
-     * @param listenerChain see {@link #getListenerChain()}
+     * Create a MetaDataStateChainingListener that delegates listener events to the given listener chain.
+     *
+     * @param listenerChain the ListenerChain to which this chaining listener will forward events
      */
     public MetaDataStateChainingListener(ListenerChain listenerChain)
     {
@@ -49,9 +51,11 @@ public class MetaDataStateChainingListener extends AbstractChainingListener
     }
 
     /**
-     * @param <T> the type of the value for the passed key
-     * @param key the key for which to find the value
-     * @return the accumulated MetaData during all the previous begin/endMetaData events
+     * Collects all non-null metadata values for the specified key from the metadata stack, from most recent to oldest.
+     *
+     * @param <T> the expected type of the metadata values
+     * @param key the metadata key to look up
+     * @return a list of metadata values for the key in reverse-chronological order (most recent first); empty if none found
      */
     public <T> List<T> getAllMetaData(String key)
     {
@@ -70,9 +74,11 @@ public class MetaDataStateChainingListener extends AbstractChainingListener
     }
 
     /**
-     * @param <T> the type of the value for the passed key
-     * @param key the key for which to find the value
-     * @return the accumulated MetaData during all the previous begin/endMetaData events, for the passed key
+     * Retrieves the first non-null metadata value associated with the given key from the stacked MetaData.
+     *
+     * @param <T> the expected type of the metadata value
+     * @param key the metadata key to look up
+     * @return the first non-null value for the key found in the stack, or {@code null} if none is present
      */
     public <T> T getMetaData(String key)
     {
@@ -88,6 +94,11 @@ public class MetaDataStateChainingListener extends AbstractChainingListener
         return result;
     }
 
+    /**
+     * Begins a document scope and records the provided MetaData on the internal stack for later retrieval.
+     *
+     * @param metaData the metadata associated with the document
+     */
     @Override
     public void beginDocument(MetaData metaData)
     {
@@ -95,6 +106,11 @@ public class MetaDataStateChainingListener extends AbstractChainingListener
         super.beginDocument(metaData);
     }
 
+    /**
+     * Ends the current document and removes its associated MetaData from the internal stack.
+     *
+     * @param metaData the MetaData associated with the document being ended
+     */
     @Override
     public void endDocument(MetaData metaData)
     {
@@ -102,6 +118,12 @@ public class MetaDataStateChainingListener extends AbstractChainingListener
         this.metaDataStack.pop();
     }
 
+    /**
+     * Registers the start of a metadata block by storing the provided metadata and forwarding the event
+     * to the chained listener.
+     *
+     * @param metaData the metadata for the new metadata block that will be pushed onto the internal stack
+     */
     @Override
     public void beginMetaData(MetaData metaData)
     {
@@ -109,6 +131,12 @@ public class MetaDataStateChainingListener extends AbstractChainingListener
         super.beginMetaData(metaData);
     }
 
+    /**
+     * Handles the end of a metadata block by delegating to the chained listener and removing the corresponding
+     * MetaData from the internal stack.
+     *
+     * @param metaData the MetaData instance for the metadata block being closed
+     */
     @Override
     public void endMetaData(MetaData metaData)
     {

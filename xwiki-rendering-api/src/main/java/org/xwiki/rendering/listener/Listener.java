@@ -57,61 +57,61 @@ public interface Listener extends LinkListener, ImageListener
     Map<String, String> EMPTY_PARAMETERS = Collections.emptyMap();
 
     /**
-     * Start of the document.
-     *
-     * @param metadata the meta data to associate to the following events, see {@link MetaData}
-     * @since 3.0M2
-     */
+ * Signal the start of a document and associate metadata with subsequent listener events.
+ *
+ * @param metadata the metadata to associate with the following events; see {@link MetaData}
+ * @since 3.0M2
+ */
     void beginDocument(MetaData metadata);
 
     /**
-     * End of the document.
-     *
-     * @param metadata the meta data associated with the previous events, see {@link MetaData}
-     * @since 3.0M2
-     */
+ * Signals the end of the document and supplies the document's metadata.
+ *
+ * @param metadata the metadata associated with the document
+ * @since 3.0M2
+ */
     void endDocument(MetaData metadata);
 
     /**
-     * Start of MetaData (eg saving source from where the content is coming from).
-     *
-     * @param metadata the metadata
-     * @since 3.0M2
-     */
+ * Signals the start of a metadata block associated with the document.
+ *
+ * @param metadata metadata to associate with subsequent rendering events
+ * @since 3.0M2
+ */
     void beginMetaData(MetaData metadata);
 
     /**
-     * End of MetaData.
-     *
-     * @param metadata the metadata
-     * @since 3.0M2
-     */
+ * Signals the end of a metadata block.
+ *
+ * @param metadata the metadata associated with the ended block
+ * @since 3.0M2
+ */
     void endMetaData(MetaData metadata);
 
     /**
-     * Start a group of elements. Groups are used to allow using standalone elements in list items, table cells, etc.
-     * They can also be used to set parameters on a group of standalone elements.
-     *
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @since 1.8.3
-     */
+ * Signals the start of a group of standalone elements, used to allow standalone elements inside list items,
+ * table cells, sections, etc., and to attach parameters to that group.
+ *
+ * @param parameters mapping of parameter names to values (may be empty). Example: style="background-color: blue"
+ * @since 1.8.3
+ */
     void beginGroup(@Default("") Map<String, String> parameters);
 
     /**
-     * End of the group.
-     *
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @since 1.8.3
-     */
+ * Signals the end of a grouped element.
+ *
+ * @param parameters map of attributes for the group (e.g., style="background-color: blue")
+ * @since 1.8.3
+ */
     void endGroup(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a text formatting block.
-     *
-     * @param format the formatting type (bold, italic, etc)
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @see Format
-     */
+ * Signals the start of a text formatting block (for example, bold or italic).
+ *
+ * @param format the formatting to apply
+ * @param parameters optional attributes for the formatting (for example, style="background-color: blue")
+ * @see Format
+ */
     void beginFormat(@Default("NONE") Format format, @Default("") Map<String, String> parameters);
 
     /**
@@ -124,62 +124,62 @@ public interface Listener extends LinkListener, ImageListener
     void endFormat(@Default("NONE") Format format, @Default("") Map<String, String> parameters);
 
     /**
-     * Start of a paragraph.
-     *
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     */
+ * Signals the start of a paragraph.
+ *
+ * @param parameters map of paragraph attributes (for example, {@code style="background-color: blue"}); may be empty
+ */
     void beginParagraph(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a paragraph.
-     *
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     */
+ * Signal the end of a paragraph.
+ *
+ * @param parameters map of paragraph attributes (e.g., style="background-color: blue")
+ */
     void endParagraph(@Default("") Map<String, String> parameters);
 
     /**
-     * Start of a list.
-     *
-     * @param type the type of list (bulleted, numbered, etc)
-     * @param parameters a generic list of parameters for the list. Example: "style"/"background-color: blue"
-     * @see ListType
-     */
+ * Signals the start of a list.
+ *
+ * @param type the list type (for example BULLETED or NUMBERED)
+ * @param parameters map of list attributes (for example {@code "style"} -> {@code "background-color: blue"})
+ * @see ListType
+ */
     void beginList(@Default("BULLETED") ListType type, @Default("") Map<String, String> parameters);
 
     /**
-     * Start of a definition list. For example in HTML this is the equivalent of &lt;dl&gt;.
+     * Signals the start of a definition list (equivalent to an HTML `<dl>`).
      *
-     * @param parameters a generic list of parameters for the list. Example: "style"/"background-color: blue"
+     * @param parameters a map of list parameters (attribute name -> value); may be empty
      * @since 2.0RC1
      */
     void beginDefinitionList(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a list.
-     *
-     * @param type the type of list (bulleted, numbered, etc)
-     * @param parameters a generic list of parameters for the list. Example: "style"/"background-color: blue"
-     * @see ListType
-     */
+ * Signals the end of a list.
+ *
+ * @param type the list type (for example, BULLETED or NUMBERED)
+ * @param parameters map of parameters for the list (for example {@code "style" -> "background-color: blue"})
+ * @see ListType
+ */
     void endList(@Default("BULLETED") ListType type, @Default("") Map<String, String> parameters);
 
     /**
-     * End of a definition list. For example in HTML this is the equivalent of &lt;/dl&gt;.
-     *
-     * @param parameters a generic list of parameters for the list. Example: "style"/"background-color: blue"
-     * @since 2.0RC1
-     */
+ * Signals the end of a definition list.
+ *
+ * @param parameters optional attributes for the list (for example, style entries like {@code background-color: blue})
+ * @since 2.0RC1
+ */
     void endDefinitionList(@Default("") Map<String, String> parameters);
 
     /**
-     * Start of a list item.
-     */
+ * Signals the start of a list item.
+ */
     void beginListItem();
 
     /**
-     * Start of a list item.
-     * 
-     * @param parameters a generic list of parameters for the list item. Example: "style"/"background-color: blue"
+     * Signals the start of a list item using the given parameters.
+     *
+     * @param parameters map of parameters for the list item (for example, "style" -> "background-color: blue")
      * @since 10.0
      */
     default void beginListItem(@Default("") Map<String, String> parameters)
@@ -188,10 +188,10 @@ public interface Listener extends LinkListener, ImageListener
     }
 
     /**
-     * Start of a definition list term. For example in HTML this is the equivalent of &lt;dt&gt;.
-     *
-     * @since 1.6M2
-     */
+ * Signals the start of a definition list term (for example, the HTML <dt> element).
+ *
+ * @since 1.6M2
+ */
     void beginDefinitionTerm();
 
     /**
@@ -207,9 +207,9 @@ public interface Listener extends LinkListener, ImageListener
     void endListItem();
 
     /**
-     * End of a list item.
-     * 
-     * @param parameters a generic list of parameters for the list item. Example: "style"/"background-color: blue"
+     * Signals the end of a list item.
+     *
+     * @param parameters a map of parameters for the list item (e.g., "style" -> "background-color: blue")
      * @since 10.0
      */
     default void endListItem(@Default("") Map<String, String> parameters)
@@ -218,10 +218,10 @@ public interface Listener extends LinkListener, ImageListener
     }
 
     /**
-     * End of a definition list term. For example in HTML this is the equivalent of &lt;/dt&gt;.
-     *
-     * @since 1.6M2
-     */
+ * Signals the end of a definition list term.
+ *
+ * @since 1.6M2
+ */
     void endDefinitionTerm();
 
     /**
@@ -232,149 +232,146 @@ public interface Listener extends LinkListener, ImageListener
     void endDefinitionDescription();
 
     /**
-     * Start of a table.
-     *
-     * @param parameters a generic list of parameters for the table.
-     * @since 1.6M2
-     */
+ * Signals the start of a table.
+ *
+ * @param parameters map of table parameters (attributes); may be empty
+ * @since 1.6M2
+ */
     void beginTable(@Default("") Map<String, String> parameters);
 
     /**
-     * Start of a table row.
-     *
-     * @param parameters a generic list of parameters for the table row.
-     * @since 1.6M2
-     */
+ * Signals the start of a table row.
+ *
+ * @param parameters map of row attributes (key → value); may be empty
+ * @since 1.6M2
+ */
     void beginTableRow(@Default("") Map<String, String> parameters);
 
     /**
-     * Start of a table cell.
-     *
-     * @param parameters a generic list of parameters for the table cell.
-     * @since 1.6M2
-     */
+ * Signals the start of a table cell.
+ *
+ * @param parameters a map of cell attributes (for example styling or span information); may be empty
+ * @since 1.6M2
+ */
     void beginTableCell(@Default("") Map<String, String> parameters);
 
     /**
-     * Start of a table head cell.
-     *
-     * @param parameters a generic list of parameters for the table head cell.
-     * @since 1.6M2
-     */
+ * Signals the start of a table header cell.
+ *
+ * @param parameters optional attributes for the header cell (for example styling, colspan, rowspan)
+ * @since 1.6M2
+ */
     void beginTableHeadCell(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a table.
-     *
-     * @param parameters a generic list of parameters for the table.
-     * @since 1.6M2
-     */
+ * Signals the end of a table element.
+ *
+ * @param parameters a map of table parameters (for example styling or other attributes)
+ * @since 1.6M2
+ */
     void endTable(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a table row.
-     *
-     * @param parameters a generic list of parameters for the table row.
-     * @since 1.6M2
-     */
+ * Signals the end of a table row.
+ *
+ * @param parameters map of attributes for the table row (may be empty)
+ * @since 1.6M2
+ */
     void endTableRow(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a table cell.
-     *
-     * @param parameters a generic list of parameters for the table cell.
-     * @since 1.6M2
-     */
+ * Signals the end of a table cell.
+ *
+ * @param parameters additional attributes for the table cell (for example styling or alignment); may be empty
+ * @since 1.6M2
+ */
     void endTableCell(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a table head cell.
-     *
-     * @param parameters a generic list of parameters for the table head cell.
-     * @since 1.6M2
-     */
+ * Signals the end of a table header cell.
+ *
+ * @param parameters a map of attributes for the table header cell (for example alignment, colspan, rowspan, or style)
+ * @since 1.6M2
+ */
     void endTableHeadCell(@Default("") Map<String, String> parameters);
 
     /**
-     * Start of a section.
-     *
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @see org.xwiki.rendering.listener.HeaderLevel
-     */
+ * Signals the start of a section.
+ *
+ * @param parameters map of attributes for the section (for example: style="background-color: blue")
+ * @see org.xwiki.rendering.listener.HeaderLevel
+ */
     void beginSection(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a section.
-     *
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @see org.xwiki.rendering.listener.HeaderLevel
-     */
+ * Signals the end of a section.
+ *
+ * @param parameters optional parameters for the section (for example, style="background-color: blue")
+ * @see org.xwiki.rendering.listener.HeaderLevel
+ */
     void endSection(@Default("") Map<String, String> parameters);
 
     /**
-     * Start of a header.
-     *
-     * @param level the header level (1, 2, 3, etc)
-     * @param id the header unique identifier
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @see org.xwiki.rendering.listener.HeaderLevel
-     * @since 1.9M1
-     */
+ * Signals the start of a header element.
+ *
+ * @param level the header level (1 = highest, 2 = next, ...)
+ * @param id the header's unique identifier (anchor name) or null if none
+ * @param parameters optional attributes for the header; e.g. style="background-color: blue"
+ * @see org.xwiki.rendering.listener.HeaderLevel
+ * @since 1.9M1
+ */
     void beginHeader(@Default("1") HeaderLevel level, String id, @Default("") Map<String, String> parameters);
 
     /**
-     * End of a header.
-     *
-     * @param level the header level (1, 2, 3, etc)
-     * @param id the header unique identifier
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @see org.xwiki.rendering.listener.HeaderLevel
-     * @since 1.9M1
-     */
+ * Signal the end of a header block.
+ *
+ * @param level the header level (1 = top-level, larger numbers indicate lower-level headers)
+ * @param id the header unique identifier (may be null)
+ * @param parameters additional header attributes (e.g., style properties); use {@link #EMPTY_PARAMETERS} when none
+ * @see org.xwiki.rendering.listener.HeaderLevel
+ * @since 1.9M1
+ */
     void endHeader(@Default("1") HeaderLevel level, String id, @Default("") Map<String, String> parameters);
 
     /**
-     * Start of marker containing a macro definition. This is a special that Macro Blocks emits when they are executed
-     * so that it's possible to reconstruct the initial macro syntax even after Macros have been executed. This is used
-     * for exemple by the WYSIWYG editor to let use see the result of executing a macro and still let them modify the
-     * macro definition.
-     *
-     * @param name the macro name
-     * @param parameters the macro parameters
-     * @param content the macro content
-     * @param inline if true the macro is located in a inline content (like paragraph, etc.)
-     * @see #onMacro(String, java.util.Map, String, boolean)
-     */
+ * Signals the start of a macro marker that preserves a macro's original syntax and metadata so the marker can be
+ * used to reconstruct the macro definition after execution.
+ *
+ * @param name the macro name
+ * @param parameters the macro parameters (may be empty)
+ * @param content the macro content
+ * @param inline true if the macro appears inline (for example inside a paragraph), false if it is block-level
+ */
     void beginMacroMarker(String name, @Default("") Map<String, String> parameters, String content, boolean inline);
 
     /**
-     * End of marker containing a macro definition.
-     *
-     * @param name the macro name
-     * @param parameters the macro parameters
-     * @param content the macro content
-     * @param inline if true the macro is located in a inline content (like paragraph, etc.)
-     * @see #beginMacroMarker(String, java.util.Map, String, boolean)
-     */
+ * Signals the end of a macro marker.
+ *
+ * @param name the macro identifier
+ * @param parameters the macro's parameters (may be an empty map)
+ * @param content the macro's content as it appeared in the source
+ * @param inline true if the macro was located in inline content (for example inside a paragraph), false otherwise
+ * @see #beginMacroMarker(String, java.util.Map, String, boolean)
+ */
     void endMacroMarker(String name, @Default("") Map<String, String> parameters, String content, boolean inline);
 
     /**
-     * Start of a quotation. There are one or several quotation lines inside a quotation block.
-     *
-     * @param parameters a generic list of parameters for the quotation. Example: "style"/"background-color: blue"
-     */
+ * Signals the start of a quotation block.
+ *
+ * @param parameters a map of parameters for the quotation (for example, "style" -> "background-color: blue")
+ */
     void beginQuotation(@Default("") Map<String, String> parameters);
 
     /**
-     * End of a quotation.
-     *
-     * @param parameters a generic list of parameters for the quotation. Example: "style"/"background-color: blue"
-     */
+ * Signals the end of a quotation block.
+ *
+ * @param parameters map of attributes for the quotation (e.g., "style" -> "background-color: blue")
+ */
     void endQuotation(@Default("") Map<String, String> parameters);
 
     /**
-     * Start of a quotation line. There can be several quotation lines in a quotation block.
-     */
+ * Signals the start of a line within a quotation block.
+ */
     void beginQuotationLine();
 
     /**
@@ -383,9 +380,9 @@ public interface Listener extends LinkListener, ImageListener
     void endQuotationLine();
 
     /**
-     * Start of a figure.
+     * Signals the start of a figure block.
      *
-     * @param parameters a generic list of parameters for the figure
+     * @param parameters attributes for the figure (may be empty)
      */
     default void beginFigure(Map<String, String> parameters)
     {
@@ -393,9 +390,9 @@ public interface Listener extends LinkListener, ImageListener
     }
 
     /**
-     * End of a figure.
+     * Signals the end of a figure block.
      *
-     * @param parameters a generic list of parameters for the figure
+     * @param parameters attributes associated with the figure; may be {@link #EMPTY_PARAMETERS} when none are provided
      */
     default void endFigure(Map<String, String> parameters)
     {
@@ -403,9 +400,9 @@ public interface Listener extends LinkListener, ImageListener
     }
 
     /**
-     * Start of a figure caption.
+     * Signals the start of a figure caption.
      *
-     * @param parameters a generic list of parameters for the figure
+     * @param parameters caption parameters (e.g., styling or attributes); may be empty
      */
     default void beginFigureCaption(Map<String, String> parameters)
     {
@@ -413,9 +410,9 @@ public interface Listener extends LinkListener, ImageListener
     }
 
     /**
-     * End of a figure caption.
+     * Signals the end of a figure caption.
      *
-     * @param parameters a generic list of parameters for the figure
+     * @param parameters map of caption attributes (for example style, id, or other metadata); may be empty
      */
     default void endFigureCaption(Map<String, String> parameters)
     {
@@ -423,88 +420,88 @@ public interface Listener extends LinkListener, ImageListener
     }
 
     /**
-     * A new line or line break (it's up to the renderers to decide if it should be outputted as a new line or as a line
-     * break in the given syntax).
-     */
+ * Signals a new line or line break in the document.
+ *
+ * Implementations choose whether this is rendered as a literal newline or as a syntax-specific line break.
+ */
     void onNewLine();
 
     /**
-     * A Macro.
-     *
-     * @param id the macro id (eg "toc" for the TOC macro)
-     * @param parameters the macro parameters
-     * @param content the macro content
-     * @param inline if true the macro is located in a inline content (like paragraph, etc.)
-     * @since 1.6M2
-     */
+         * Signals the occurrence of a macro in the document.
+         *
+         * @param id the macro identifier (e.g., "toc")
+         * @param parameters a map of macro parameters (name → value)
+         * @param content the macro content, if any
+         * @param inline true if the macro appears inside inline content (for example within a paragraph)
+         * @since 1.6M2
+         */
     void onMacro(String id, @Default("") Map<String, String> parameters, String content,
         @Name("inline") boolean inline);
 
     /**
-     * A word. Note that sentences ar broken into different events: word events, special symbols events, space events,
-     * etc. This allows fine-grained actions for listeners.
-     *
-     * @param word the word encountered
-     */
+ * Signals that a word token was encountered.
+ *
+ * @param word the text content of the word token
+ */
     void onWord(String word);
 
     /**
-     * A space.
-     */
+ * Signals a space token encountered in the document.
+ */
     void onSpace();
 
     /**
-     * A special symbol ({@code *}, {@code <}, {@code >}, {@code =}, quote, etc). Any non alpha numeric character is a
-     * special symbol.
-     *
-     * @param symbol the symbol encountered
-     */
+ * Signals that a non-alphanumeric symbol (for example: '*', '<', '>', '=', '"', ''' ) was encountered.
+ *
+ * @param symbol the symbol character encountered
+ */
     void onSpecialSymbol(char symbol);
 
     /**
-     * A reference/location in a page. In HTML for example this is called an Anchor. It allows pointing to that
-     * location, for example in links. Note that there is no wiki syntax for this in general and it's often generated by
-     * Macros (such as the TOC Macro).
-     *
-     * @param name the location name.
-     * @since 1.6M1
-     */
+ * Signals a named reference (anchor) location within the document.
+ *
+ * <p>This marks a location that can be targeted by links; names are typically generated by macros.</p>
+ *
+ * @param name the reference name (anchor identifier)
+ * @since 1.6M1
+ */
     void onId(String name);
 
     /**
-     * Represents an horizontal line.
-     *
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @since 1.6M1
-     */
+ * Signals a horizontal line (horizontal rule) element in the document.
+ *
+ * @param parameters map of optional parameters for the horizontal line (for example, style="background-color: blue")
+ * @since 1.6M1
+ */
     void onHorizontalLine(@Default("") Map<String, String> parameters);
 
     /**
-     * Represents an empty line between 2 standalone Blocks. A standalone block is block that is not included in another
-     * block. Standalone blocks are Paragraph, Standalone Macro, Lists, Table, etc.
-     *
-     * @param count the number of empty lines between 2 standalone Blocks
-     */
+ * Signal one or more empty lines between standalone blocks.
+ *
+ * Standalone blocks are blocks not contained within another block (for example: paragraph, standalone macro, list, table).
+ *
+ * @param count the number of consecutive empty lines between standalone blocks
+ */
     void onEmptyLines(@Default("1") int count);
 
     /**
-     * A portion of text.
-     *
-     * @param content the string to protected from rendering
-     * @param inline if true the text content is located in a inline content (like paragraph, etc.)
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     */
+ * Signals a verbatim text segment that must not be parsed or interpreted.
+ *
+ * @param content the verbatim text content
+ * @param inline  true when the content appears inline (for example inside a paragraph), false when standalone
+ * @param parameters optional parameters (for example styling attributes) associated with the verbatim segment
+ */
     void onVerbatim(@Name("content") String content, boolean inline, @Default("") Map<String, String> parameters);
 
     /**
-     * Some text to inject directly into the listener output without parsing it. For example a HTML macro could inject
-     * directly some HTML entered by the user into the rendered HTML output. Note that it's not recommended to use this
-     * event in most cases since it can lead to invalid content being generated and in addition most listener
-     * implementations will not understand the injected text and will just ignore it.
-     *
-     * @param content the text to inject
-     * @param syntax the syntax in which the text is written. This is useful so that listener implementations can decide
-     *            whether they can handle direct inject for that syntax
-     */
+ * Injects raw text into the listener output without parsing it.
+ *
+ * The provided text is delivered as-is; listener implementations may handle or ignore it. The
+ * `syntax` parameter indicates the writing syntax of the raw text so implementations can decide
+ * whether they can process the injected content.
+ *
+ * @param content the raw text to inject
+ * @param syntax the syntax of the provided content
+ */
     void onRawText(@Name("content") String content, Syntax syntax);
 }

@@ -45,8 +45,10 @@ public class RawBlock extends AbstractBlock
     private Syntax syntax;
 
     /**
-     * @param rawContent the content to inject as is into the listener (it won't be modified)
-     * @param syntax the syntax in which the content is written
+     * Create a RawBlock that holds raw content associated with a specific syntax.
+     *
+     * @param rawContent the raw content to inject without modification
+     * @param syntax the syntax that describes how the content should be interpreted
      */
     public RawBlock(String rawContent, Syntax syntax)
     {
@@ -54,6 +56,11 @@ public class RawBlock extends AbstractBlock
         this.syntax = syntax;
     }
 
+    /**
+     * Emits this block's raw content to the provided listener using the block's associated syntax.
+     *
+     * @param listener the listener that will receive the raw content via {@code onRawText(String, Syntax)}
+     */
     @Override
     public void traverse(Listener listener)
     {
@@ -61,7 +68,9 @@ public class RawBlock extends AbstractBlock
     }
 
     /**
-     * @return the content to inject as is into the listener (it won't be modified)
+     * The raw content to be injected into a listener without modification.
+     *
+     * @return the raw text content to emit as-is
      */
     public String getRawContent()
     {
@@ -69,13 +78,22 @@ public class RawBlock extends AbstractBlock
     }
 
     /**
-     * @return the syntax in which the content is written
+     * The syntax associated with this raw block's content.
+     *
+     * @return the syntax of the raw content
      */
     public Syntax getSyntax()
     {
         return this.syntax;
     }
 
+    /**
+     * Determine whether another object is equal to this RawBlock.
+     *
+     * @param obj the object to compare with this RawBlock
+     * @return {@code true} if {@code obj} is the same instance or is a {@code RawBlock} whose superclass state,
+     *         raw content, and syntax are equal to this instance; {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -95,6 +113,13 @@ public class RawBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Compute a hash code for this block including the superclass state, the raw content, and the syntax.
+     *
+     * The result is consistent with {@link #equals(Object)}.
+     *
+     * @return the hash code computed from the superclass hash, the raw content, and the syntax
+     */
     @Override
     public int hashCode()
     {

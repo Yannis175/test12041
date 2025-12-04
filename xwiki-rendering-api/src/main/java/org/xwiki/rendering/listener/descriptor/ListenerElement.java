@@ -61,7 +61,9 @@ public class ListenerElement
     private Method onMethod;
 
     /**
-     * @param name the name of the element
+     * Constructs a ListenerElement with the given name.
+     *
+     * @param name the element's name
      */
     public ListenerElement(String name)
     {
@@ -69,6 +71,8 @@ public class ListenerElement
     }
 
     /**
+     * Get the element's name.
+     *
      * @return the name of the element
      */
     public String getName()
@@ -77,7 +81,9 @@ public class ListenerElement
     }
 
     /**
-     * @return the parameters of the element
+     * Get the parameter types declared for this listener element.
+     *
+     * @return the list of parameter types for the element
      */
     public List<Type> getParameters()
     {
@@ -85,7 +91,9 @@ public class ListenerElement
     }
 
     /**
-     * @return the begin method, null if it's a <code>on</code> event based element
+     * Method invoked at the element's begin event.
+     *
+     * @return the begin {@link Method}, or {@code null} if the element is defined as an {@code on}-event
      */
     public Method getBeginMethod()
     {
@@ -93,7 +101,9 @@ public class ListenerElement
     }
 
     /**
-     * @param beginMethod the begin method, null if it's a <code>on</code> event based element
+     * Set the method to invoke when the element's begin event occurs.
+     *
+     * @param beginMethod the begin event method, or {@code null} if the element is defined as an on-event
      */
     public void setBeginMethod(Method beginMethod)
     {
@@ -101,7 +111,9 @@ public class ListenerElement
     }
 
     /**
-     * @return the end method, null if it's a <code>on</code> event based element
+     * The method invoked for the element's end event.
+     *
+     * @return the end {@link Method}, or {@code null} if the element uses an {@code on} event model
      */
     public Method getEndMethod()
     {
@@ -109,7 +121,9 @@ public class ListenerElement
     }
 
     /**
-     * @param endMethod the end method, null if it's a <code>on</code> event based element
+     * Set the method to invoke for this element's end event.
+     *
+     * @param endMethod the method to invoke at the element's end event, or `null` to indicate the element uses an on-event model
      */
     public void setEndMethod(Method endMethod)
     {
@@ -117,7 +131,9 @@ public class ListenerElement
     }
 
     /**
-     * @return the on method, null if it's a <code>begin/end</code> event based element
+     * Method to invoke for an on-event element.
+     *
+     * @return the on-event {@link Method}, or {@code null} if this element is defined by begin/end events.
      */
     public Method getOnMethod()
     {
@@ -125,7 +141,9 @@ public class ListenerElement
     }
 
     /**
-     * @param onMethod the on method, null if it's a <code>begin/end</code> event based element
+     * Set the method to invoke for an on-event element.
+     *
+     * @param onMethod the Method to invoke for the on event; set to {@code null} if this element uses begin/end events
      */
     public void setOnMethod(Method onMethod)
     {

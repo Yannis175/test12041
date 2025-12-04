@@ -63,6 +63,17 @@ public class DefaultConverter implements Converter
     @Inject
     private TransformationManager transformationManager;
 
+    /**
+     * Convert content from a source syntax to a target syntax and write the rendered output to the provided printer.
+     *
+     * Parses the input, applies configured transformations, and renders the resulting XDOM into the given WikiPrinter.
+     *
+     * @param source the reader providing the input content
+     * @param sourceSyntax the syntax of the input content
+     * @param targetSyntax the desired syntax for the output
+     * @param printer the printer that will receive the rendered output
+     * @throws ConversionException if a Parser or BlockRenderer cannot be located for the given syntaxes, parsing fails, or transformations cannot be executed
+     */
     @Override
     public void convert(Reader source, Syntax sourceSyntax, Syntax targetSyntax, WikiPrinter printer)
         throws ConversionException

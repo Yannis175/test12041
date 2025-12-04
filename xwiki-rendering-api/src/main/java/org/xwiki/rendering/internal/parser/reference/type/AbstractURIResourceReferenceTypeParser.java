@@ -31,6 +31,13 @@ import org.xwiki.rendering.parser.ResourceReferenceTypeParser;
  */
 public abstract class AbstractURIResourceReferenceTypeParser implements ResourceReferenceTypeParser
 {
+    /**
+     * Parses the given reference into a ResourceReference using the entire input string as the resource reference
+     * (the URI scheme, if any, is not extracted).
+     *
+     * @param reference the input reference string; the entire string is used as the resource reference
+     * @return the created ResourceReference with its reference set to the provided string and its type taken from {@code getType()}
+     */
     @Override
     public ResourceReference parse(String reference)
     {

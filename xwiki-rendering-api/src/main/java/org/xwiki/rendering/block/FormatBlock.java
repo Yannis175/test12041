@@ -41,8 +41,9 @@ public class FormatBlock extends AbstractBlock
     private Format format;
 
     /**
-     * Create an empty format block with no children. This is useful when the user wants to call {@link #addChild(Block)}
-     * manually for adding children one by one after the block is constructed.
+     * Creates an empty format block with no children.
+     *
+     * The block's format is initialized to {@link Format#NONE}, allowing callers to add children and set formatting later.
      */
     public FormatBlock()
     {
@@ -50,8 +51,10 @@ public class FormatBlock extends AbstractBlock
     }
 
     /**
-     * @param childrenBlocks the nested children blocks
-     * @param format the formatting to apply to the children blocks
+     * Create a format block that applies the given format to the provided child blocks.
+     *
+     * @param childrenBlocks the nested child blocks to which the format will be applied
+     * @param format the formatting to apply to the child blocks
      */
     public FormatBlock(List<Block> childrenBlocks, Format format)
     {
@@ -59,9 +62,11 @@ public class FormatBlock extends AbstractBlock
     }
 
     /**
-     * @param childrenBlocks the nested children blocks
-     * @param format the formatting to apply to the children blocks
-     * @param parameters the custom parameters
+     * Constructs a FormatBlock that applies the given format to the specified child blocks and attaches optional parameters.
+     *
+     * @param childrenBlocks the nested child blocks to which the format will be applied
+     * @param format the formatting to apply to the child blocks
+     * @param parameters additional parameters for this block (may be empty)
      */
     public FormatBlock(List<Block> childrenBlocks, Format format, Map<String, String> parameters)
     {
@@ -70,25 +75,47 @@ public class FormatBlock extends AbstractBlock
     }
 
     /**
-     * @return the formatting to apply to the children blocks
+     * The formatting applied to this block's children.
+     *
+     * @return the {@link Format} to apply to child blocks
      */
     public Format getFormat()
     {
         return this.format;
     }
 
+    /**
+     * Signal the start of this format block to the listener.
+     *
+     * @param listener the listener to notify; receives a `beginFormat` event with this block's format and parameters
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginFormat(getFormat(), getParameters());
     }
 
+    /**
+     * Notify the provided listener that this format block has ended, supplying the block's format and parameters.
+     *
+     * @param listener the rendering listener to notify
+     */
     @Override
     public void after(Listener listener)
     {
         listener.endFormat(getFormat(), getParameters());
     }
 
+    /**
+     * Determine whether the given object is equal to this FormatBlock.
+     *
+     * Compares identity first, then verifies that the other object is a {@code FormatBlock}, that
+     * the superclass equality holds, and that both blocks have the same {@code Format}.
+     *
+     * @param obj the object to compare with this block
+     * @return {@code true} if {@code obj} is the same instance or is a {@code FormatBlock} with equal
+     *         superclass state and an identical {@code Format}; {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -103,6 +130,11 @@ public class FormatBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Compute a hash code that combines the superclass hash and this block's format.
+     *
+     * @return the computed hash code
+     */
     @Override
     public int hashCode()
     {

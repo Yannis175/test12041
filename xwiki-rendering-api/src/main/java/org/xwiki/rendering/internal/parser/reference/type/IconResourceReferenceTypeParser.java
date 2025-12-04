@@ -36,6 +36,11 @@ import org.xwiki.rendering.listener.reference.ResourceType;
 @Singleton
 public class IconResourceReferenceTypeParser extends AbstractURIResourceReferenceTypeParser
 {
+    /**
+     * Identify the resource type handled by this parser.
+     *
+     * @return the `ResourceType.ICON` resource type
+     */
     @Override
     public ResourceType getType()
     {

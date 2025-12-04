@@ -62,8 +62,10 @@ public class PlainTextBlockFilter implements BlockFilter
     private LinkLabelGenerator linkLabelGenerator;
 
     /**
-     * @param plainTextParser a plain text parser used to transform link labels into plain text
-     * @param linkLabelGenerator generate link label.
+     * Initialize a PlainTextBlockFilter that produces plain-text blocks for link labels using the provided components.
+     *
+     * @param plainTextParser    parser used to parse link labels into plain-text blocks
+     * @param linkLabelGenerator generator used to produce textual labels for link references
      * @since 2.0M3
      */
     public PlainTextBlockFilter(Parser plainTextParser, LinkLabelGenerator linkLabelGenerator)
@@ -72,6 +74,14 @@ public class PlainTextBlockFilter implements BlockFilter
         this.linkLabelGenerator = linkLabelGenerator;
     }
 
+    /**
+     * Filter a block into its plain-text representation where applicable.
+     *
+     * @param block the block to filter
+     * @return a list of blocks produced by the filter: a singleton list containing the original block if it is one of
+     *         the valid plain-text block types; the parsed plain-text children of a link's label when the block is a
+     *         link with no children; otherwise an empty list
+     */
     @Override
     public List<Block> filter(Block block)
     {
@@ -87,6 +97,18 @@ public class PlainTextBlockFilter implements BlockFilter
         return Collections.emptyList();
     }
 
+    /**
+     * Produces a list of plain-text blocks representing the label for the given link reference.
+     *
+     * The label is generated via the LinkLabelGenerator for DOCUMENT, SPACE or PAGE types, or taken
+     * from the reference string for other types, then parsed with the plain-text parser. If parsing
+     * yields top-level blocks, the children of the first top-level block are returned; otherwise the
+     * empty parse result is returned.
+     *
+     * @param reference the link resource reference to resolve into a plain-text label
+     * @return the parsed plain-text blocks for the link label, or an empty list if parsing produced no blocks
+     * @throws RuntimeException if the plain-text parser fails to parse the generated label
+     */
     private List<Block> filterLinkBlock(ResourceReference reference)
     {
         try {

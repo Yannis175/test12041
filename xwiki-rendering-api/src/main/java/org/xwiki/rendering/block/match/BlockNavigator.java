@@ -40,7 +40,9 @@ public class BlockNavigator
     private BlockMatcher matcher;
 
     /**
-     * The default matcher does not filter anything.
+     * Creates a BlockNavigator that accepts all blocks by default.
+     *
+     * The navigator's matcher is initialized to AnyBlockMatcher.ANYBLOCKMATCHER.
      */
     public BlockNavigator()
     {
@@ -48,7 +50,9 @@ public class BlockNavigator
     }
 
     /**
-     * @param matcher used to filter the result of the various methods
+     * Create a BlockNavigator that filters navigated blocks using the provided matcher.
+     *
+     * @param matcher the BlockMatcher used to decide which blocks are included in results
      */
     public BlockNavigator(BlockMatcher matcher)
     {
@@ -58,12 +62,12 @@ public class BlockNavigator
     // Blocks
 
     /**
-     * Get all blocks following provided {@link BlockMatcher} and {@link Axes}.
+     * Collects all blocks reachable from the given start block following the specified axes that match the configured BlockMatcher.
      *
-     * @param <T> the class of the Blocks to return
-     * @param currentBlock the block to start searching from
-     * @param currentAxes indicate the search axes
-     * @return the matched {@link Block}s, empty list of none was found
+     * @param <T> the type of blocks to return
+     * @param currentBlock the block from which to start the search
+     * @param currentAxes the navigation axes to follow during traversal
+     * @return a list of matching blocks; empty list if none found
      */
     public <T extends Block> List<T> getBlocks(Block currentBlock, Axes currentAxes)
     {
@@ -141,12 +145,11 @@ public class BlockNavigator
     }
 
     /**
-     * Add provided {@link Block} to provided list (or create list of null) if block validate the provided
-     * {@link BlockMatcher}.
+     * Adds the current block to the provided list if it is non-null and matches the navigator's matcher.
      *
-     * @param <T> the class of the Blocks to return
-     * @param currentBlock the block to search from
-     * @param blocks the list of blocks to fill
+     * @param <T> the class of the blocks in the list
+     * @param currentBlock the block to consider
+     * @param blocks the list to append to; must be non-null
      */
     private <T extends Block> void addBlock(Block currentBlock, List<T> blocks)
     {
@@ -156,15 +159,14 @@ public class BlockNavigator
     }
 
     /**
-     * Add all blocks following provided {@link BlockMatcher} and {@link Axes} in the provide list (or create a new list
-     * of provided list is null).
+     * Collect matching blocks starting from each block in the provided list following the given axes and append them
+     * to the provided accumulator.
      *
-     * @param <T> the class of the Blocks to return
-     * @param blocks the blocks from where to search
-     * @param axes the axes
-     * @param blocksOut the list of blocks to fill
-     * @return the modified list, null if provided list is null and provided {@link Block} does not validate provided
-     *         {@link BlockMatcher}
+     * @param <T> the class of the blocks to return
+     * @param blocks the blocks from which to start the search
+     * @param axes the navigation axes to follow for each start block
+     * @param blocksOut an accumulator list to fill; may be null
+     * @return the accumulator list populated with matching blocks, or `null` if `blocksOut` was null and no matches were found
      */
     private <T extends Block> List<T> getBlocks(List<Block> blocks, Axes axes, List<T> blocksOut)
     {
@@ -178,15 +180,15 @@ public class BlockNavigator
     }
 
     /**
-     * Add all blocks following provided {@link BlockMatcher} and {@link Axes} in the provide list (or create a new list
-     * of provided list is null).
+     * Accumulate blocks matching the navigator's matcher starting from a block using the given axes into an existing
+     * list or a newly created list.
      *
-     * @param <T> the class of the Blocks to return
+     * @param <T> the class of the blocks to return
      * @param currentBlock the block to search from
-     * @param axes the axes
-     * @param blocksOut the list of blocks to fill
-     * @return the modified list, null if provided list is null and provided {@link Block} does not validate provided
-     *         {@link BlockMatcher}
+     * @param axes the axes to use for navigation
+     * @param blocksOut an optional accumulator list to append results to; may be null
+     * @return the accumulator list containing found blocks, or a new list if none was provided and matches were found;
+     *         returns null if no matches were found and no accumulator was provided
      */
     private <T extends Block> List<T> getBlocks(Block currentBlock, Axes axes, List<T> blocksOut)
     {
@@ -207,12 +209,12 @@ public class BlockNavigator
     // First block
 
     /**
-     * Get the first matched block in the provided {@link Axes}.
+     * Finds the first block that matches the configured matcher starting from the given block and following the specified axes.
      *
-     * @param <T> the class of the Block to return
-     * @param currentBlock the block to start searching from
-     * @param currentAxes indicate the search axes
-     * @return the matched {@link Block}, null if none was found
+     * @param <T> the concrete Block type to return
+     * @param currentBlock the block to start the search from
+     * @param currentAxes the navigation axes that define how to traverse from the starting block
+     * @return the first matching block, or {@code null} if none is found
      */
     public <T extends Block> T getFirstBlock(Block currentBlock, Axes currentAxes)
     {

@@ -45,8 +45,10 @@ public class HeaderBlock extends AbstractBlock
     private String id;
 
     /**
-     * @param childBlocks the children of the header.
-     * @param level the level of the header
+     * Create a header block containing the given child blocks at the specified header level.
+     *
+     * @param childBlocks the blocks representing the header's content
+     * @param level the header level (e.g., H1..H6)
      */
     public HeaderBlock(List<Block> childBlocks, HeaderLevel level)
     {
@@ -56,9 +58,11 @@ public class HeaderBlock extends AbstractBlock
     }
 
     /**
-     * @param childBlocks the children of the header.
-     * @param level the level of the header
-     * @param parameters the parameters of the header
+     * Create a header block with the given child blocks, header level, and parameters.
+     *
+     * @param childBlocks the child blocks that form the header content
+     * @param level the header's level (e.g., H1..H6)
+     * @param parameters rendering parameters associated with the header
      */
     public HeaderBlock(List<Block> childBlocks, HeaderLevel level, Map<String, String> parameters)
     {
@@ -68,9 +72,11 @@ public class HeaderBlock extends AbstractBlock
     }
 
     /**
-     * @param childBlocks the children of the header.
-     * @param level the level of the header
-     * @param id the id of the header.
+     * Create a header block with the given child blocks, header level, and identifier.
+     *
+     * @param childBlocks the child blocks that make up the header content
+     * @param level the header level (e.g., H1..H6)
+     * @param id the header identifier (may be null)
      */
     public HeaderBlock(List<Block> childBlocks, HeaderLevel level, String id)
     {
@@ -80,10 +86,12 @@ public class HeaderBlock extends AbstractBlock
     }
 
     /**
-     * @param childBlocks the children of the header.
-     * @param level the level of the header
-     * @param parameters the parameters of the header
-     * @param id the id of the header.
+     * Create a header block with the given child blocks, header level, optional parameters, and optional identifier.
+     *
+     * @param childBlocks the child blocks contained by the header
+     * @param level the header level
+     * @param parameters parameters associated with the header (may be null)
+     * @param id the identifier for the header (may be null)
      */
     public HeaderBlock(List<Block> childBlocks, HeaderLevel level, Map<String, String> parameters, String id)
     {
@@ -93,7 +101,9 @@ public class HeaderBlock extends AbstractBlock
     }
 
     /**
-     * @return the level of the header
+     * Retrieve the header's level.
+     *
+     * @return the header level
      */
     public HeaderLevel getLevel()
     {
@@ -101,7 +111,9 @@ public class HeaderBlock extends AbstractBlock
     }
 
     /**
-     * @return the id of the header.
+     * Get the header's identifier.
+     *
+     * @return the header identifier, or null if none is set
      */
     public String getId()
     {
@@ -109,7 +121,9 @@ public class HeaderBlock extends AbstractBlock
     }
 
     /**
-     * @param id the id of the header to set
+     * Assigns the header's identifier.
+     *
+     * @param id the header identifier, or {@code null} to clear it
      * @since 14.2RC1
      */
     @Unstable
@@ -119,25 +133,45 @@ public class HeaderBlock extends AbstractBlock
     }
 
     /**
-     * @return the {@link SectionBlock} corresponding to this header
+     * Returns the section that contains this header.
+     *
+     * @return the {@link SectionBlock} that contains this header, or {@code null} if this header has no parent
      */
     public SectionBlock getSection()
     {
         return (SectionBlock) getParent();
     }
 
+    /**
+     * Notifies the listener that this header block is beginning, supplying its level, id, and parameters.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginHeader(getLevel(), getId(), getParameters());
     }
 
+    /**
+     * Notify the listener that processing of this header has finished.
+     *
+     * Passes this header's level, id, and parameters to the listener's endHeader callback.
+     */
     @Override
     public void after(Listener listener)
     {
         listener.endHeader(getLevel(), getId(), getParameters());
     }
 
+    /**
+     * Compares this HeaderBlock with another object for value equality.
+     *
+     * Two HeaderBlock instances are considered equal if they are the same instance or if the other object is a
+     * HeaderBlock whose superclass state is equal and whose header level and id are equal.
+     *
+     * @return `true` if the given object is equal to this HeaderBlock, `false` otherwise.
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -157,6 +191,11 @@ public class HeaderBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Computes a hash code for this header block that incorporates header-specific state.
+     *
+     * @return the hash code computed from the superclass hash, the header level, and the header id
+     */
     @Override
     public int hashCode()
     {

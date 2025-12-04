@@ -44,6 +44,14 @@ public class MetaDataConverter extends AbstractConverter<MetaData>
     private static final String UNSUPPORTED_EXCEPTION = "Conversion from [" + MetaData.class.getName() + "] to ["
         + String.class.getName() + "] is not supported";
 
+    /**
+     * Converts the given input into a MetaData instance.
+     *
+     * @param type the desired target type (not used)
+     * @param value the input to convert; may be a MetaData, a Map, a value whose trimmed string is empty, or null
+     * @return the resulting MetaData, or null if the input is null
+     * @throws ConversionException if the input is neither a MetaData nor a Map and its trimmed string representation is non-empty
+     */
     @Override
     protected MetaData convertToType(Type type, Object value)
     {
@@ -70,6 +78,12 @@ public class MetaDataConverter extends AbstractConverter<MetaData>
         return parameters;
     }
 
+    /**
+     * Indicate that converting a MetaData instance to a String is not supported.
+     *
+     * @param value the MetaData instance attempted to convert
+     * @throws ConversionException always thrown to signal that conversion from MetaData to String is unsupported
+     */
     @Override
     protected String convertToString(MetaData value)
     {

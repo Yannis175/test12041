@@ -36,7 +36,7 @@ public class MacroBlockMatcher extends ClassBlockMatcher
     private String macroId;
 
     /**
-     * Match {@link org.xwiki.rendering.block.MacroBlock} having the passed id.
+     * Create a matcher that matches MacroBlock instances with the specified macro id.
      *
      * @param macroId the macro id to match
      */
@@ -46,6 +46,12 @@ public class MacroBlockMatcher extends ClassBlockMatcher
         this.macroId = macroId;
     }
 
+    /**
+     * Checks whether the given block is a MacroBlock with the configured macro id.
+     *
+     * @param block the block to test
+     * @return {@code true} if the block is a MacroBlock whose id equals the configured macroId, {@code false} otherwise
+     */
     @Override
     public boolean match(Block block)
     {

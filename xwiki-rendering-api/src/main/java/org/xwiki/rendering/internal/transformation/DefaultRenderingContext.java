@@ -101,7 +101,7 @@ public class DefaultRenderingContext implements MutableRenderingContext
         private Syntax targetSyntax;
 
         /**
-         * Create a null context.
+         * Create a sentinel Context that represents the absence of any rendering context.
          */
         private Context()
         {
@@ -109,13 +109,14 @@ public class DefaultRenderingContext implements MutableRenderingContext
         }
 
         /**
-         * Initialize a new rendering context.
+         * Create a new rendering context frame capturing the current transformation state.
          *
-         * @param transformation the transformation being performed.
-         * @param xdom the complete XDOM being processed.
-         * @param syntax the current syntax.
-         * @param transformationId the id of the transformation.
-         * @param restricted true if the transformation is restricted.
+         * @param transformation the Transformation being executed
+         * @param xdom the complete XDOM being processed
+         * @param syntax the current Syntax used for the transformation
+         * @param transformationId an identifier for this transformation execution
+         * @param restricted true if the transformation is running in restricted mode
+         * @param targetSyntax the Syntax of the target renderer for the transformation output
          */
         private Context(Transformation transformation, XDOM xdom, Syntax syntax, String transformationId,
             boolean restricted, Syntax targetSyntax)
@@ -128,11 +129,22 @@ public class DefaultRenderingContext implements MutableRenderingContext
             this.targetSyntax = targetSyntax;
         }
 
+        /**
+         * Retrieve the identifier of the current transformation.
+         *
+         * @return the identifier of the current transformation, or {@code null} if none is set
+         */
         public String getTransformationId()
         {
             return this.transformationId;
         }
 
+        /**
+         * Create and return a shallow copy of this Context.
+         *
+         * @return a shallow clone of this Context
+         * @throws RuntimeException if the clone operation is not supported (should not occur)
+         */
         @Override
         public Context clone()
         {
@@ -148,6 +160,13 @@ public class DefaultRenderingContext implements MutableRenderingContext
         }
     }
 
+    /**
+     * Pushes a new rendering context frame onto the current execution context stack using the provided
+     * Transformation and values extracted from the given TransformationContext.
+     *
+     * @param transformation the Transformation that will be associated with the new context frame
+     * @param context the TransformationContext supplying XDOM, syntax, id, restriction flag and target syntax
+     */
     @Override
     public void push(Transformation transformation, TransformationContext context)
     {
@@ -155,6 +174,16 @@ public class DefaultRenderingContext implements MutableRenderingContext
             context.getTargetSyntax());
     }
 
+    /**
+     * Pushes a new rendering context frame containing the provided transformation state onto the per-execution context stack.
+     *
+     * @param transformation the Transformation being entered
+     * @param xdom the XDOM being processed within this context
+     * @param syntax the current source Syntax for this context
+     * @param id an identifier for the transformation execution (may be null)
+     * @param restricted whether the transformation should run in restricted (safe) mode
+     * @param targetSyntax the Syntax of the target renderer for this context (may be null)
+     */
     @Override
     public void push(Transformation transformation, XDOM xdom, Syntax syntax, String id, boolean restricted,
         Syntax targetSyntax)
@@ -165,6 +194,11 @@ public class DefaultRenderingContext implements MutableRenderingContext
         }
     }
 
+    /**
+     * Remove the top rendering context frame from the per-execution stack.
+     *
+     * <p>If there is no context stack for the current execution this method does nothing.</p>
+     */
     @Override
     public void pop()
     {
@@ -174,6 +208,15 @@ public class DefaultRenderingContext implements MutableRenderingContext
         }
     }
 
+    /**
+     * Execute a transformation on the given block while the transformation and its context are pushed
+     * onto the rendering context stack, and ensure the previous context is restored afterwards.
+     *
+     * @param transformation the transformation to execute
+     * @param context the transformation execution context to push
+     * @param block the block to transform
+     * @throws TransformationException if the executed transformation fails
+     */
     @Override
     public void transformInContext(Transformation transformation, TransformationContext context, Block block)
         throws TransformationException
@@ -186,6 +229,14 @@ public class DefaultRenderingContext implements MutableRenderingContext
         }
     }
 
+    /**
+     * Retrieve the per-execution rendering context stack, optionally creating and storing it when absent.
+     *
+     * @param create if {@code true}, create and store a new {@code Deque<Context>} in the current {@code ExecutionContext}
+     *               when no stack is present
+     * @return the existing or newly created {@code Deque<Context>} stored under {@code EXECUTION_CONTEXT_KEY}, or
+     *         {@code null} if there is no current {@code ExecutionContext}
+     */
     @SuppressWarnings("unchecked")
     private Deque<Context> getContextStack(boolean create)
     {
@@ -205,24 +256,46 @@ public class DefaultRenderingContext implements MutableRenderingContext
         return null;
     }
 
+    /**
+     * Retrieve the current rendering context frame without removing it from the stack.
+     *
+     * @return the current {@code Context} from the execution stack, or the {@link #NULL_CONTEXT} sentinel if no context is available
+     */
     protected Context peek()
     {
         Deque<Context> stack = getContextStack(false);
         return (stack != null && !stack.isEmpty()) ? stack.peek() : NULL_CONTEXT;
     }
 
+    /**
+     * Get the XDOM associated with the current rendering context.
+     *
+     * @return the `XDOM` of the current rendering context, or `null` if no rendering context is active
+     */
     @Override
     public XDOM getXDOM()
     {
         return peek().xdom;
     }
 
+    /**
+     * Gets the block currently being processed in the active rendering context.
+     *
+     * @return the current block being processed, or {@code null} if none is set
+     */
     @Override
     public Block getCurrentBlock()
     {
         return peek().currentBlock;
     }
 
+    /**
+     * Update the current block in the active rendering context.
+     *
+     * <p>If there is no active rendering context, this method has no effect.</p>
+     *
+     * @param block the block to mark as currently processed; may be {@code null} to clear the current block
+     */
     @Override
     public void setCurrentBlock(Block block)
     {
@@ -232,36 +305,66 @@ public class DefaultRenderingContext implements MutableRenderingContext
         }
     }
 
+    /**
+     * Retrieve the default Syntax for the current rendering context.
+     *
+     * @return the default Syntax from the active context, or {@code null} if no context is available
+     */
     @Override
     public Syntax getDefaultSyntax()
     {
         return peek().syntax;
     }
 
+    /**
+     * Indicates whether the current rendering context is in restricted mode.
+     *
+     * @return `true` if the current context is restricted, `false` otherwise.
+     */
     @Override
     public boolean isRestricted()
     {
         return peek().restricted;
     }
 
+    /**
+     * Get the transformation currently executing in this rendering context.
+     *
+     * @return the active {@link Transformation}, or {@code null} if no transformation is set
+     */
     @Override
     public Transformation getTransformation()
     {
         return peek().transformation;
     }
 
+    /**
+     * Get the identifier of the currently active transformation.
+     *
+     * @return the transformation identifier, or {@code null} if no transformation is active.
+     */
     @Override
     public String getTransformationId()
     {
         return peek().transformationId;
     }
 
+    /**
+     * Get the renderer target syntax for the current rendering context.
+     *
+     * @return the target {@link Syntax} of the current rendering context, or `null` if no target syntax is set
+     */
     @Override
     public Syntax getTargetSyntax()
     {
         return peek().targetSyntax;
     }
 
+    /**
+     * Set the renderer target syntax for the current rendering context frame.
+     *
+     * @param targetSyntax the Syntax to use for the renderer; {@code null} clears the target syntax for the current frame
+     */
     @Override
     public void setTargetSyntax(Syntax targetSyntax)
     {

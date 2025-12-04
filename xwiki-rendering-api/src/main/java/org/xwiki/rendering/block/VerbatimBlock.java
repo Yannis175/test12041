@@ -44,8 +44,10 @@ public class VerbatimBlock extends AbstractBlock
     private boolean inline;
 
     /**
-     * @param protectedString the string to protect from rendering.
-     * @param isInline if true the macro is located in a inline content (like paragraph, etc.).
+     * Create a VerbatimBlock that preserves a protected string and indicates whether it is inline.
+     *
+     * @param protectedString the string to preserve verbatim (excluded from rendering)
+     * @param isInline true if the block is located in inline content (for example, inside a paragraph)
      */
     public VerbatimBlock(String protectedString, boolean isInline)
     {
@@ -54,9 +56,11 @@ public class VerbatimBlock extends AbstractBlock
     }
 
     /**
-     * @param protectedString the string to protect from rendering.
-     * @param parameters the custom parameters
-     * @param isInline if true the macro is located in a inline content (like paragraph, etc.).
+     * Create a VerbatimBlock that preserves the given protected string and records whether it is inline.
+     *
+     * @param protectedString the string that will be preserved from rendering
+     * @param parameters custom parameters associated with this block
+     * @param isInline {@code true} if the block appears in inline content (for example, inside a paragraph)
      */
     public VerbatimBlock(String protectedString, Map<String, String> parameters, boolean isInline)
     {
@@ -67,7 +71,9 @@ public class VerbatimBlock extends AbstractBlock
     }
 
     /**
-     * @return the string to protect from rendering
+     * Get the verbatim string preserved from rendering.
+     *
+     * @return the verbatim string preserved from rendering
      */
     public String getProtectedString()
     {
@@ -75,13 +81,22 @@ public class VerbatimBlock extends AbstractBlock
     }
 
     /**
-     * @return if true the macro is located in a inline content (like paragraph, etc.).
+     * Indicates whether this verbatim block is located in inline content.
+     *
+     * @return `true` if the block is inline (for example, inside a paragraph), `false` otherwise.
      */
     public boolean isInline()
     {
         return this.inline;
     }
 
+    /**
+     * Dispatches this verbatim block to the given listener.
+     *
+     * Invokes {@code listener.onVerbatim} with this block's protected string, inline flag, and parameters.
+     *
+     * @param listener the listener to notify about this verbatim block
+     */
     @Override
     public void traverse(Listener listener)
     {
@@ -89,8 +104,9 @@ public class VerbatimBlock extends AbstractBlock
     }
 
     /**
-     * {@inheritDoc}
+     * Represent this block by its protected string.
      *
+     * @return the protected string of this block
      * @since 1.8RC2
      */
     @Override
@@ -99,6 +115,13 @@ public class VerbatimBlock extends AbstractBlock
         return getProtectedString();
     }
 
+    /**
+     * Indicates whether the given object is equal to this VerbatimBlock.
+     *
+     * @param obj the object to compare with this block
+     * @return {@code true} if {@code obj} is a {@code VerbatimBlock} whose superclass state is equal to this block,
+     *         and whose {@code inline} flag and protected string are equal; {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -118,6 +141,13 @@ public class VerbatimBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Compute the hash code for this VerbatimBlock.
+     *
+     * The computed value incorporates the superclass hash, the inline flag, and the protected string.
+     *
+     * @return the hash code value for this block
+     */
     @Override
     public int hashCode()
     {

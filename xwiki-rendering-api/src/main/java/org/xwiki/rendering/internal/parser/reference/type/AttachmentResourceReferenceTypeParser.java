@@ -36,6 +36,11 @@ import org.xwiki.rendering.listener.reference.ResourceType;
 @Singleton
 public class AttachmentResourceReferenceTypeParser extends AbstractURIResourceReferenceTypeParser
 {
+    /**
+     * Identifies the resource type handled by this parser as an attachment.
+     *
+     * @return the attachment {@link ResourceType}
+     */
     @Override
     public ResourceType getType()
     {

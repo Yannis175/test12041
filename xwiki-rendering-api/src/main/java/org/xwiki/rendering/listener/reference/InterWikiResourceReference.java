@@ -37,7 +37,9 @@ public class InterWikiResourceReference extends ResourceReference
     public static final String INTERWIKI_ALIAS = "interWikiAlias";
 
     /**
-     * @param reference see {@link #getReference()}
+     * Create a new InterWikiResourceReference for the specified InterWiki reference.
+     *
+     * @param reference the InterWiki reference string, typically in the form "alias:page" (InterWiki shorthand)
      */
     public InterWikiResourceReference(String reference)
     {
@@ -46,7 +48,9 @@ public class InterWikiResourceReference extends ResourceReference
     }
 
     /**
-     * @param interWikiAlias see {@link #getInterWikiAlias()}
+     * Stores the InterWiki alias used to resolve this reference to an external InterWiki URL.
+     *
+     * @param interWikiAlias the InterWiki alias (may be null to unset)
      */
     public void setInterWikiAlias(String interWikiAlias)
     {
@@ -54,9 +58,11 @@ public class InterWikiResourceReference extends ResourceReference
     }
 
     /**
-     * @return the <a href="http://en.wikipedia.org/wiki/InterWiki">Inter Wiki</a> alias to which the resource is
-     *         pointing to or null if not defined. Mappings between Inter Wiki aliases and actual locations are defined
-     *         in the Inter Wiki Map. Example: "wikipedia"
+     * The InterWiki alias that this resource references.
+     *
+     * Mappings between InterWiki aliases and external locations are defined in the InterWiki Map (for example: "wikipedia").
+     *
+     * @return the InterWiki alias, or {@code null} if not defined
      */
     public String getInterWikiAlias()
     {

@@ -35,14 +35,14 @@ import org.xwiki.rendering.syntax.Syntax;
 public interface Converter
 {
     /**
-     * Converts content from a Syntax to another and execute all registered Macro Transformations on the parsed content.
-     *
-     * @param source the content to be converted
-     * @param sourceSyntax the Syntax in which the content is represented
-     * @param targetSyntax the Syntax to which to convert to
-     * @param printer the printer that will receive the result of the conversion
-     * @throws ConversionException in case of a conversion error (invalid Syntax, etc)
-     */
+         * Convert content from a source Syntax to a target Syntax and apply all registered macro transformations to the parsed content.
+         *
+         * @param source the reader providing the content to convert
+         * @param sourceSyntax the Syntax of the source content
+         * @param targetSyntax the Syntax to convert the content into
+         * @param printer the WikiPrinter that will receive the conversion output
+         * @throws ConversionException if the conversion fails (for example, due to invalid syntax)
+         */
     void convert(Reader source, Syntax sourceSyntax, Syntax targetSyntax, WikiPrinter printer)
         throws ConversionException;
 }

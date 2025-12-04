@@ -35,13 +35,21 @@ public class EqualsBlockMatcher implements BlockMatcher
     private Block block;
 
     /**
-     * @param block the block to match
+     * Create a matcher that considers a Block equal when it equals the provided reference block.
+     *
+     * @param block the reference block to compare against when matching
      */
     public EqualsBlockMatcher(Block block)
     {
         this.block = block;
     }
 
+    /**
+     * Determines whether the given block is equal to the registered block.
+     *
+     * @param block the block to compare with the stored block
+     * @return true if the stored block equals the provided block, false otherwise
+     */
     @Override
     public boolean match(Block block)
     {

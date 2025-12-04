@@ -38,6 +38,12 @@ import org.xwiki.rendering.renderer.reference.link.URILabelGenerator;
 @Singleton
 public class DataURILabelGenerator implements URILabelGenerator
 {
+    /**
+     * Provides a human-readable label for a resource identified by a Data URI.
+     *
+     * @param reference the resource reference to label
+     * @return the label {@code Data URI image}
+     */
     @Override
     public String generateLabel(ResourceReference reference)
     {

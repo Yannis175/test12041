@@ -70,12 +70,24 @@ public class SyntaxRegistryListener implements EventListener
      */
     private Map<ComponentDescriptor<?>, Syntax[]> componentSyntaxes = new HashMap<>();
 
+    /**
+     * Provides the canonical name of this event listener.
+     *
+     * @return the listener name "syntaxregistry".
+     */
     @Override
     public String getName()
     {
         return "syntaxregistry";
     }
 
+    /**
+     * Specifies the observation events handled by this listener.
+     *
+     * @return a list containing an ApplicationStartedEvent, a ComponentDescriptorAddedEvent for the
+     *         Provider<List<Syntax>> type, and a ComponentDescriptorRemovedEvent for the
+     *         Provider<List<Syntax>> type.
+     */
     @Override
     public List<Event> getEvents()
     {
@@ -85,6 +97,18 @@ public class SyntaxRegistryListener implements EventListener
             new ComponentDescriptorRemovedEvent(SYNTAX_PROVIDER_TYPE));
     }
 
+    /**
+     * Handles lifecycle events to synchronize syntaxes from provider components into the SyntaxRegistry.
+     *
+     * <p>On {@link ApplicationStartedEvent} discovers and registers syntaxes from existing provider components.
+     * On {@link org.xwiki.component.event.ComponentDescriptorAddedEvent} retrieves the provider described by {@code data}
+     * and registers its syntaxes. For other component-descriptor events (e.g. removals) it unregisters syntaxes that were
+     * previously registered for the given descriptor, if any.</p>
+     *
+     * @param event the observed event
+     * @param source the event source; for component-descriptor events this is the {@link org.xwiki.component.manager.ComponentManager}
+     * @param data the event payload; for component-descriptor events this is the {@link org.xwiki.component.descriptor.ComponentDescriptor}
+     */
     @Override
     public void onEvent(Event event, Object source, Object data)
     {
@@ -116,6 +140,14 @@ public class SyntaxRegistryListener implements EventListener
         }
     }
 
+    /**
+     * Discover all provider components that supply syntaxes and register their syntaxes in the syntax registry.
+     *
+     * Retrieves the current ComponentManager, obtains all component descriptors for providers of List<Syntax>,
+     * instantiates each provider and delegates registration to {@code registerSyntaxesProvider}.
+     *
+     * @throws RuntimeException if a syntax provider component cannot be instantiated
+     */
     private void registerSyntaxesProviders()
     {
         ComponentManager cm = this.componentManagerProvider.get();
@@ -136,6 +168,13 @@ public class SyntaxRegistryListener implements EventListener
         }
     }
 
+    /**
+     * Register syntaxes supplied by the given provider into the SyntaxRegistry and remember them for the
+     * provided component descriptor.
+     *
+     * @param syntaxesProvider provider that supplies the list of syntaxes to register
+     * @param descriptor the component descriptor used as the key to store the registered syntaxes
+     */
     private void registerSyntaxesProvider(Provider<List<Syntax>> syntaxesProvider, ComponentDescriptor<?> descriptor)
     {
         List<Syntax> syntaxes = syntaxesProvider.get();
@@ -144,6 +183,14 @@ public class SyntaxRegistryListener implements EventListener
         this.componentSyntaxes.put(descriptor, syntaxArray);
     }
 
+    /**
+     * Retrieve the provider that supplies the list of syntaxes for the given component descriptor.
+     *
+     * @param componentManager the component manager to perform the lookup
+     * @param descriptor the component descriptor whose role hint is used to resolve the provider
+     * @return the Provider that supplies a List of Syntax instances for the descriptor's role hint
+     * @throws RuntimeException if the provider cannot be looked up (wraps the underlying ComponentLookupException)
+     */
     private Provider<List<Syntax>> getSyntaxesProvider(ComponentManager componentManager,
         ComponentDescriptor<?> descriptor)
     {

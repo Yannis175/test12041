@@ -71,8 +71,10 @@ public class ResourceReference implements Cloneable
     private Map<String, String> parameters = new LinkedHashMap<>();
 
     /**
-     * @param reference see {@link #getReference()}
-     * @param type see {@link #getType()}
+     * Create a ResourceReference with the given reference and resource type.
+     *
+     * @param reference the reference string of the resource
+     * @param type the resource's type
      */
     public ResourceReference(String reference, ResourceType type)
     {
@@ -81,7 +83,9 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @param typed see {@link #isTyped()}
+     * Set whether the resource type was explicitly provided.
+     *
+     * @param typed `true` if the resource type was explicitly provided, `false` otherwise
      */
     public void setTyped(boolean typed)
     {
@@ -89,8 +93,9 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @return true if the resource type has been explicitly provided (eg in XWiki Syntax 2.1 if the reference is
-     *         prefixed with the resource type followed by ":" and then the rest of the reference)
+     * Indicates whether the resource type was explicitly provided (for example, "type:reference").
+     *
+     * @return {@code true} if the resource type was explicitly provided, {@code false} otherwise.
      */
     public boolean isTyped()
     {
@@ -98,7 +103,9 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @param reference see {@link #getReference()}
+     * Set the resource reference string.
+     *
+     * @param reference the reference identifying the resource, or {@code null} to unset it
      */
     public void setReference(String reference)
     {
@@ -106,10 +113,11 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @return the reference pointed to by this resource. For example a reference can be a document's name (which
-     *         depends on the wiki, for example for XWiki the format is "wiki:space.page"), a URI
-     *         (for example: mailto:john@doe.com), a URL, an
-     *         <a href="http://en.wikipedia.org/wiki/InterWiki">Inter Wiki</a> reference, etc
+     * Get the resource's reference string.
+     *
+     * The reference identifies the resource and may be a document name, a URI, a URL, an InterWiki reference, etc.
+     *
+     * @return the reference string (for example "wiki:space.page", "mailto:john@doe.com", a URL, or an InterWiki reference)
      * @see #getType()
      */
     public String getReference()
@@ -118,7 +126,9 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @param baseReference see {@link #getBaseReferences()}
+     * Adds a base reference to the list of base references used to resolve this resource.
+     *
+     * @param baseReference the base reference to add to the resolution chain
      */
     public void addBaseReference(String baseReference)
     {
@@ -129,7 +139,11 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @param baseReferences see {@link #getBaseReferences()}
+     * Adds multiple base references to this resource.
+     *
+     * Each element in the provided list is added as a base reference in iteration order.
+     *
+     * @param baseReferences the list of base reference strings to add
      */
     public void addBaseReferences(List<String> baseReferences)
     {
@@ -139,9 +153,10 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @return the base references to use when we need to compute an absolute reference and {@link #getReference()}
-     *         returns a non absolute reference, can be {@code null}. When resolving references the list should be
-     *         evaluated from first to last (the last entries qualifying the entries earlier in the list)
+     * Get base references used to resolve non-absolute resource references.
+     *
+     * @return an unmodifiable list of base reference strings in resolution order (first to last); empty list if no base
+     *         references are set
      */
     public List<String> getBaseReferences()
     {
@@ -155,7 +170,9 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @return the type of the resource
+     * Gets the resource's type.
+     *
+     * @return the resource type
      * @see ResourceType
      */
     public ResourceType getType()
@@ -164,7 +181,9 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @param type the type of the resource
+     * Sets the type of this resource reference.
+     *
+     * @param type the resource type to assign to this reference, or {@code null} to unset it
      * @see ResourceType
      */
     public void setType(ResourceType type)
@@ -173,8 +192,10 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @param name see {@link #getParameter(String)}
-     * @param value see {@link #getParameter(String)}
+     * Adds or updates a named parameter on this resource reference.
+     *
+     * @param name  the parameter key
+     * @param value the parameter value; if a parameter with the same name already exists its value is replaced
      */
     public void setParameter(String name, String value)
     {
@@ -182,7 +203,10 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @param parameters see {@link #getParameters()}
+     * Merge the provided parameter entries into this reference's parameter map.
+     *
+     * @param parameters the parameter entries to add; entries with the same name replace existing ones
+     * @throws NullPointerException if {@code parameters} is {@code null}
      */
     public void setParameters(Map<String, String> parameters)
     {
@@ -190,7 +214,9 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @param name see {@link #getParameter(String)}
+     * Remove the parameter with the given name from this reference's parameter map.
+     *
+     * @param name the parameter name to remove; if no parameter exists with this name the method does nothing
      */
     public void removeParameter(String name)
     {
@@ -198,14 +224,13 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * In order for Resource references to be extensible we allow for extra parameters in addition to the Resource
-     * reference. For example this is used in Document Resource References for storing the query string and anchor
-     * information, and in InterWiki Resource References to store the InterWiki Alias. Note that supported parameters
-     * depend on the Renderer that will be used (i.e. it depends on the target Syntax). For example the XWiki Syntax
-     * 2.1 only supports "queryString" and "anchor".
+     * Retrieve an extension parameter value for this resource reference.
      *
-     * @param name the name of the parameter to get
-     * @return the parameter value or null if no such parameter exist
+     * <p>Supported parameter names depend on the target renderer/syntax (for example, XWiki Syntax 2.1 supports
+     * {@code "queryString"} and {@code "anchor"}).</p>
+     *
+     * @param name the parameter name
+     * @return the parameter value, or {@code null} if no such parameter is set
      */
     public String getParameter(String name)
     {
@@ -213,8 +238,9 @@ public class ResourceReference implements Cloneable
     }
 
     /**
-     * @return the collections of parameters, see {@link #getParameter(String)}. Returns parameters in the same order
-     *         they were added.
+     * Get the parameters map preserving the order in which parameters were added.
+     *
+     * @return an unmodifiable map of parameter names to parameter values in insertion order
      */
     public Map<String, String> getParameters()
     {
@@ -255,6 +281,15 @@ public class ResourceReference implements Cloneable
         return builder.toString();
     }
 
+    /**
+     * Create a copy of this ResourceReference with its mutable collections duplicated.
+     *
+     * The returned instance is a clone whose baseReferences and parameters are independent copies of the original's
+     * collections.
+     *
+     * @return a cloned ResourceReference with cloned mutable fields
+     * @throws RuntimeException if the object cannot be cloned (wraps CloneNotSupportedException)
+     */
     @Override
     public ResourceReference clone()
     {
@@ -275,6 +310,11 @@ public class ResourceReference implements Cloneable
         return clone;
     }
 
+    /**
+     * Compute a hash code based on the resource's type, typed flag, reference, base references, and parameters.
+     *
+     * @return the hash code value computed from the resource's type, typed flag, reference, base references, and parameters
+     */
     @Override
     public int hashCode()
     {
@@ -287,6 +327,13 @@ public class ResourceReference implements Cloneable
             .toHashCode();
     }
 
+    /**
+     * Determine whether the given object is equal to this ResourceReference.
+     *
+     * @param object the object to compare with this ResourceReference
+     * @return `true` if the object is a ResourceReference with the same type, typed flag, reference, base references,
+     *         and parameters; `false` otherwise
+     */
     @Override
     public boolean equals(Object object)
     {

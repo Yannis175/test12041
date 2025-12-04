@@ -42,8 +42,10 @@ public class MetaDataBlock extends AbstractBlock
     private MetaData metaData;
 
     /**
-     * @param childBlocks the list of children blocks of the block to construct
-     * @param metaData the metadata to set
+     * Constructs a MetaDataBlock that associates the provided metadata with the given child blocks.
+     *
+     * @param childBlocks the child blocks contained by this block
+     * @param metaData the metadata applied to this block and its descendants
      * @see AbstractBlock#AbstractBlock(List)
      */
     public MetaDataBlock(List<? extends Block> childBlocks, MetaData metaData)
@@ -53,11 +55,11 @@ public class MetaDataBlock extends AbstractBlock
     }
 
     /**
-     * Helper constructor.
+     * Create a MetaDataBlock containing the given child blocks and a single metadata entry.
      *
-     * @param childBlocks the list of children blocks of the block to construct
-     * @param key the metadata key to set
-     * @param value the metadata value to set
+     * @param childBlocks the child blocks to attach to the created MetaDataBlock
+     * @param key the metadata key to store
+     * @param value the metadata value to store for the given key
      * @see AbstractBlock#AbstractBlock(List)
      */
     public MetaDataBlock(List<? extends Block> childBlocks, String key, Object value)
@@ -66,7 +68,9 @@ public class MetaDataBlock extends AbstractBlock
     }
 
     /**
-     * @param childBlocks the list of children blocks of the block to construct
+     * Create a MetaDataBlock containing the given child blocks and an empty MetaData.
+     *
+     * @param childBlocks the child blocks to include in this MetaDataBlock
      * @see AbstractBlock#AbstractBlock(List)
      */
     public MetaDataBlock(List<? extends Block> childBlocks)
@@ -75,25 +79,42 @@ public class MetaDataBlock extends AbstractBlock
     }
 
     /**
-     * @return the metadata for this block, see {@link MetaData}
+     * Retrieve the metadata attached to this block and its descendants.
+     *
+     * @return the MetaData instance associated with this block and its descendants
      */
     public MetaData getMetaData()
     {
         return this.metaData;
     }
 
+    /**
+     * Notify the listener that metadata processing begins for this block and its descendants.
+     *
+     * @param listener the listener to notify of the metadata begin event
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginMetaData(getMetaData());
     }
 
+    /**
+     * Notifies the listener that processing of this block's metadata has ended.
+     *
+     * @param listener the listener to receive the endMetaData event for this block's metadata
+     */
     @Override
     public void after(Listener listener)
     {
         listener.endMetaData(getMetaData());
     }
 
+    /**
+     * Create a clone of this MetaDataBlock with its metadata copied into a new MetaData instance.
+     *
+     * @return the cloned MetaDataBlock whose {@code metaData} is a new copy of this block's metadata
+     */
     @Override
     public MetaDataBlock clone()
     {
@@ -104,6 +125,14 @@ public class MetaDataBlock extends AbstractBlock
         return cloned;
     }
 
+    /**
+     * Determine whether the given object is equal to this MetaDataBlock by checking superclass equality and
+     * comparing the contained MetaData.
+     *
+     * @param obj the object to compare with this block
+     * @return {@code true} if {@code obj} is a MetaDataBlock, the superclass parts are equal, and both blocks have
+     *         equal metadata; {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -122,6 +151,11 @@ public class MetaDataBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Compute a hash code that combines the superclass state with this block's metadata.
+     *
+     * @return the hash code value derived from the superclass hash and this block's {@link #getMetaData() metadata}
+     */
     @Override
     public int hashCode()
     {

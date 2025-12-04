@@ -35,24 +35,24 @@ import org.xwiki.rendering.listener.reference.ResourceReference;
 public interface LinkListener
 {
     /**
-     * Start of a link.
-     *
-     * @param reference the link reference
-     * @param freestanding if true then the link is a free standing URI directly in the text
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @see ResourceReference
-     * @since 2.5RC1
-     */
+ * Invoked at the start of processing a link.
+ *
+ * @param reference the link resource reference
+ * @param freestanding {@code true} if the link is a freestanding URI appearing directly in text
+ * @param parameters additional link parameters (e.g., {@code style="background-color: blue"}); may be empty
+ * @see ResourceReference
+ * @since 2.5RC1
+ */
     void beginLink(ResourceReference reference, boolean freestanding, @Default("") Map<String, String> parameters);
 
     /**
-     * End of a link.
-     *
-     * @param reference the link reference
-     * @param freestanding if true then the link is a free standing URI directly in the text
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     * @see ResourceReference
-     * @since 2.5RC1
-     */
+ * Signal the end of processing for a link.
+ *
+ * @param reference the link resource reference
+ * @param freestanding {@code true} if the link is a freestanding URI directly in the text
+ * @param parameters a map of additional parameters for the link (for example: {@code style="background-color: blue"})
+ * @see ResourceReference
+ * @since 2.5RC1
+ */
     void endLink(ResourceReference reference, boolean freestanding, @Default("") Map<String, String> parameters);
 }

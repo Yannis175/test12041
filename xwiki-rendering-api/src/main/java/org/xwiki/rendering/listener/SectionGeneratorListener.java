@@ -32,13 +32,25 @@ public class SectionGeneratorListener extends WrappingListener
     private int sectionDepth = -1;
 
     /**
-     * @param listener the listener to wrapp
+     * Create a SectionGeneratorListener that translates header events into section begin/end events and forwards events to the given wrapped listener.
+     *
+     * @param listener the listener to wrap and forward generated events to
      */
     public SectionGeneratorListener(Listener listener)
     {
         setWrappedListener(listener);
     }
 
+    /**
+     * Adjusts the current section nesting to match the given header level, then forwards the header event.
+     *
+     * Closes any open sections deeper than the header level and opens sections until the nesting depth equals the
+     * header level's ordinal, then delegates the header event to the wrapped listener.
+     *
+     * @param level the header level indicating the target section depth
+     * @param id an optional identifier for the header, or {@code null} if none
+     * @param parameters additional header parameters (may be empty)
+     */
     @Override
     public void beginHeader(HeaderLevel level, String id, Map<String, String> parameters)
     {
@@ -55,6 +67,11 @@ public class SectionGeneratorListener extends WrappingListener
         super.beginHeader(level, id, parameters);
     }
 
+    /**
+     * Closes any open sections and then forwards the document end event to the wrapped listener.
+     *
+     * @param metadata document metadata passed to the wrapped listener
+     */
     @Override
     public void endDocument(MetaData metadata)
     {

@@ -38,6 +38,12 @@ import org.xwiki.rendering.renderer.reference.link.URILabelGenerator;
 @Singleton
 public class DefaultPageAttachmentURILabelGenerator implements URILabelGenerator
 {
+    /**
+     * Generates a label for a page attachment URI from the provided resource reference.
+     *
+     * @param reference the attachment resource reference
+     * @return the raw reference string to use as the label
+     */
     @Override
     public String generateLabel(ResourceReference reference)
     {

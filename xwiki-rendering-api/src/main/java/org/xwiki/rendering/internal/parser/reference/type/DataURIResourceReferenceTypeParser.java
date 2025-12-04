@@ -38,12 +38,23 @@ import org.xwiki.rendering.parser.ResourceReferenceTypeParser;
 @Singleton
 public class DataURIResourceReferenceTypeParser implements ResourceReferenceTypeParser
 {
+    /**
+     * Identify the resource type handled by this parser.
+     *
+     * @return the {@link ResourceType#DATA} resource type
+     */
     @Override
     public ResourceType getType()
     {
         return ResourceType.DATA;
     }
 
+    /**
+     * Parse a resource reference that represents an image Data URI.
+     *
+     * @param reference the resource reference to parse; expected to start with a MIME type prefix such as {@code "image/"}
+     * @return {@code ResourceReference} for the parsed data image, or {@code null} if the input does not represent an image Data URI
+     */
     @Override
     public ResourceReference parse(String reference)
     {

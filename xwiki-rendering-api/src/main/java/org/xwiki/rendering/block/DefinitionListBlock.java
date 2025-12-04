@@ -33,9 +33,9 @@ import org.xwiki.rendering.listener.Listener;
 public class DefinitionListBlock extends AbstractBlock implements ListBLock
 {
     /**
-     * Construct a Definition List block with no parameters.
+     * Create a DefinitionListBlock containing the given child blocks and no parameters.
      *
-     * @param childrenBlocks the blocks making the Definition list
+     * @param childrenBlocks the child blocks that form the definition list
      */
     public DefinitionListBlock(List<Block> childrenBlocks)
     {
@@ -43,23 +43,32 @@ public class DefinitionListBlock extends AbstractBlock implements ListBLock
     }
 
     /**
-     * Construct a Definition List Block with parameters.
+     * Create a definition list block containing the given child blocks and configured with the provided parameters.
      *
-     * @param childrenBlocks the blocks making the Definition list
-     * @param parameters see {@link org.xwiki.rendering.block.AbstractBlock#getParameter(String)} for more details on
-     *            parameters
+     * @param childrenBlocks the child blocks contained in this definition list
+     * @param parameters a map of block parameters (see {@link org.xwiki.rendering.block.AbstractBlock#getParameter(String)} for retrieval details)
      */
     public DefinitionListBlock(List<Block> childrenBlocks, Map<String, String> parameters)
     {
         super(childrenBlocks, parameters);
     }
 
+    /**
+     * Signals the start of this definition list to the given listener.
+     *
+     * @param listener the listener to notify; receives this block's parameters when the definition list begins
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginDefinitionList(getParameters());
     }
 
+    /**
+     * Signal the end of this definition list to the provided listener.
+     *
+     * @param listener the rendering listener to notify; the block's parameters are passed to the listener
+     */
     @Override
     public void after(Listener listener)
     {

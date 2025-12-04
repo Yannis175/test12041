@@ -73,11 +73,17 @@ public class DefaultResourceReferenceParser extends AbstractResourceReferencePar
     private Logger logger;
 
     /**
-     * {@inheritDoc}
+     * Parse a raw resource reference, optionally using a type prefix to select a type-specific parser.
      *
-     * @return the parsed resource reference or a Resource Reference with {@link ResourceType#UNKNOWN} if no reference
-     *         type was specified
-     * @see org.xwiki.rendering.parser.ResourceReferenceParser#parse(String)
+     * If the input has a leading "type:" prefix and a corresponding ResourceReferenceTypeParser is available,
+     * that parser is used; otherwise the raw reference is returned with type {@link ResourceType#UNKNOWN}.
+     * When not in wiki mode, wiki-dependent types (DOCUMENT, SPACE, PAGE, ATTACHMENT, PAGE_ATTACHMENT, ICON)
+     * are treated as {@link ResourceType#URL} and marked as untyped. Component lookup failures are logged and
+     * cause the method to fall back to the default behavior.
+     *
+     * @param rawReference the raw reference string, possibly prefixed with "type:" (e.g. "type:reference")
+     * @return the parsed {@link ResourceReference}; defaults to a reference with type {@link ResourceType#UNKNOWN},
+     *         or to {@link ResourceType#URL} (marked untyped) when in non-wiki mode for wiki-dependent types
      */
     @Override
     public ResourceReference parse(String rawReference)

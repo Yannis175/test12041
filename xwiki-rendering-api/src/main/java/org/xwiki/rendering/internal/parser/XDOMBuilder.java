@@ -40,7 +40,7 @@ public class XDOMBuilder
     private Deque<List<Block>> stack = new ArrayDeque<List<Block>>();
 
     /**
-     * Default constructor.
+     * Create a new XDOMBuilder and initialize the root block list container.
      */
     public XDOMBuilder()
     {
@@ -48,7 +48,13 @@ public class XDOMBuilder
     }
 
     /**
-     * @return the resulting {@link XDOM}.
+     * Builds and returns the XDOM representing the accumulated blocks.
+     *
+     * If the accumulated blocks begin with an existing {@link XDOM}, that instance is returned;
+     * otherwise a new {@link XDOM} is constructed from the blocks.
+     *
+     * @return the resulting {@link XDOM} built from the accumulated blocks
+     * @throws IllegalStateException if begin/end block events are unbalanced (missing or extra {@code endBlockList()} calls)
      */
     public XDOM getXDOM()
     {
@@ -76,9 +82,10 @@ public class XDOMBuilder
     }
 
     /**
-     * End a container element.
+     * End the current block container and return the list of blocks it contained.
      *
-     * @return the list of blocks in that container.
+     * @return the list of blocks from the ended container
+     * @throws IllegalStateException if there is no open container (too many calls to {@code endBlockList()})
      */
     public List<Block> endBlockList()
     {
@@ -90,9 +97,10 @@ public class XDOMBuilder
     }
 
     /**
-     * Add a block to the current block container.
+     * Add the given block to the current container of blocks.
      *
-     * @param block the block to be added.
+     * @param block the block to add
+     * @throws IllegalStateException if there is no open block container (too many {@code endBlockList()} calls)
      */
     public void addBlock(Block block)
     {

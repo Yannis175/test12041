@@ -45,16 +45,34 @@ public abstract class AbstractBlockRenderer implements BlockRenderer
     protected Logger logger;
 
     /**
-     * @return provide the factory to use to create a new {@link PrintRenderer}.
-     */
+ * Provide the factory used to create {@link PrintRenderer} instances.
+ *
+ * @return the {@link PrintRendererFactory} used to create {@link PrintRenderer} instances
+ */
     protected abstract PrintRendererFactory getPrintRendererFactory();
 
+    /**
+     * Render a single block to the given WikiPrinter.
+     *
+     * @param block   the block to render
+     * @param printer the printer that receives the rendered output
+     */
     @Override
     public void render(Block block, WikiPrinter printer)
     {
         render(Collections.singletonList(block), printer);
     }
 
+    /**
+     * Renders a collection of blocks to the given WikiPrinter.
+     *
+     * <p>Creates a PrintRenderer via the factory returned by {@link #getPrintRendererFactory()}, traverses each block
+     * with that renderer, and if the renderer implements {@link java.io.Flushable} attempts to flush it. If flushing
+     * fails with an {@link java.io.IOException}, the error is logged when a logger is available.
+     *
+     * @param blocks  the blocks to render
+     * @param printer the target printer receiving the rendered output
+     */
     @Override
     public void render(Collection<Block> blocks, WikiPrinter printer)
     {

@@ -34,7 +34,11 @@ import org.xwiki.rendering.listener.Listener;
 public class QuotationBlock extends AbstractBlock
 {
     /**
-     * @param blocks the children of the quotation
+     * Create a quotation block containing the given child blocks.
+     *
+     * The created quotation has no parameters.
+     *
+     * @param blocks the child blocks that make up the quotation
      */
     public QuotationBlock(List<Block> blocks)
     {
@@ -42,20 +46,32 @@ public class QuotationBlock extends AbstractBlock
     }
 
     /**
-     * @param blocks the children of the quotation
-     * @param parameters the parameters of the quotation
+     * Create a quotation block containing the given child blocks and rendering parameters.
+     *
+     * @param blocks the child blocks that make up the quotation
+     * @param parameters rendering parameters for the quotation (may be empty)
      */
     public QuotationBlock(List<Block> blocks, Map<String, String> parameters)
     {
         super(blocks, parameters);
     }
 
+    /**
+     * Notify the provided listener that this quotation block is starting.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginQuotation(getParameters());
     }
 
+    /**
+     * Signals the end of this quotation to the given listener.
+     *
+     * @param listener the listener to notify; receives the quotation's parameters with the end event
+     */
     @Override
     public void after(Listener listener)
     {

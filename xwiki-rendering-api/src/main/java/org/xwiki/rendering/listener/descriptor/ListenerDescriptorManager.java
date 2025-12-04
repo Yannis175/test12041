@@ -31,8 +31,10 @@ import org.xwiki.component.annotation.Role;
 public interface ListenerDescriptorManager
 {
     /**
-     * @param type the listener class
-     * @return the listener descriptor
-     */
+ * Retrieve the ListenerDescriptor associated with the specified listener class.
+ *
+ * @param type the listener class for which to obtain a descriptor
+ * @return the corresponding ListenerDescriptor, or {@code null} if no descriptor is available
+ */
     ListenerDescriptor getListenerDescriptor(Class<?> type);
 }

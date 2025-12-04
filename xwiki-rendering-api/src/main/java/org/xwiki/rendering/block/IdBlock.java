@@ -39,7 +39,9 @@ public class IdBlock extends AbstractBlock
     private String name;
 
     /**
-     * @param name the unique name for the reference/location.
+     * Creates an IdBlock identifying a location (anchor) within a document.
+     *
+     * @param name the unique identifier for the anchor location
      */
     public IdBlock(String name)
     {
@@ -47,19 +49,32 @@ public class IdBlock extends AbstractBlock
     }
 
     /**
-     * @return the reference/location name
+     * Gets the unique name of this reference (anchor) within the page.
+     *
+     * @return the reference name
      */
     public String getName()
     {
         return this.name;
     }
 
+    /**
+     * Notify the given listener about this block's identifier.
+     *
+     * @param listener the listener to notify; its {@code onId} callback will be invoked with this block's name
+     */
     @Override
     public void traverse(Listener listener)
     {
         listener.onId(getName());
     }
 
+    /**
+     * Determine whether this block is equal to another object.
+     *
+     * @param obj the object to compare with this block
+     * @return {@code true} if {@code obj} is an {@link IdBlock} with equal superclass state and the same name, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -79,6 +94,11 @@ public class IdBlock extends AbstractBlock
         return false;
     }
 
+    /**
+     * Compute a hash code for this IdBlock.
+     *
+     * @return the hash code computed from the superclass state and this block's name
+     */
     @Override
     public int hashCode()
     {

@@ -33,7 +33,9 @@ import org.xwiki.rendering.listener.Listener;
 public class TableBlock extends AbstractBlock
 {
     /**
-     * @param list the list of children blocks of the table block (generally a list of {@link TableRowBlock}).
+     * Create a table block containing the given child blocks.
+     *
+     * @param list the child blocks of the table (typically {@link TableRowBlock} instances)
      * @since 4.2M1
      */
     public TableBlock(List<Block> list)
@@ -42,20 +44,32 @@ public class TableBlock extends AbstractBlock
     }
 
     /**
-     * @param list the list of children blocks of the table block (generally a list of {@link TableRowBlock}).
-     * @param parameters the parameters of the table.
+     * Create a table block with the given child blocks and parameters.
+     *
+     * @param list the child blocks of the table (generally a list of {@link TableRowBlock})
+     * @param parameters the parameters for the table
      */
     public TableBlock(List<Block> list, Map<String, String> parameters)
     {
         super(list, parameters);
     }
 
+    /**
+     * Notifies the given listener that table rendering is starting, supplying this block's parameters.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginTable(getParameters());
     }
 
+    /**
+     * Signals the end of this table to the given listener.
+     *
+     * @param listener the listener to notify of the table end; the block's parameters are passed to the listener
+     */
     @Override
     public void after(Listener listener)
     {

@@ -40,7 +40,9 @@ public class DocumentResourceReference extends ResourceReference
     public static final String ANCHOR = "anchor";
 
     /**
-     * @param reference see {@link #getReference()}
+     * Create a DocumentResourceReference for the given document reference string.
+     *
+     * @param reference the document reference string (the value returned by {@link #getReference()})
      */
     public DocumentResourceReference(String reference)
     {
@@ -48,8 +50,9 @@ public class DocumentResourceReference extends ResourceReference
     }
 
     /**
-     * @return the query string for specifying parameters that will be used in the rendered URL or null if no query
-     *         string has been specified. Example: {@code mydata1=5&mydata2=Hello}
+     * Get the query string used when rendering the document URL.
+     *
+     * @return the query string to append to the URL, or {@code null} if none is set. Example: {@code mydata1=5&mydata2=Hello}
      */
     public String getQueryString()
     {
@@ -57,7 +60,9 @@ public class DocumentResourceReference extends ResourceReference
     }
 
     /**
-     * @param queryString see {@link #getQueryString()}
+     * Set the query string parameter for this document reference.
+     *
+     * @param queryString the query string to associate with the reference; if null or empty the parameter is not set
      */
     public void setQueryString(String queryString)
     {
@@ -67,9 +72,11 @@ public class DocumentResourceReference extends ResourceReference
     }
 
     /**
-     * @return the anchor name pointing to an anchor defined in the referenced document or null if no anchor has been
-     *         specified (in which case the reference points to the top of the document). Note that in XWiki anchors are
-     *         automatically created for titles. Example: "TableOfContentAnchor"
+     * Retrieves the anchor name within the referenced document.
+     *
+     * In XWiki, anchors are automatically created for titles (for example, "TableOfContentAnchor").
+     *
+     * @return the anchor name pointing to an anchor defined in the referenced document, or null if no anchor has been specified
      */
     public String getAnchor()
     {
@@ -77,7 +84,9 @@ public class DocumentResourceReference extends ResourceReference
     }
 
     /**
-     * @param anchor see {@link #getAnchor()}
+     * Sets the anchor (fragment identifier) of the document reference.
+     *
+     * @param anchor the anchor (fragment identifier) to set; ignored if null or empty
      */
     public void setAnchor(String anchor)
     {

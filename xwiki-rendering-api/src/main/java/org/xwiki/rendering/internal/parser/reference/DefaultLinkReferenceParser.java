@@ -54,6 +54,13 @@ public class DefaultLinkReferenceParser implements ResourceReferenceParser
     @Named("link/untyped")
     private ResourceReferenceParser untypedLinkReferenceParser;
 
+    /**
+     * Parse a raw link reference, guessing its resource type when necessary.
+     *
+     * @param rawReference the raw reference string to parse
+     * @return the parsed ResourceReference; if the parser cannot determine a concrete type the returned
+     *         reference will have type {@link org.xwiki.rendering.listener.meta.ResourceType#UNKNOWN}
+     */
     @Override
     public ResourceReference parse(String rawReference)
     {

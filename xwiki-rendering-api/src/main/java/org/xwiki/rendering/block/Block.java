@@ -101,204 +101,213 @@ public interface Block extends Cloneable
     }
 
     /**
-     * Let the block send {@link Listener} events corresponding to its content. For example a Paragraph block will send
-     * the {@link org.xwiki.rendering.listener.Listener#beginParagraph} and
-     * {@link org.xwiki.rendering.listener.Listener#endParagraph} events when this method is called.
-     *
-     * @param listener the listener to which to send the events to.
-     */
+ * Notify the given {@link Listener} of events that represent this block's content.
+ *
+ * For example, a paragraph block will send {@link org.xwiki.rendering.listener.Listener#beginParagraph}
+ * and {@link org.xwiki.rendering.listener.Listener#endParagraph} events.
+ *
+ * @param listener the listener that will receive events for this block
+ */
     void traverse(Listener listener);
 
     /**
-     * Helper method to add a single child block to the end of the children list of the current block. For adding
-     * several blocks at once use {@link #addChildren(java.util.List)}.
-     *
-     * @param blockToAdd the child block to add
-     */
+ * Appends the given block to the end of this block's children.
+ *
+ * @param blockToAdd the block to append as a child
+ */
     void addChild(Block blockToAdd);
 
     /**
-     * Adds several children blocks to the end of the children list of the current block. For example a bold sentence is
-     * made up of a Bold block to which the different words making up the text have been added to.
-     *
-     * @param blocksToAdd the children blocks to add
-     */
+ * Appends the given blocks to the end of this block's children list.
+ *
+ * @param blocksToAdd the blocks to add as children
+ */
     void addChildren(List<? extends Block> blocksToAdd);
 
     /**
-     * Replace current children by the provided list of {@link Block}s.
-     *
-     * @param children the new children
-     */
+ * Replace the current children with the provided list of {@link Block} instances.
+ *
+ * @param children the list of blocks to use as the new children
+ */
     void setChildren(List<? extends Block> children);
 
     /**
-     * Helper method to add a single child block to the current block before the provided existing child block. For
-     * adding several blocks at once use {@link #addChildren(java.util.List)}.
-     *
-     * @param blockToInsert the child block to add
-     * @param nextBlock the child block that will be just after the added block
-     * @since 1.6M1
-     */
+ * Insert a single child block immediately before a specified existing child.
+ *
+ * @param blockToInsert the child block to insert
+ * @param nextBlock the existing child block that will follow the inserted block
+ * @since 1.6M1
+ */
     void insertChildBefore(Block blockToInsert, Block nextBlock);
 
     /**
-     * Helper method to add a single child block to the current block after the provided existing child block. For
-     * adding several blocks at once use {@link #addChildren(java.util.List)}.
-     *
-     * @param blockToInsert the child block to add
-     * @param previousBlock the child block that will be just before the added block
-     * @since 1.6M1
-     */
+ * Insert a child block immediately after a specified existing child.
+ *
+ * @param blockToInsert the child block to insert
+ * @param previousBlock the existing child block that will precede the inserted block
+ * @since 1.6M1
+ */
     void insertChildAfter(Block blockToInsert, Block previousBlock);
 
     /**
-     * Replaces an existing children block with the passed new block. Also sets the new block's parent to be the current
-     * block.
-     *
-     * @param newBlock the new block to replace the old block with
-     * @param oldBlock the block to replace with the new block
-     */
+ * Replace an existing child block with another block and set the new block's parent to this block.
+ *
+ * @param newBlock the block that will replace the existing child
+ * @param oldBlock the existing child block to be replaced
+ */
     void replaceChild(Block newBlock, Block oldBlock);
 
     /**
-     * Replaces an existing children block with the passed new blocks. Also sets the new block's parents to be the
-     * current block.
-     *
-     * @param newBlocks the new blocks to replace the old block with
-     * @param oldBlock the block to replace with the new blocks
-     */
+ * Replace an existing child block with the given list of blocks and set each new block's parent to this block.
+ *
+ * @param newBlocks the blocks to insert in place of the existing child; their parent will be set to this block
+ * @param oldBlock the existing child block to be replaced
+ */
     void replaceChild(List<Block> newBlocks, Block oldBlock);
 
     /**
-     * Get the parent block. All blocks have a parent and the top level parent is the {@link XDOM} object.
-     *
-     * @return the parent block
-     */
+ * Return the parent block in the document tree.
+ *
+ * @return the parent block; the top-level parent is the {@link XDOM} instance
+ */
     Block getParent();
 
     /**
-     * Sets the parent block.
-     *
-     * @param parentBlock the parent block
-     */
+ * Set the parent of this block.
+ *
+ * @param parentBlock the parent block to assign
+ */
     void setParent(Block parentBlock);
 
     /**
-     * Gets all children blocks.
-     *
-     * @return the children blocks
-     * @see #addChildren(java.util.List)
-     */
+ * The list of this block's child blocks in document order.
+ *
+ * @return the list of child blocks; an empty list if there are no children
+ * @see #addChildren(java.util.List)
+ */
     List<Block> getChildren();
 
     /**
-     * Gets the top level Block. If the current block is the top level Block, it return itself.
-     *
-     * @return the top level Block
-     */
+ * Get the top-level block of this block's tree.
+ *
+ * @return the root block of the tree, or this block if it is already the root
+ */
     Block getRoot();
 
     /**
-     * Removes a Block.
-     *
-     * @param childBlockToRemove the child block to remove
-     * @since 2.6RC1
-     */
+ * Removes the specified child block from this block's list of children.
+ *
+ * @param childBlockToRemove the child block to remove
+ * @since 2.6RC1
+ */
     void removeBlock(Block childBlockToRemove);
 
     /**
-     * @return the next sibling block or null if there's no next sibling
-     * @since 2.6RC1
-     */
+ * Get the next sibling of this block.
+ *
+ * @return the next sibling block, or {@code null} if there is no next sibling
+ * @since 2.6RC1
+ */
     Block getNextSibling();
 
     /**
-     * @param nextSiblingBlock see {@link #getNextSibling()}
-     * @since 2.6RC1
-     */
+ * Set the immediate next sibling of this block.
+ *
+ * @param nextSiblingBlock the block to set as the next sibling, or `null` to clear the reference
+ * @since 2.6RC1
+ */
     void setNextSiblingBlock(Block nextSiblingBlock);
 
     /**
-     * @return the previous sibling block or null if there's no previous sibling
-     * @since 2.6RC1
-     */
+ * Retrieve the previous sibling of this block within its parent's child list.
+ *
+ * @return the previous sibling block, or null if there is no previous sibling
+ * @since 2.6RC1
+ */
     Block getPreviousSibling();
 
     /**
-     * @param previousSiblingBlock see {@link #getPreviousSibling()} ()}
-     * @since 2.6RC1
-     */
+ * Set the previous sibling of this block.
+ *
+ * @param previousSiblingBlock the block to set as this block's previous sibling, or {@code null} to clear it
+ * @since 2.6RC1
+ */
     void setPreviousSiblingBlock(Block previousSiblingBlock);
 
     /**
-     * Return a copy of the block with filtered children.
-     *
-     * @param blockFilter the Block filter.
-     * @return the filtered Block.
-     * @since 1.8RC2
-     */
+ * Create a copy of this block whose descendant children are limited to those accepted by the given filter.
+ *
+ * @param blockFilter the filter that decides which descendant blocks are included in the cloned block
+ * @return the cloned block with its children filtered according to {@code blockFilter}
+ * @since 1.8RC2
+ */
     Block clone(BlockFilter blockFilter);
 
     /**
-     * @return the cloned Block
-     * @see Object#clone()
-     */
+ * Create a clone of this block.
+ *
+ * @return the cloned Block
+ */
     Block clone();
 
     /**
-     * @return all parameters
-     * @since 3.0M1
-     */
+ * Parameters associated with this block.
+ *
+ * @return the map of parameters where keys are parameter names and values are parameter values
+ * @since 3.0M1
+ */
     Map<String, String> getParameters();
 
     /**
-     * A Parameter is a generic key/value which can be used to add metadata to a block. What is done with the metadata
-     * depends on the Renderer's implementations. For example the XHTML Renderer adds them as Element attributes.
-     *
-     * @param name the name of the parameter to return
-     * @return the parameter or null if the parameter doesn't exist
-     * @since 3.0M1
-     */
+ * Retrieve the value of the named parameter attached to this block.
+ *
+ * <p>Parameters are arbitrary key/value metadata that renderers or extensions may use (for example, renderers
+ * may convert them to element attributes).</p>
+ *
+ * @param name the parameter name
+ * @return the parameter value, or `null` if no parameter with the given name exists
+ * @since 3.0M1
+ */
     String getParameter(String name);
 
     /**
-     * Set a parameter on the current block. See {@link #getParameter(String)} for more details.
-     *
-     * @param name the parameter's name
-     * @param value the parameter's value
-     * @since 3.0M1
-     */
+ * Sets the value of a named parameter on this block.
+ *
+ * @param name the parameter name
+ * @param value the parameter value, or null to remove the parameter
+ * @since 3.0M1
+ */
     void setParameter(String name, String value);
 
     /**
-     * Set several parameters at once.
-     *
-     * @param parameters the parameters to set
-     * @see #getParameter(String)
-     * @since 3.0M1
-     */
+ * Set multiple parameters on the block from the provided map.
+ *
+ * Each entry in the map is applied as a parameter; entries override any existing parameter with the same name.
+ *
+ * @param parameters the parameters to set
+ * @since 3.0M1
+ */
     void setParameters(Map<String, String> parameters);
 
     /**
-     * Get all blocks following provided {@link BlockMatcher} and {@link Axes}.
-     *
-     * @param <T> the class of the Blocks to return
-     * @param matcher filter the blocks to return
-     * @param axes indicate the search axes
-     * @return the matched {@link Block}s, empty list of none was found
-     * @since 3.0M3
-     */
+ * Retrieve blocks related to this block that match the given matcher according to the specified search axes.
+ *
+ * @param <T> the concrete Block type to return
+ * @param matcher the matcher used to select blocks
+ * @param axes the axes that define how the block tree is searched relative to this block
+ * @return the matched blocks, or an empty list if none are found
+ * @since 3.0M3
+ */
     <T extends Block> List<T> getBlocks(BlockMatcher matcher, Axes axes);
 
     /**
-     * Get the first matched block in the provided {@link Axes}.
-     *
-     * @param <T> the class of the Block to return
-     * @param matcher indicate which block to stop to
-     * @param axes indicate the search axes
-     * @return the matched {@link Block}, null if none was found
-     * @since 3.0M3
-     */
+ * Finds the first block that matches the given matcher within the specified axes.
+ *
+ * @param <T> the expected block type
+ * @param matcher the matcher used to identify target blocks
+ * @param axes the axes that define the search scope
+ * @return the first matching {@link Block}, or {@code null} if none is found
+ * @since 3.0M3
+ */
     <T extends Block> T getFirstBlock(BlockMatcher matcher, Axes axes);
 }
