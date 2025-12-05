@@ -48,8 +48,9 @@ public class XDOM extends MetaDataBlock
     private transient IdGenerator idGenerator;
 
     /**
-     * @param childBlocks the list of children blocks of the block to construct
-     * @see AbstractBlock#AbstractBlock(List)
+     * Create an XDOM containing the given child blocks using a fresh IdGenerator and empty metadata.
+     *
+     * @param childBlocks the child blocks that compose the document
      */
     public XDOM(List<? extends Block> childBlocks)
     {
@@ -57,8 +58,10 @@ public class XDOM extends MetaDataBlock
     }
 
     /**
-     * @param childBlocks the list of children blocks of the block to construct
-     * @param metaData the meta data to add for this block
+     * Create an XDOM initialized with the given child blocks and metadata.
+     *
+     * @param childBlocks the child blocks that form the document's content
+     * @param metaData the metadata to attach to the document
      * @see AbstractBlock#AbstractBlock(List)
      */
     public XDOM(List<? extends Block> childBlocks, MetaData metaData)
@@ -67,8 +70,12 @@ public class XDOM extends MetaDataBlock
     }
 
     /**
-     * @param childBlocks the list of children blocks of the block to construct
-     * @param idGenerator a stateful id generator for this document
+     * Create an XDOM containing the given child blocks and using the provided document-wide IdGenerator.
+     *
+     * The XDOM is initialized with empty metadata.
+     *
+     * @param childBlocks the child blocks that form the document's content
+     * @param idGenerator a stateful IdGenerator to produce stable identifiers within this document
      */
     public XDOM(List<? extends Block> childBlocks, IdGenerator idGenerator)
     {
@@ -76,9 +83,11 @@ public class XDOM extends MetaDataBlock
     }
 
     /**
-     * @param childBlocks the list of children blocks of the block to construct
-     * @param metaData the meta data to add for this block
-     * @param idGenerator a stateful id generator for this document
+     * Create an XDOM containing the given child blocks, using the provided document-wide id generator and metadata.
+     *
+     * @param childBlocks the child blocks that form the document tree
+     * @param idGenerator a stateful IdGenerator to produce document-scoped identifiers
+     * @param metaData metadata to attach to the document
      * @see AbstractBlock#AbstractBlock(List)
      */
     public XDOM(List<? extends Block> childBlocks, IdGenerator idGenerator, MetaData metaData)
@@ -88,7 +97,9 @@ public class XDOM extends MetaDataBlock
     }
 
     /**
-     * @return a stateful id generator for the whole document.
+     * Access the document-scoped IdGenerator used to assign identifiers to blocks within this XDOM.
+     *
+     * @return the stateful IdGenerator for this document
      */
     public IdGenerator getIdGenerator()
     {
@@ -96,7 +107,9 @@ public class XDOM extends MetaDataBlock
     }
 
     /**
-     * @param idGenerator a stateful id generator for the whole document.
+     * Assigns the document-wide IdGenerator used to produce stable identifiers for blocks within this XDOM.
+     *
+     * @param idGenerator the stateful id generator to use for this document; may be {@code null} to remove any generator
      * @since 2.1M1
      */
     public void setIdGenerator(IdGenerator idGenerator)
@@ -104,18 +117,33 @@ public class XDOM extends MetaDataBlock
         this.idGenerator = idGenerator;
     }
 
+    /**
+     * Notify the given listener that document processing is starting using this XDOM's metadata.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginDocument(getMetaData());
     }
 
+    /**
+     * Signals the end of this document to the given listener using this document's metadata.
+     *
+     * @param listener the listener to notify of the document end
+     */
     @Override
     public void after(Listener listener)
     {
         listener.endDocument(getMetaData());
     }
 
+    /**
+     * Create a shallow copy of this XDOM with an independent IdGenerator when present.
+     *
+     * @return a shallow clone of this XDOM; if this XDOM has an `IdGenerator`, the clone receives a copied `IdGenerator`
+     */
     @Override
     public XDOM clone()
     {

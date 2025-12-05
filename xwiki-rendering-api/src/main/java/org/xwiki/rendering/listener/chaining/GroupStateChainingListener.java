@@ -34,22 +34,41 @@ public class GroupStateChainingListener extends AbstractChainingListener
 {
     private int groupDepth;
 
+    /**
+     * Create a GroupStateChainingListener bound to the given listener chain.
+     *
+     * @param listenerChain the listener chain to which events will be delegated
+     */
     public GroupStateChainingListener(ListenerChain listenerChain)
     {
         setListenerChain(listenerChain);
     }
 
+    /**
+     * Gets the current group nesting depth within the document.
+     *
+     * @return the current depth of nested groups; 0 when not inside any group
+     */
     public int getDocumentDepth()
     {
         return this.groupDepth;
     }
 
+    /**
+     * Indicates whether the current position is inside a group.
+     *
+     * @return {@code true} if the current group nesting depth is greater than zero, {@code false} otherwise.
+     */
     public boolean isInGroup()
     {
         return this.groupDepth > 0;
     }
 
-    // Events
+    /**
+     * Increments the internal group nesting depth and forwards a group-begin event to the chained listeners.
+     *
+     * @param parameters the parameters associated with the group, or {@code null} if none
+     */
 
     @Override
     public void beginGroup(Map<String, String> parameters)
@@ -59,6 +78,11 @@ public class GroupStateChainingListener extends AbstractChainingListener
         super.beginGroup(parameters);
     }
 
+    /**
+     * Signals the end of a group to the chained listener and updates the tracked group nesting depth.
+     *
+     * @param parameters the parameters associated with the group end event
+     */
     @Override
     public void endGroup(Map<String, String> parameters)
     {

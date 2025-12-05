@@ -41,12 +41,22 @@ public class DefinitionDescriptionBlock extends AbstractBlock
         super(childrenBlocks);
     }
 
+    /**
+     * Notify the listener that a definition description block is starting.
+     *
+     * @param listener the listener to notify of the block lifecycle event
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginDefinitionDescription();
     }
 
+    /**
+     * Signals the end of a definition description to the given listener.
+     *
+     * @param listener the listener to notify about the end of the definition description
+     */
     @Override
     public void after(Listener listener)
     {

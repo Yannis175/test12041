@@ -48,9 +48,10 @@ public class DefaultUntypedImageReferenceParser extends AbstractUntypedReference
     private ResourceReferenceTypeParser attachmentResourceReferenceTypeParser;
 
     /**
-     * {@inheritDoc}
+     * Parse a wiki attachment reference string into an {@link AttachmentResourceReference}.
      *
-     * @return the {@link AttachmentResourceReference} to which the reference string is pointing
+     * @param rawReference the raw wiki reference string pointing to an attachment
+     * @return the {@link AttachmentResourceReference} represented by {@code rawReference}
      */
     @Override
     protected ResourceReference getWikiResource(String rawReference)

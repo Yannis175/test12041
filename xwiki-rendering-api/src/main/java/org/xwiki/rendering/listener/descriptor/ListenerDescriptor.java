@@ -36,7 +36,9 @@ public class ListenerDescriptor
     private Map<String, ListenerElement> elements = new HashMap<String, ListenerElement>();
 
     /**
-     * @return the listener elements
+     * Get the map of listener elements keyed by event name.
+     *
+     * @return the map of listener elements keyed by event name
      */
     public Map<String, ListenerElement> getElements()
     {

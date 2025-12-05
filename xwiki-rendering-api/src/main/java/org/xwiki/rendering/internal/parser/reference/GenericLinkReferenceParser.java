@@ -122,13 +122,24 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     private ResourceReferenceParser untypedLinkReferenceParser;
 
     /**
-     * @return the list of URI prefixes the link parser recognizes
+     * URI prefixes recognized by this link parser.
+     *
+     * @return the list of recognized URI prefixes (for example, "mailto")
      */
     protected List<String> getAllowedURIPrefixes()
     {
         return URI_PREFIXES;
     }
 
+    /**
+     * Parses a raw link reference and returns a corresponding ResourceReference.
+     *
+     * The method recognizes URIs with supported schemes, InterWiki links, non-wiki URLs (when not in wiki mode),
+     * or document links (including optional query string and anchor).
+     *
+     * @param rawReference the raw reference string to parse
+     * @return the parsed ResourceReference, or `null` if the reference could not be parsed
+     */
     @Override
     public ResourceReference parse(String rawReference)
     {
@@ -157,10 +168,10 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     }
 
     /**
-     * Construct a Document Link reference out of the passed content.
+     * Create a document ResourceReference by parsing the provided content, extracting an optional query string and anchor.
      *
-     * @param content the string containing the Document link reference
-     * @return the parsed Link Object corresponding to the Document link reference
+     * @param content the mutable raw document reference text (may contain escaped separators); parsed parts are removed from this builder
+     * @return the parsed document ResourceReference, marked as untyped, with `QUERY_STRING` and `ANCHOR` parameters set when present
      */
     private ResourceReference parseDocumentLink(StringBuilder content)
     {
@@ -196,11 +207,10 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     }
 
     /**
-     * Check if the passed link references is an URI link reference.
+     * Determine whether the input represents a URI or URL and parse it into a ResourceReference.
      *
-     * @param rawLink the original reference to parse
-     * @return the parsed Link object or null if the passed reference is not an URI link reference or if no URI type
-     *         parser was found for the passed URI scheme
+     * @param rawLink the raw reference string to inspect and parse
+     * @return a ResourceReference representing the parsed URI or URL, or `null` if the input is not a URI/URL or no suitable parser is available
      */
     private ResourceReference parseURILinks(String rawLink)
     {
@@ -233,10 +243,13 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     }
 
     /**
-     * Check if the passed link references is an interwiki link reference.
+     * Detects an interwiki link in the given content.
      *
-     * @param content the original content to parse
-     * @return the parsed Link object or null if the passed reference is not an interwiki link reference
+     * <p>If an interwiki separator is found, the corresponding InterWikiResourceReference is created with escapes
+     * removed and the interwiki alias set.</p>
+     *
+     * @param content the original content to parse; this StringBuilder is modified to remove the parsed interwiki part
+     * @return an {@link InterWikiResourceReference} for the detected interwiki link, or {@code null} if none was found
      */
     private ResourceReference parseInterWikiLinks(StringBuilder content)
     {
@@ -251,11 +264,13 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     }
 
     /**
-     * Find out the element located to the right of the passed separator.
+     * Extracts and returns the substring located to the right of the last unescaped occurrence of {@code separator}.
      *
-     * @param content the string to parse. This parameter will be modified by the method to remove the parsed content.
-     * @param separator the separator string to locate the element
-     * @return the parsed element or null if the separator string wasn't found
+     * The method removes the separator and everything to its right from the provided {@code content} buffer.
+     *
+     * @param content the string buffer to parse; the buffer will be modified to remove the parsed part when a separator is found
+     * @param separator the separator string to locate
+     * @return the parsed element (trimmed), or {@code null} if the separator string wasn't found unescaped
      */
     protected String parseElementAfterString(StringBuilder content, String separator)
     {
@@ -282,12 +297,13 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     }
 
     /**
-     * Count the number of escape chars before a given character and if that number is odd then that character should be
-     * escaped.
+     * Determine whether the character at the given index is escaped by preceding escape characters.
+     *
+     * A character is considered escaped when it is immediately preceded by an odd number of escape characters (`ESCAPE_CHAR`).
      *
      * @param content the content in which to check for escapes
-     * @param charPosition the position of the char for which to decide if it should be escaped or not
-     * @return true if the character should be escaped
+     * @param charPosition the index of the character to check within {@code content}
+     * @return {@code true} if the character is escaped, {@code false} otherwise
      */
     private boolean shouldEscape(StringBuilder content, int charPosition)
     {
@@ -301,8 +317,10 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     }
 
     /**
-     * @param text the reference from which to remove unneeded escapes
-     * @return the cleaned text
+     * Remove escape sequences that apply to the main reference portion, restoring the original characters.
+     *
+     * @param text the reference text containing escape sequences
+     * @return the reference text with reference-part escapes removed
      */
     private String removeEscapesFromReferencePart(String text)
     {
@@ -310,8 +328,10 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     }
 
     /**
-     * @param text the reference from which to remove unneeded escapes
-     * @return the cleaned text
+     * Remove escape sequences from query string, anchor, and interwiki parts of a reference.
+     *
+     * @param text the input substring (query, anchor, or interwiki alias) that may contain escape sequences
+     * @return the input string with escape sequences replaced according to the ESCAPES_EXTRA → ESCAPE_REPLACEMENTS_EXTRA mappings
      */
     private String removeEscapesFromExtraParts(String text)
     {
@@ -319,8 +339,10 @@ public class GenericLinkReferenceParser extends AbstractResourceReferenceParser
     }
 
     /**
-     * @param text the reference from which to remove unneeded escapes
-     * @return the cleaned text
+     * Remove interwiki escape sequences from the given reference text.
+     *
+     * @param text the reference text that may contain interwiki escape sequences
+     * @return the text with interwiki escape sequences replaced by their unescaped equivalents
      */
     private String removeEscapes(String text)
     {

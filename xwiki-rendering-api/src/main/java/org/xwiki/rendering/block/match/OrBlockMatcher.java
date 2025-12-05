@@ -39,7 +39,9 @@ public class OrBlockMatcher implements BlockMatcher
     private List<BlockMatcher> matchers = new ArrayList<BlockMatcher>();
 
     /**
-     * @param matchers list of matchers to add
+     * Create an OrBlockMatcher that matches a block if any of the provided matchers match.
+     *
+     * @param matchers the matchers to combine; evaluation stops after the first matcher that matches
      */
     public OrBlockMatcher(List<BlockMatcher> matchers)
     {
@@ -47,7 +49,9 @@ public class OrBlockMatcher implements BlockMatcher
     }
 
     /**
-     * @param matchers vararg list of matchers to add
+     * Creates an OrBlockMatcher that succeeds if any of the provided matchers matches a block.
+     *
+     * @param matchers the matchers to include (evaluated in order)
      */
     public OrBlockMatcher(BlockMatcher... matchers)
     {
@@ -56,6 +60,12 @@ public class OrBlockMatcher implements BlockMatcher
         }
     }
 
+    /**
+     * Determine whether any configured matcher matches the given block.
+     *
+     * @param block the block to evaluate against the configured matchers
+     * @return `true` if at least one configured matcher matches the block, `false` otherwise
+     */
     @Override
     public boolean match(Block block)
     {

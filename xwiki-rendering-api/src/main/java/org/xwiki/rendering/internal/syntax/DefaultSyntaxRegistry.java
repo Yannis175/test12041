@@ -51,6 +51,11 @@ public class DefaultSyntaxRegistry implements SyntaxRegistry
 
     private Map<String, Syntax> syntaxes = new HashMap<>();
 
+    /**
+     * Registers one or more Syntax instances in the registry.
+     *
+     * @param syntaxes the Syntax instances to add to the registry
+     */
     @Override
     public void registerSyntaxes(Syntax... syntaxes)
     {
@@ -59,6 +64,11 @@ public class DefaultSyntaxRegistry implements SyntaxRegistry
         }
     }
 
+    /**
+     * Unregisters the given syntaxes from this registry.
+     *
+     * @param syntaxes the syntaxes to remove
+     */
     @Override
     public void unregisterSyntaxes(Syntax... syntaxes)
     {
@@ -67,18 +77,39 @@ public class DefaultSyntaxRegistry implements SyntaxRegistry
         }
     }
 
+    /**
+     * Provides an unmodifiable map of registered syntaxes keyed by their id.
+     *
+     * @return an unmodifiable map whose keys are syntax id strings and whose values are the corresponding {@link Syntax} instances
+     */
     @Override
     public Map<String, Syntax> getSyntaxes()
     {
         return Collections.unmodifiableMap(this.syntaxes);
     }
 
+    /**
+     * Retrieve a registered Syntax by its identifier.
+     *
+     * @param syntaxId the syntax identifier (as returned by {@code Syntax#toIdString()})
+     * @return an {@link Optional} containing the matching {@link Syntax} if present, otherwise an empty {@link Optional}
+     */
     @Override
     public Optional<Syntax> getSyntax(String syntaxId)
     {
         return Optional.ofNullable(this.syntaxes.get(syntaxId));
     }
 
+    /**
+     * Resolve a Syntax for the given identifier by returning a registered entry or constructing one from the identifier.
+     *
+     * <p>If no registered syntax matches the provided id, the id is parsed using the format "name/version" to build a new
+     * Syntax instance; the resulting Syntax's type will use the parsed name (or a known SyntaxType matching that name).
+     *
+     * @param syntaxId the syntax identifier to resolve, expected in the form "name/version"
+     * @return the registered Syntax matching the id, or a newly constructed Syntax parsed from the id
+     * @throws ParseException if {@code syntaxId} is {@code null} or does not follow the required "name/version" format
+     */
     @Override
     public Syntax resolveSyntax(String syntaxId) throws ParseException
     {
@@ -87,6 +118,18 @@ public class DefaultSyntaxRegistry implements SyntaxRegistry
         return getSyntax(syntaxId).orElse(valueOf(syntaxId));
     }
 
+    /**
+     * Parse a syntax identifier string and return the corresponding {@link Syntax}.
+     *
+     * <p>The input must be in the form "name/version". If a known {@link SyntaxType} for the parsed name exists, that
+     * type is used; otherwise a new {@link SyntaxType} is created with the parsed name used as both id and human-readable
+     * name.</p>
+     *
+     * @param syntaxIdAsString the syntax identifier string, formatted as "name/version"
+     * @return the parsed {@link Syntax} combining the resolved {@link SyntaxType} and the parsed version
+     * @throws ParseException if {@code syntaxIdAsString} is {@code null} or does not match the required "name/version"
+     *         format
+     */
     private Syntax valueOf(String syntaxIdAsString) throws ParseException
     {
         if (syntaxIdAsString == null) {
@@ -112,11 +155,21 @@ public class DefaultSyntaxRegistry implements SyntaxRegistry
         return new Syntax(syntaxType, version);
     }
 
+    /**
+     * Register the given syntax in the registry.
+     *
+     * @param syntax the Syntax to register; it is stored keyed by its id string (returned by {@code syntax.toIdString()})
+     */
     private void registerSyntax(Syntax syntax)
     {
         this.syntaxes.put(syntax.toIdString(), syntax);
     }
 
+    /**
+     * Remove the given syntax from the registry.
+     *
+     * @param syntax the Syntax to unregister; the entry with the same id string will be removed if present
+     */
     private void unregisterSyntax(Syntax syntax)
     {
         this.syntaxes.remove(syntax.toIdString());

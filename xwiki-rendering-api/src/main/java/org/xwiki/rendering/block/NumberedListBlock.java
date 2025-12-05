@@ -34,9 +34,9 @@ import org.xwiki.rendering.listener.Listener;
 public class NumberedListBlock extends AbstractBlock implements ListBLock
 {
     /**
-     * Construct a Numbered List Block with no parameters.
+     * Create a NumberedListBlock containing the given child blocks.
      *
-     * @param childrenBlocks the blocks making the list
+     * @param childrenBlocks the blocks that make up the numbered list
      */
     public NumberedListBlock(List<Block> childrenBlocks)
     {
@@ -44,23 +44,34 @@ public class NumberedListBlock extends AbstractBlock implements ListBLock
     }
 
     /**
-     * Construct a Numbered List Block with parameters.
+     * Create a numbered list block with the given child blocks and rendering parameters.
      *
-     * @param childrenBlocks the blocks making the list
-     * @param parameters see {@link org.xwiki.rendering.block.AbstractBlock#getParameter(String)} for more details on
-     *            parameters
+     * @param childrenBlocks the blocks comprising this list
+     * @param parameters a map of rendering parameters; see {@link org.xwiki.rendering.block.AbstractBlock#getParameter(String)}
      */
     public NumberedListBlock(List<Block> childrenBlocks, Map<String, String> parameters)
     {
         super(childrenBlocks, parameters);
     }
 
+    /**
+     * Notifies the listener that a numbered (ordered) list is starting, passing this block's parameters.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginList(ListType.NUMBERED, getParameters());
     }
 
+    /**
+     * Notify the given listener that rendering of this numbered list has finished.
+     *
+     * Calls the listener's endList with ListType.NUMBERED and this block's parameters.
+     *
+     * @param listener the listener to notify
+     */
     @Override
     public void after(Listener listener)
     {

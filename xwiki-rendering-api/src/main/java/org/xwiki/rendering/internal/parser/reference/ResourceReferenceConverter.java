@@ -48,6 +48,16 @@ public class ResourceReferenceConverter extends AbstractConverter<ResourceRefere
     @Inject
     private ResourceReferenceParser referenceParser;
 
+    /**
+     * Convert a string representation into a ResourceReference instance.
+     *
+     * Parses the provided value's string form into a ResourceReference of the requested generic type; returns null if
+     * the provided value is null.
+     *
+     * @param targetType the desired target type (generic ResourceReference subtype)
+     * @param value the input to convert; its toString() representation is parsed
+     * @return the parsed ResourceReference of type G, or null if the input value is null
+     */
     @Override
     protected <G extends ResourceReference> G convertToType(Type targetType, Object value)
     {
@@ -59,6 +69,13 @@ public class ResourceReferenceConverter extends AbstractConverter<ResourceRefere
         return reference;
     }
 
+    /**
+     * Convert a ResourceReference to its string representation.
+     *
+     * @param value the resource reference to convert
+     * @return the string representation of the resource reference
+     * @throws ConversionException always thrown because string conversion is not implemented
+     */
     @Override
     protected String convertToString(ResourceReference value)
     {

@@ -36,6 +36,11 @@ import org.xwiki.rendering.listener.reference.ResourceType;
 @Singleton
 public class PathResourceReferenceTypeParser extends AbstractURIResourceReferenceTypeParser
 {
+    /**
+     * The resource type handled by this parser.
+     *
+     * @return ResourceType.PATH indicating a path (relative URL) resource
+     */
     @Override
     public ResourceType getType()
     {

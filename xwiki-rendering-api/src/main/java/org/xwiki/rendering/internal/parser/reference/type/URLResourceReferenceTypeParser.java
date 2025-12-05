@@ -45,12 +45,24 @@ public class URLResourceReferenceTypeParser extends AbstractURIResourceReference
      */
     private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("[a-zA-Z0-9+.-]*://");
 
+    /**
+     * Exposes which resource type this parser handles.
+     *
+     * @return the URL resource type
+     */
     @Override
     public ResourceType getType()
     {
         return ResourceType.URL;
     }
 
+    /**
+     * Detects URL-like reference strings and wraps them as a URL resource reference.
+     *
+     * @param reference the candidate resource reference string to examine for a URL scheme (e.g. "http://", "skype://")
+     * @return the {@link ResourceReference} wrapping the original reference with URL type if it begins with a URL scheme,
+     *         {@code null} otherwise
+     */
     @Override
     public ResourceReference parse(String reference)
     {

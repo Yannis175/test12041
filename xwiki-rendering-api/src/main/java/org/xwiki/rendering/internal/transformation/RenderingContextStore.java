@@ -79,13 +79,23 @@ public class RenderingContextStore extends AbstractContextStore
     private SyntaxRegistry syntaxRegistry;
 
     /**
-     * Default constructor.
+     * Create a RenderingContextStore and register the well-known rendering context keys
+     * "rendering.defaultsyntax", "rendering.targetsyntax", and "rendering.restricted".
      */
     public RenderingContextStore()
     {
         super(PROP_DEFAULTSYNTAX, PROP_TARGETSYNTAX, PROP_RESTRICTED);
     }
 
+    /**
+     * Persist selected rendering syntax entries from the current {@code RenderingContext} into the provided store.
+     *
+     * Saves the default and target syntax identifiers into {@code contextStore} when those keys are present in
+     * {@code entries}.
+     *
+     * @param contextStore the destination map where selected context entries are stored; keys are property names and values are serializable representations
+     * @param entries the collection of property names indicating which entries should be saved
+     */
     @Override
     public void save(Map<String, Serializable> contextStore, Collection<String> entries)
     {
@@ -93,6 +103,15 @@ public class RenderingContextStore extends AbstractContextStore
         save(contextStore, PROP_TARGETSYNTAX, this.context::getTargetSyntax, entries);
     }
 
+    /**
+     * Conditionally stores the identifier of a Syntax into the provided context store when the given key
+     * is present in the set of requested entries.
+     *
+     * @param contextStore the map used to persist context entries
+     * @param key the context entry name to check and, if applicable, to store into {@code contextStore}
+     * @param supplier supplies the current {@code Syntax} value for the given key
+     * @param entries the collection of entry names requested for saving
+     */
     private void save(Map<String, Serializable> contextStore, String key, Supplier<Syntax> supplier,
         Collection<String> entries)
     {
@@ -105,6 +124,14 @@ public class RenderingContextStore extends AbstractContextStore
         }
     }
 
+    /**
+     * Restore rendering-related entries from the provided context store into the current rendering context.
+     *
+     * The method pushes a new state onto the mutable rendering context using values read from the store
+     * (such as default syntax, target syntax and the restricted flag).
+     *
+     * @param contextStore a map of stored context entries to restore
+     */
     @Override
     public void restore(Map<String, Serializable> contextStore)
     {
@@ -115,6 +142,16 @@ public class RenderingContextStore extends AbstractContextStore
             getSyntax(contextStore, PROP_TARGETSYNTAX));
     }
 
+    /**
+     * Resolve a Syntax stored under the given key in the provided context store.
+     *
+     * If the store contains a non-null value for the key, attempts to resolve it with the SyntaxRegistry.
+     * If resolution fails or the value is missing/null, returns {@code null}.
+     *
+     * @param contextStore the map containing saved context entries
+     * @param key the context entry key to read and resolve as a syntax identifier
+     * @return the resolved {@code Syntax}, or {@code null} if not found or if resolution fails
+     */
     private Syntax getSyntax(Map<String, Serializable> contextStore, String key)
     {
         if (contextStore.containsKey(key)) {

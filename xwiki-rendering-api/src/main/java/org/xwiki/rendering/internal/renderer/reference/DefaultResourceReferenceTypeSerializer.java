@@ -38,6 +38,15 @@ import org.xwiki.rendering.renderer.reference.ResourceReferenceTypeSerializer;
 @Singleton
 public class DefaultResourceReferenceTypeSerializer implements ResourceReferenceTypeSerializer
 {
+    /**
+     * Serialize a ResourceReference into its textual representation.
+     *
+     * <p>If the reference is typed and the type is supported, the result is the type's scheme followed by the
+     * type separator and then the reference (for example "scheme:reference"); otherwise the result is the reference string.</p>
+     *
+     * @param reference the resource reference to serialize
+     * @return the serialized representation: the string "scheme<separator>reference" when the reference is typed and supported, otherwise the reference string
+     */
     @Override
     public String serialize(ResourceReference reference)
     {
@@ -52,10 +61,10 @@ public class DefaultResourceReferenceTypeSerializer implements ResourceReference
     }
 
     /**
-     * Indicate if the provided type is supported by this syntax.
+     * Indicates whether the provided resource type is supported by this serializer.
      *
-     * @param type the type of resource
-     * @return true if the type is supported
+     * @param type the resource type to check
+     * @return `true` if the resource type is supported, `false` otherwise
      */
     protected boolean isSupportedType(ResourceType type)
     {

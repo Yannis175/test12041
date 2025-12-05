@@ -35,13 +35,21 @@ public class ClassBlockMatcher implements BlockMatcher
     private Class<? extends Block> blockClass;
 
     /**
-     * @param blockClass the class of the block to match
+     * Creates a matcher that matches blocks whose runtime class is assignable to the given block class.
+     *
+     * @param blockClass the target Block subclass to match against
      */
     public ClassBlockMatcher(Class<? extends Block> blockClass)
     {
         this.blockClass = blockClass;
     }
 
+    /**
+     * Determines whether the provided block's runtime class is assignable to the configured block class.
+     *
+     * @param block the block to test
+     * @return {@code true} if the block's runtime class is assignable to the configured class, {@code false} otherwise
+     */
     @Override
     public boolean match(Block block)
     {

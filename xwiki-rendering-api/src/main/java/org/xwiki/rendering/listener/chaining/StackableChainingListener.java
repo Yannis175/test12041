@@ -30,7 +30,12 @@ package org.xwiki.rendering.listener.chaining;
 public interface StackableChainingListener extends ChainingListener
 {
     /**
-     * @return the new instance of the listener
-     */
+ * Create a fresh instance of this stackable chaining listener.
+ *
+ * Used by a ListenerChain to reset stackable listeners to a new initial state (for example when handling groups).
+ *
+ * @return a new {@link StackableChainingListener} instance in its initial state
+ * @since 1.8RC1
+ */
     StackableChainingListener createChainingListenerInstance();
 }

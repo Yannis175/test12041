@@ -42,6 +42,12 @@ public abstract class AbstractPrintRendererFactory implements PrintRendererFacto
     @Inject
     private ComponentManager componentManager;
 
+    /**
+     * Creates a PrintRenderer for the current syntax and associates it with the provided printer.
+     *
+     * @param printer the WikiPrinter to set on the created renderer
+     * @return the configured PrintRenderer for the current syntax
+     */
     @Override
     public PrintRenderer createRenderer(WikiPrinter printer)
     {

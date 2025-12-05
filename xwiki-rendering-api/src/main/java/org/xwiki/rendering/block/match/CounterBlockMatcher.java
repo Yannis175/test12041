@@ -34,7 +34,8 @@ public class CounterBlockMatcher implements BlockMatcher
     private Block stopBlock;
 
     /**
-     * Count all blocks.
+     * Creates a CounterBlockMatcher with no stop block. The internal counter is initialized to -1 so the first call
+     * to {@link #match(org.xwiki.rendering.block.Block)} will record a count of 0.
      */
     public CounterBlockMatcher()
     {
@@ -42,15 +43,21 @@ public class CounterBlockMatcher implements BlockMatcher
     }
 
     /**
-     * Find the index of the passed block.
-     * 
-     * @param stopBlock the block where to stop counting
+     * Create a matcher that stops counting when the given block is encountered.
+     *
+     * @param stopBlock the block that marks where counting should stop
      */
     public CounterBlockMatcher(Block stopBlock)
     {
         this.stopBlock = stopBlock;
     }
 
+    /**
+     * Checks whether the given block is the configured stop block and increments the internal block counter.
+     *
+     * @param block the block to test
+     * @return {@code true} if the provided block is the same instance as the configured stop block, {@code false} otherwise
+     */
     @Override
     public boolean match(Block block)
     {
@@ -60,7 +67,12 @@ public class CounterBlockMatcher implements BlockMatcher
     }
 
     /**
-     * @return the count
+     * The number of blocks seen so far by this matcher.
+     *
+     * The counter is initialized to -1 so that after the first call to {@link #match(org.xwiki.rendering.block.Block)}
+     * the count becomes 0.
+     *
+     * @return the current count of observed blocks (starts at -1 before any matches)
      */
     public long getCount()
     {

@@ -42,9 +42,9 @@ public class MetadataBlockMatcher extends ClassBlockMatcher
     private Object metadataValue;
 
     /**
-     * Match {@link MetaDataBlock} containing the provided key.
+     * Create a matcher that matches MetaDataBlock instances containing a metadata entry with the given key.
      *
-     * @param metadataKey the key of the {@link MetaData}
+     * @param metadataKey the metadata key to check for presence
      */
     public MetadataBlockMatcher(String metadataKey)
     {
@@ -52,10 +52,10 @@ public class MetadataBlockMatcher extends ClassBlockMatcher
     }
 
     /**
-     * Match {@link MetaDataBlock} containing the provided key/value pair.
+     * Create a matcher that targets MetaDataBlock instances and matches a MetaData entry by key and optional value.
      *
-     * @param metadataKey the key of the {@link MetaData}
-     * @param metadataValue the value of the {@link MetaData}
+     * @param metadataKey the metadata key to match
+     * @param metadataValue the expected value for the key, or {@code null} to match only presence of the key
      */
     public MetadataBlockMatcher(String metadataKey, Object metadataValue)
     {
@@ -65,6 +65,13 @@ public class MetadataBlockMatcher extends ClassBlockMatcher
         this.metadataValue = metadataValue;
     }
 
+    /**
+     * Checks whether the given block is a MetaDataBlock whose metadata matches the configured key and optional value.
+     *
+     * @param block the block to test for a metadata match
+     * @return {@code true} if the block is a MetaDataBlock and its metadata contains the configured key (and equals the
+     *         configured value when one was provided), {@code false} otherwise
+     */
     @Override
     public boolean match(Block block)
     {
@@ -72,10 +79,11 @@ public class MetadataBlockMatcher extends ClassBlockMatcher
     }
 
     /**
-     * Matches the {@link MetaData} for provided key and value.
+     * Check whether the provided MetaData contains the configured key and, if a value was specified, whether that
+     * value equals the configured metadata value.
      *
-     * @param metadata the {@link MetaData} to analyze
-     * @return true is the {@link MetaData} is matched, false otherwise
+     * @param metadata the MetaData to check for the configured key (and value, if specified)
+     * @return {@code true} if the key is present (and equals the configured value when one is provided), {@code false} otherwise
      */
     private boolean matchMetadata(MetaData metadata)
     {

@@ -31,7 +31,9 @@ import org.xwiki.rendering.listener.Listener;
 public class SectionBlock extends AbstractBlock
 {
     /**
-     * @param childBlocks the children of the section
+     * Create a section block containing the specified child blocks.
+     *
+     * @param childBlocks the list of child blocks contained in this section
      */
     public SectionBlock(List<Block> childBlocks)
     {
@@ -39,20 +41,32 @@ public class SectionBlock extends AbstractBlock
     }
 
     /**
-     * @param childBlocks the children of the section
-     * @param parameters the parameters of the section
+     * Create a section block with the given child blocks and parameters.
+     *
+     * @param childBlocks the child blocks that make up the section
+     * @param parameters key/value string parameters associated with the section
      */
     public SectionBlock(List<Block> childBlocks, Map<String, String> parameters)
     {
         super(childBlocks, parameters);
     }
 
+    /**
+     * Signals the start of this section to the provided listener.
+     *
+     * @param listener the listener to notify about the section start
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginSection(getParameters());
     }
 
+    /**
+     * Signals the end of this section to the provided listener.
+     *
+     * @param listener the listener to notify with this section's parameters
+     */
     @Override
     public void after(Listener listener)
     {
@@ -60,7 +74,9 @@ public class SectionBlock extends AbstractBlock
     }
 
     /**
-     * @return the title block of the section.
+     * Retrieve the section's header block if present.
+     *
+     * @return the first child cast to {@link HeaderBlock}, or {@code null} if there are no children or the first child is not a {@link HeaderBlock}
      */
     public HeaderBlock getHeaderBlock()
     {

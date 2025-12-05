@@ -40,16 +40,22 @@ public class HorizontalLineBlock extends AbstractBlock
     }
 
     /**
-     * Construct a Horizontal Line Block with parameters.
+     * Create a horizontal line block with the specified parameters.
      *
-     * @param parameters see {@link org.xwiki.rendering.block.AbstractBlock#getParameter(String)} for more details on
-     *            parameters
+     * @param parameters a map of parameter names to values used to initialize the block
      */
     public HorizontalLineBlock(Map<String, String> parameters)
     {
         super(parameters);
     }
 
+    /**
+     * Emits a horizontal-line event to the given listener.
+     *
+     * Invokes the listener's horizontal line callback with this block's parameters.
+     *
+     * @param listener the listener to notify about the horizontal line
+     */
     @Override
     public void traverse(Listener listener)
     {

@@ -36,6 +36,11 @@ import org.xwiki.rendering.listener.reference.ResourceType;
 @Singleton
 public class UNCResourceReferenceTypeParser extends AbstractURIResourceReferenceTypeParser
 {
+    /**
+     * Provides the UNC resource type for this parser.
+     *
+     * @return the {@link ResourceType#UNC} resource type.
+     */
     @Override
     public ResourceType getType()
     {

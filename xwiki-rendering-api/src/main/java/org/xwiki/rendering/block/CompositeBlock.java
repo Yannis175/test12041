@@ -32,8 +32,7 @@ import java.util.List;
 public class CompositeBlock extends AbstractBlock
 {
     /**
-     * Create an empty composite block with no children. This is useful when the user wants to call
-     * {@link #addChild(Block)} manually for adding children one by one after the block is constructed.
+     * Creates a CompositeBlock containing no children.
      */
     public CompositeBlock()
     {
@@ -41,13 +40,20 @@ public class CompositeBlock extends AbstractBlock
     }
 
     /**
-     * @param blocks the blocks
+     * Create a composite block that contains the given child blocks.
+     *
+     * @param blocks the child blocks to include in this composite
      */
     public CompositeBlock(List<Block> blocks)
     {
         super(blocks);
     }
 
+    /**
+     * Produce the string representation of this composite block's children.
+     *
+     * @return the string representation of the list of child blocks
+     */
     @Override
     public String toString()
     {

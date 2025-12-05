@@ -29,36 +29,66 @@ import java.util.Map;
  */
 public class InlineFilterListener extends WrappingListener
 {
+    /**
+     * Suppresses the document begin event so the wrapped listener is not notified.
+     *
+     * @param metadata the document metadata associated with the event
+     */
     @Override
     public void beginDocument(MetaData metadata)
     {
         // Disable this event
     }
 
+    /**
+     * Suppresses the document end event; this implementation performs no action.
+     *
+     * @param metadata the metadata associated with the document end event
+     */
     @Override
     public void endDocument(MetaData metadata)
     {
         // Disable this event
     }
 
+    /**
+     * Suppresses the begin-section event by performing no action.
+     *
+     * @param parameters a map of section parameters, possibly empty
+     */
     @Override
     public void beginSection(Map<String, String> parameters)
     {
         // Disable this event
     }
 
+    /**
+     * Suppresses the end of a section event so it is not forwarded to the wrapped listener.
+     *
+     * @param parameters section parameters (attributes) associated with the section
+     */
     @Override
     public void endSection(Map<String, String> parameters)
     {
         // Disable this event
     }
 
+    /**
+     * Suppresses the paragraph begin event; this implementation performs no action.
+     *
+     * @param parameters a map of paragraph parameters (may be empty or null)
+     */
     @Override
     public void beginParagraph(Map<String, String> parameters)
     {
         // Disable this event
     }
 
+    /**
+     * Suppresses the paragraph end event so it is not handled.
+     *
+     * @param parameters the paragraph event parameters, may be null or empty
+     */
     @Override
     public void endParagraph(Map<String, String> parameters)
     {

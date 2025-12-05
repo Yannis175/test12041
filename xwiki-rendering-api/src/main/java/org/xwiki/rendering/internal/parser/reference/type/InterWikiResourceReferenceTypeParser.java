@@ -43,12 +43,23 @@ public class InterWikiResourceReferenceTypeParser extends AbstractURIResourceRef
      */
     public static final String INTERWIKI_ALIAS_SEPARATOR = ":";
 
+    /**
+     * Identify the resource type handled by this parser.
+     *
+     * @return the INTERWIKI ResourceType
+     */
     @Override
     public ResourceType getType()
     {
         return ResourceType.INTERWIKI;
     }
 
+    /**
+     * Parse the given resource reference into an InterWikiResourceReference when it contains the interwiki alias separator.
+     *
+     * @param reference the raw resource reference string to parse
+     * @return the populated {@link InterWikiResourceReference} when the interwiki alias separator (":") is present, `null` otherwise
+     */
     @Override
     public ResourceReference parse(String reference)
     {

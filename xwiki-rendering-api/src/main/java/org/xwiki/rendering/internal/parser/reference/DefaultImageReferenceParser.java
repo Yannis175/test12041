@@ -55,6 +55,12 @@ public class DefaultImageReferenceParser implements ResourceReferenceParser
     @Named("image/untyped")
     private ResourceReferenceParser untypedImageReferenceParser;
 
+    /**
+     * Parse an image resource reference using the typed parser and fall back to the untyped image parser when the parsed type is UNKNOWN.
+     *
+     * @param rawReference the raw reference string to parse
+     * @return the resolved {@link ResourceReference}; if the typed parser yields type {@link ResourceType#UNKNOWN}, the result from the untyped image parser is returned
+     */
     @Override
     public ResourceReference parse(String rawReference)
     {

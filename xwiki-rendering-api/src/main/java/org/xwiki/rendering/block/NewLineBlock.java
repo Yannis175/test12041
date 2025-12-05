@@ -30,6 +30,11 @@ import org.xwiki.rendering.listener.Listener;
  */
 public final class NewLineBlock extends AbstractBlock
 {
+    /**
+     * Signals a newline event to the provided listener.
+     *
+     * @param listener the listener to notify about the newline
+     */
     @Override
     public void traverse(Listener listener)
     {

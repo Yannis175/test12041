@@ -34,7 +34,9 @@ import org.xwiki.rendering.listener.Listener;
 public class FigureBlock extends AbstractBlock
 {
     /**
-     * @param blocks the children blocks of the figure
+     * Create a FigureBlock containing the given child blocks.
+     *
+     * @param blocks the child blocks that make up the figure (for example caption and content blocks)
      */
     public FigureBlock(List<Block> blocks)
     {
@@ -42,20 +44,30 @@ public class FigureBlock extends AbstractBlock
     }
 
     /**
-     * @param blocks the children blocks of the figure
-     * @param parameters the parameters of the figure
+     * Create a figure container with the given child blocks and parameters.
+     *
+     * @param blocks the child blocks contained in the figure (may include a caption block)
+     * @param parameters the parameters/attributes associated with the figure that are exposed to the renderer
      */
     public FigureBlock(List<Block> blocks, Map<String, String> parameters)
     {
         super(blocks, parameters);
     }
 
+    /**
+     * Notify the rendering listener that a figure block is starting, passing this block's parameters.
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginFigure(getParameters());
     }
 
+    /**
+     * Signals the end of this figure block to the given rendering listener.
+     *
+     * @param listener the rendering listener to notify; it will receive this block's parameters when ending the figure
+     */
     @Override
     public void after(Listener listener)
     {

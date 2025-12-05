@@ -35,13 +35,21 @@ public class SameBlockMatcher implements BlockMatcher
     private Block block;
 
     /**
-     * @param block the block to match
+     * Create a matcher that only matches the specified block instance.
+     *
+     * @param block the Block instance to match by reference
      */
     public SameBlockMatcher(Block block)
     {
         this.block = block;
     }
 
+    /**
+     * Checks whether the given block is the same instance as the stored block.
+     *
+     * @param block the block to compare against the stored block
+     * @return {@code true} if the provided block is the identical instance to the stored block, {@code false} otherwise
+     */
     @Override
     public boolean match(Block block)
     {

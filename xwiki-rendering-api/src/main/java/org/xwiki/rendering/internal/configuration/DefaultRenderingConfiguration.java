@@ -74,6 +74,13 @@ public class DefaultRenderingConfiguration implements RenderingConfiguration, In
      */
     private Properties interWikiDefinitions = new Properties();
 
+    /**
+     * Discovers all registered {@link Transformation} components and records their role hints into
+     * {@code transformationNames}.
+     *
+     * Called during component initialization to populate the configured transformation list available
+     * for the rendering pipeline.
+     */
     @Override
     public void initialize() throws InitializationException
     {
@@ -85,6 +92,11 @@ public class DefaultRenderingConfiguration implements RenderingConfiguration, In
         }
     }
 
+    /**
+     * Provide the format string used to render link labels when no explicit label is provided.
+     *
+     * @return the link label format string (defaults to "%p" when not configured)
+     */
     @Override
     public String getLinkLabelFormat()
     {
@@ -92,7 +104,9 @@ public class DefaultRenderingConfiguration implements RenderingConfiguration, In
     }
 
     /**
-     * @param linkLabelFormat the format used to decide how to display links that have no label
+     * Set the format used to render links that do not have an explicit label.
+     *
+     * @param linkLabelFormat a format string specifying how to display unlabeled links (for example "%p" to show the link target)
      */
     public void setLinkLabelFormat(String linkLabelFormat)
     {
@@ -101,6 +115,12 @@ public class DefaultRenderingConfiguration implements RenderingConfiguration, In
         this.linkLabelFormat = linkLabelFormat;
     }
 
+    /**
+     * Accesses the inter-wiki alias-to-URL mappings used by the rendering configuration.
+     *
+     * @return the {@link Properties} mapping inter-wiki aliases to their target URLs; the returned object is the
+     *         live internal store and modifications to it will update this configuration's inter-wiki definitions.
+     */
     @Override
     public Properties getInterWikiDefinitions()
     {
@@ -108,8 +128,10 @@ public class DefaultRenderingConfiguration implements RenderingConfiguration, In
     }
 
     /**
-     * @param interWikiAlias see {@link org.xwiki.rendering.listener.reference.InterWikiResourceReference}
-     * @param interWikiURL see {@link org.xwiki.rendering.listener.reference.InterWikiResourceReference}
+     * Add or update an inter-wiki alias-to-URL mapping used when resolving inter-wiki links.
+     *
+     * @param interWikiAlias the inter-wiki alias (see {@link org.xwiki.rendering.listener.reference.InterWikiResourceReference})
+     * @param interWikiURL the URL or URL pattern associated with the alias (see {@link org.xwiki.rendering.listener.reference.InterWikiResourceReference})
      */
     public void addInterWikiDefinition(String interWikiAlias, String interWikiURL)
     {
@@ -119,13 +141,20 @@ public class DefaultRenderingConfiguration implements RenderingConfiguration, In
     }
 
     /**
-     * @param transformationNames the explicit list of transformation names to execute (overrides the default list)
+     * Replace the configured list of transformation names used for rendering.
+     *
+     * @param transformationNames the list of transformation role hints to use as the explicit set of transformations (replaces the previously configured list)
      */
     public void setTransformationNames(List<String> transformationNames)
     {
         this.transformationNames = transformationNames;
     }
 
+    /**
+     * Retrieve the list of transformation names to execute.
+     *
+     * @return the list of transformation names (may be empty)
+     */
     @Override
     public List<String> getTransformationNames()
     {

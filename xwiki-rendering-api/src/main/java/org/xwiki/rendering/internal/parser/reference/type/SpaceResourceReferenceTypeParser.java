@@ -39,12 +39,23 @@ import org.xwiki.rendering.listener.reference.SpaceResourceReference;
 @Singleton
 public class SpaceResourceReferenceTypeParser extends AbstractURIResourceReferenceTypeParser
 {
+    /**
+     * Identify the resource type handled by this parser.
+     *
+     * @return the resource type handled: {@link ResourceType#SPACE}
+     */
     @Override
     public ResourceType getType()
     {
         return ResourceType.SPACE;
     }
 
+    /**
+     * Parses a space reference string into a space resource reference.
+     *
+     * @param reference the string representation of the space reference to parse
+     * @return a ResourceReference representing the space (a {@link SpaceResourceReference})
+     */
     @Override
     public ResourceReference parse(String reference)
     {

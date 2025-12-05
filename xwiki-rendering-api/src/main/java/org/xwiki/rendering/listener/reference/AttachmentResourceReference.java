@@ -42,7 +42,9 @@ public class AttachmentResourceReference extends ResourceReference
     public static final String ANCHOR = "anchor";
 
     /**
-     * @param reference see {@link #getReference()}
+     * Create a resource reference representing an attachment from the given reference string.
+     *
+     * @param reference the attachment reference string
      */
     public AttachmentResourceReference(String reference)
     {
@@ -50,8 +52,10 @@ public class AttachmentResourceReference extends ResourceReference
     }
 
     /**
-     * @return the query string for specifying parameters that will be used in the rendered URL or null if no query
-     *         string has been specified. Example: {@code mydata1=5&mydata2=Hello}
+     * The query string used when rendering the attachment URL.
+     *
+     * @return the query string to append to the rendered URL, or {@code null} if none has been specified.
+     *         Example: {@code mydata1=5&mydata2=Hello}
      */
     public String getQueryString()
     {
@@ -59,7 +63,9 @@ public class AttachmentResourceReference extends ResourceReference
     }
 
     /**
-     * @param queryString see {@link #getQueryString()}
+     * Set the query string associated with this attachment reference.
+     *
+     * @param queryString the query string to associate; ignored if null or empty
      */
     public void setQueryString(String queryString)
     {
@@ -69,7 +75,9 @@ public class AttachmentResourceReference extends ResourceReference
     }
 
     /**
-     * @return the anchor name pointing to an anchor defined in the referenced attachment or null if no anchor has been
+     * Anchor name within the referenced attachment.
+     *
+     * @return the anchor name pointing to an anchor defined in the referenced attachment, or null if no anchor has been
      *         specified (in which case the reference points to the top of the attachment).
      * @since 5.3M2
      */
@@ -79,7 +87,9 @@ public class AttachmentResourceReference extends ResourceReference
     }
 
     /**
-     * @param anchor see {@link #getAnchor()}
+     * Set the anchor parameter used to identify a fragment within the attachment URL.
+     *
+     * @param anchor the anchor value to store; empty or null values are ignored
      * @since 5.3M2
      */
     public void setAnchor(String anchor)

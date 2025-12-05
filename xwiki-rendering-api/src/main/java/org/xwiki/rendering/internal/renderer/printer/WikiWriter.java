@@ -32,7 +32,9 @@ import org.xwiki.rendering.renderer.printer.WikiPrinter;
 public class WikiWriter extends Writer
 {
     /**
-     * @param printer the actual printer
+     * Create a Writer that delegates all output to the given WikiPrinter.
+     *
+     * @param printer the WikiPrinter to receive printed output and to use as the Writer's synchronization lock
      */
     public WikiWriter(WikiPrinter printer)
     {
@@ -40,7 +42,9 @@ public class WikiWriter extends Writer
     }
 
     /**
-     * @param printer the actual printer
+     * Sets the underlying WikiPrinter used by this writer.
+     *
+     * @param printer the WikiPrinter to delegate output to and to use as this writer's lock
      */
     public void setWikiPrinter(WikiPrinter printer)
     {
@@ -48,25 +52,41 @@ public class WikiWriter extends Writer
     }
 
     /**
-     * @return the actual printer
+     * Retrieve the underlying WikiPrinter used as this writer's lock/target.
+     *
+     * @return the underlying {@link WikiPrinter} instance
      */
     public WikiPrinter getWikiPrinter()
     {
         return (WikiPrinter) this.lock;
     }
 
+    /**
+     * Performs no action when closing this Writer because the underlying {@link org.xwiki.rendering.renderer.printer.WikiPrinter}
+     * does not support being closed.
+     */
     @Override
     public void close() throws IOException
     {
         // WikiPrinter does not support stream close
     }
 
+    /**
+     * No-op flush; the underlying {@link org.xwiki.rendering.renderer.printer.WikiPrinter} does not support flush.
+     */
     @Override
     public void flush() throws IOException
     {
         // WikiPrinter does not support stream flush
     }
 
+    /**
+     * Writes a portion of a character array to the underlying {@link org.xwiki.rendering.renderer.printer.WikiPrinter}.
+     *
+     * @param cbuf the source character array
+     * @param off the start offset in the array
+     * @param len the number of characters to write
+     */
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException
     {
@@ -74,11 +94,10 @@ public class WikiWriter extends Writer
     }
 
     /**
-     * {@inheritDoc}
-     * <p>
-     * Override it to improve speed a little. Otherwise the String is transformed in char table passed to the over
-     * methods which recreate a String.
-     * </p>
+     * Send the specified string to the underlying WikiPrinter.
+     *
+     * @param str the string to print
+     * @throws IOException if an I/O error occurs while printing
      */
     @Override
     public void write(String str) throws IOException

@@ -38,6 +38,12 @@ import org.xwiki.rendering.renderer.reference.link.URILabelGenerator;
 @Singleton
 public class MailtoURILabelGenerator implements URILabelGenerator
 {
+    /**
+     * Generate the label for a MAILTO URI by stripping any query string.
+     *
+     * @param reference the resource reference whose reference string will be used to build the label
+     * @return the URI string up to (but not including) the first '?' character; if no '?' is present, the full reference string
+     */
     @Override
     public String generateLabel(ResourceReference reference)
     {

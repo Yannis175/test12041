@@ -51,8 +51,13 @@ public class ListenerChain
     private List<Class<? extends ChainingListener>> nextListeners = new ArrayList<>();
 
     /**
-     * @param listener the chaining listener to add to the chain. If an instance of that listener is already present
-     *            then we stack the new instance instead.
+     * Add a chaining listener to the chain.
+     *
+     * If a listener of the same class is already registered, the new instance is pushed onto that class's stack
+     * so multiple instances of the same listener class can be stacked.
+     *
+     * @param listener the chaining listener to add; if an instance of that listener's class is already present the new
+     *                 instance will be stacked on top of the existing instances
      */
     public void addListener(ChainingListener listener)
     {
@@ -60,8 +65,13 @@ public class ListenerChain
     }
 
     /**
-     * @param listenerClass the listener to remove from the chain. If more than one instance of that listener exist
-     *                      in the chain then remove the one from the top of the stack
+     * Remove the top instance of the specified listener class from the chain.
+     *
+     * If multiple instances of that listener class are stacked, only the top instance is popped.
+     * When the class' stack becomes empty the listener class is removed from the chain ordering.
+     *
+     * @param listenerClass the listener class whose top instance should be removed
+     * @throws NullPointerException if the listener class is not registered in the chain
      */
     public void removeListener(Class<? extends ChainingListener> listenerClass)
     {
@@ -76,9 +86,17 @@ public class ListenerChain
     }
 
     /**
-     * @param listener the chaining listener to add to the chain. If an instance of that listener is already present
-     *            then we stack the new instance instead.
-     * @param index the position in the chain where to insert the listener
+     * Add a chaining listener into the chain at the given position, stacking additional instances of the same
+     * listener class on top of the existing class-specific stack.
+     *
+     * If a stack for the listener's class does not yet exist, a new stack is created and the listener's class
+     * is inserted into the chain at the specified index; if the index is negative or out of range the class is
+     * appended at the end. The provided listener instance is pushed onto its class stack.
+     *
+     * @param listener the chaining listener to add; if other instances of the same listener class exist, this
+     *                 instance is pushed on that class's stack
+     * @param index the position in the chain where the listener's class should be inserted, or a negative/out-of-range
+     *              value to append the class at the end
      * @since 10.5RC1
      */
     public void addListener(ChainingListener listener, int index)
@@ -101,8 +119,10 @@ public class ListenerChain
     }
 
     /**
-     * @param listenerClass the listener for which we need to find the next listener in the chain
-     * @return the next listener in the chain
+     * Get the listener instance that follows the given listener class in the chain.
+     *
+     * @param listenerClass the listener class whose successor is requested
+     * @return the next listener instance in the chain, or {@code null} if there is no successor
      */
     public ChainingListener getNextListener(Class<? extends ChainingListener> listenerClass)
     {
@@ -115,9 +135,14 @@ public class ListenerChain
     }
 
     /**
-     * @param listenerClass the listener class for which we want to find the listener instance
-     * @return the listener instance corresponding to the passed class. Note that the last instance of the stack is
-     *         returned
+     * Retrieve the current listener instance for the given listener class.
+     *
+     * If there is no exact stack registered for the requested class, searches for a registered listener class
+     * that is assignable to the requested class and uses its current top instance. Returns the top (most recently
+     * pushed) instance from the matching class-specific stack.
+     *
+     * @param listenerClass the listener class for which to locate the current instance
+     * @return the top (most recently added) listener instance for the matching class, or {@code null} if none exists
      */
     public ChainingListener getListener(Class<? extends ChainingListener> listenerClass)
     {
@@ -135,8 +160,10 @@ public class ListenerChain
     }
 
     /**
-     * @param listenerClass the listener class for which to find the position in the chain
-     * @return the position in the chain (first position is 0)
+     * Get the position of a listener class within the chain.
+     *
+     * @param listenerClass the listener class whose position to locate
+     * @return the zero-based position of the class in the chain, or -1 if the class is not present
      */
     public int indexOf(Class<? extends ChainingListener> listenerClass)
     {
@@ -144,11 +171,13 @@ public class ListenerChain
     }
 
     /**
-     * Create a new instance of the passed chaining listener if it's stackable (ie it implements the
-     * {@link org.xwiki.rendering.listener.chaining.StackableChainingListener} interface. This allows creating a clean
-     * state when some sub rendering has to be done with some new state.
+     * Pushes a new instance for the given listener class onto its class-specific stack when the class is stackable.
      *
-     * @param listenerClass the listener class for which to create a new instance (if stackable)
+     * If the listener class implements StackableChainingListener and a stack for that class is present, a new
+     * ChainingListener instance produced by the stack's current top element is pushed onto the stack. No action is
+     * performed for non-stackable classes or when no stack is registered for the class.
+     *
+     * @param listenerClass the listener class for which to create and push a new instance if it is stackable
      */
     public void pushListener(Class<? extends ChainingListener> listenerClass)
     {
@@ -159,9 +188,7 @@ public class ListenerChain
     }
 
     /**
-     * Create new instances of all chaining listeners that are stackable (ie that implement the
-     * {@link org.xwiki.rendering.listener.chaining.StackableChainingListener} interface. This allows creating a clean
-     * state when some sub rendering has to be done with some new state.
+     * Creates and pushes a fresh instance for every registered stackable chaining listener, establishing a clean state for subsequent sub-rendering operations.
      */
     public void pushAllStackableListeners()
     {
@@ -171,7 +198,10 @@ public class ListenerChain
     }
 
     /**
-     * Remove all pushed stackable listeners to go back to the previous state (see {@link #pushAllStackableListeners()}.
+     * Restore the chain to the previous state by popping one instance for each registered stackable listener.
+     *
+     * <p>For each listener class currently registered in the chain, this method removes the top instance if the
+     * listener class implements {@code StackableChainingListener}; non-stackable listener classes are left unchanged.</p>
      */
     public void popAllStackableListeners()
     {
@@ -181,11 +211,10 @@ public class ListenerChain
     }
 
     /**
-     * Remove the last instance corresponding to the passed listener class if it's stackable, in order to go back to the
-     * previous state.
-     *
-     * @param listenerClass the class of the chaining listener to pop
-     */
+         * Pop the top instance for a stackable listener class to restore the previous listener state.
+         *
+         * @param listenerClass the class of the chaining listener to pop
+         */
     public void popListener(Class<? extends ChainingListener> listenerClass)
     {
         if (StackableChainingListener.class.isAssignableFrom(listenerClass)) {

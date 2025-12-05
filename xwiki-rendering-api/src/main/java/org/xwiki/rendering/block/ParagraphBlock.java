@@ -31,7 +31,9 @@ import org.xwiki.rendering.listener.Listener;
 public class ParagraphBlock extends AbstractBlock
 {
     /**
-     * @param blocks the children blocks of the paragraph
+     * Create a paragraph block that contains the given child blocks.
+     *
+     * @param blocks the child blocks contained in this paragraph
      */
     public ParagraphBlock(List<Block> blocks)
     {
@@ -39,20 +41,32 @@ public class ParagraphBlock extends AbstractBlock
     }
 
     /**
-     * @param blocks the children blocks of the paragraph
-     * @param parameters the parameters of the paragraph
+     * Create a paragraph block containing the given child blocks and parameters.
+     *
+     * @param blocks the child blocks of the paragraph
+     * @param parameters a map of parameter names to values for the paragraph
      */
     public ParagraphBlock(List<Block> blocks, Map<String, String> parameters)
     {
         super(blocks, parameters);
     }
 
+    /**
+     * Signals the start of this paragraph to the provided listener using this block's parameters.
+     *
+     * @param listener the listener to notify of the paragraph start
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginParagraph(getParameters());
     }
 
+    /**
+     * Signals the end of this paragraph to the provided listener.
+     *
+     * @param listener the listener to notify; receives this block's parameters in the endParagraph call
+     */
     @Override
     public void after(Listener listener)
     {

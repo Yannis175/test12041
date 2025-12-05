@@ -41,6 +41,17 @@ import org.xwiki.rendering.block.match.ClassBlockMatcher;
 public class BlockMatcherConverter extends AbstractConverter<BlockMatcher>
 {
 
+    /**
+     * Converts a string representation into a {@link BlockMatcher}.
+     *
+     * <p>Accepts values of the form {@code "class:Name"} where {@code Name} is either a fully-qualified class name or a
+     * simple class name. When a simple name is provided, the {@code org.xwiki.rendering.block} package is assumed.
+     *
+     * @param targetType the desired target type (unused but kept for converter contract)
+     * @param value the string representation of the matcher, or {@code null}
+     * @return the corresponding {@link BlockMatcher}
+     * @throws ConversionException if {@code value} is not {@code null} and does not resolve to a known matcher
+     */
     @Override
     protected BlockMatcher convertToType(Type targetType, Object value)
     {
@@ -72,6 +83,13 @@ public class BlockMatcherConverter extends AbstractConverter<BlockMatcher>
         return matcher;
     }
 
+    /**
+     * Convert a BlockMatcher into its string representation.
+     *
+     * @param value the matcher to convert
+     * @return the string representation of the matcher
+     * @throws ConversionException if the conversion is not supported or not implemented
+     */
     @Override
     protected String convertToString(BlockMatcher value)
     {

@@ -36,21 +36,23 @@ import org.xwiki.stability.Unstable;
 public interface ImageListener
 {
     /**
-     * An image.
-     *
-     * @param reference the image reference
-     * @param freestanding if true then the image is defined directly as a URI in the text
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
-     */
+ * Handle an image element encountered during parsing or rendering.
+ *
+ * @param reference the image reference (location and related metadata)
+ * @param freestanding true if the image is defined directly as a URI in the text
+ * @param parameters a map of image parameters (for example: {@code style="background-color: blue"})
+ */
     void onImage(ResourceReference reference, boolean freestanding, @Default("") Map<String, String> parameters);
 
     /**
-     * An image.
+     * Handle an image event that includes a generated image id.
+     *
+     * <p>Default implementation ignores the `id` parameter.</p>
      *
      * @param reference the image reference
-     * @param freestanding if true then the image is defined directly as a URI in the text
-     * @param id the (generated) id of the image
-     * @param parameters a generic list of parameters. Example: style="background-color: blue"
+     * @param freestanding true if the image is defined directly as a URI in the text
+     * @param id the generated image id (may be empty)
+     * @param parameters a map of image parameters, for example {@code style="background-color: blue"}
      * @since 14.2RC1
      */
     @Unstable

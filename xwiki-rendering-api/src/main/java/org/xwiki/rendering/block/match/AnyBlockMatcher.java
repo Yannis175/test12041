@@ -34,6 +34,12 @@ public class AnyBlockMatcher implements BlockMatcher
      */
     public static final AnyBlockMatcher ANYBLOCKMATCHER = new AnyBlockMatcher();
 
+    /**
+     * Indicates whether the matcher accepts the provided block.
+     *
+     * @param block the block to test; this matcher does not inspect the block's contents
+     * @return `true` if the block is accepted by the matcher, `false` otherwise (always `true` for this implementation)
+     */
     @Override
     public boolean match(Block block)
     {

@@ -37,6 +37,11 @@ import org.xwiki.rendering.listener.reference.ResourceType;
 @Singleton
 public class PageAttachmentResourceReferenceTypeParser extends AbstractURIResourceReferenceTypeParser
 {
+    /**
+     * Identifies this parser as handling page attachment resources.
+     *
+     * @return the PAGE_ATTACHMENT resource type
+     */
     @Override
     public ResourceType getType()
     {

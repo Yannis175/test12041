@@ -45,7 +45,10 @@ public abstract class AbstractBlockParser implements Parser
     private ComponentManager componentManager;
 
     /**
-     * @return the {@link StreamParser} to use to parser the input content
+     * Locate the StreamParser implementation for the parser's current syntax.
+     *
+     * @return the StreamParser implementation for the current syntax
+     * @throws RuntimeException if a StreamParser cannot be obtained for the current syntax
      */
     protected StreamParser getStreamParser()
     {
@@ -59,6 +62,13 @@ public abstract class AbstractBlockParser implements Parser
         return streamParser;
     }
 
+    /**
+     * Parse the provided character stream into an XDOM.
+     *
+     * @param source the character stream containing the document to parse
+     * @return the XDOM representing the parsed document
+     * @throws ParseException if the input cannot be parsed
+     */
     @Override
     public XDOM parse(Reader source) throws ParseException
     {

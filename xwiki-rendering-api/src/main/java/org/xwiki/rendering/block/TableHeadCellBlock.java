@@ -33,7 +33,9 @@ import org.xwiki.rendering.listener.Listener;
 public class TableHeadCellBlock extends TableCellBlock
 {
     /**
-     * @param list the list of children blocks of the table cell block.
+     * Create a table header cell block containing the given child blocks.
+     *
+     * @param list the child blocks contained in the header cell
      * @since 4.2M1
      */
     public TableHeadCellBlock(List<Block> list)
@@ -42,20 +44,30 @@ public class TableHeadCellBlock extends TableCellBlock
     }
 
     /**
-     * @param list the list of children blocks of the table cell block.
-     * @param parameters the parameters of the table head cell.
+     * Create a table header cell block with the given child blocks and parameters.
+     *
+     * @param list the child blocks contained in the header cell
+     * @param parameters a map of parameter names to values for the header cell
      */
     public TableHeadCellBlock(List<Block> list, Map<String, String> parameters)
     {
         super(list, parameters);
     }
 
+    /**
+     * Notify the listener that rendering of this table header cell is starting.
+     *
+     * @param listener the listener to notify; receives a beginTableHeadCell event with this cell's parameters
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginTableHeadCell(getParameters());
     }
 
+    /**
+     * Signal the listener that a table header cell has finished rendering.
+     */
     @Override
     public void after(Listener listener)
     {

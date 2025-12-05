@@ -39,6 +39,12 @@ import org.xwiki.rendering.block.MacroMarkerBlock;
  */
 public class ProtectedBlockFilter implements BlockFilter
 {
+    /**
+     * Filter out protected blocks.
+     *
+     * @param block the block to evaluate
+     * @return a list containing the input block if it is not protected, otherwise an empty list
+     */
     @Override
     public List<Block> filter(Block block)
     {
@@ -50,8 +56,10 @@ public class ProtectedBlockFilter implements BlockFilter
     }
 
     /**
-     * @param blocks the blocks to filter
-     * @return the filtered blocks
+     * Filters out protected blocks from the given list.
+     *
+     * @param blocks the input blocks to filter; protected blocks are excluded from the result
+     * @return the input blocks with protected blocks removed
      */
     public List<Block> filter(List<Block> blocks)
     {
@@ -63,8 +71,10 @@ public class ProtectedBlockFilter implements BlockFilter
     }
 
     /**
-     * @param block the block to filter out
-     * @return the next sibling that is not a protected block or null if not found
+     * Finds the next sibling block that is not protected.
+     *
+     * @param block the block whose subsequent siblings will be scanned
+     * @return the first following sibling that is not protected, or {@code null} if none exists
      */
     public Block getNextSibling(Block block)
     {
@@ -76,11 +86,13 @@ public class ProtectedBlockFilter implements BlockFilter
     }
 
     /**
-     * @param block the block to filter out
-     * @param blockClass the type of Blocks to look for
-     * @param recurse if true also search recursively children
-     * @param <T> the class of the Blocks to return
-     * @return the filtered blocks matching the passed Block class
+     * Collects child blocks of the specified type from the given block, optionally traversing descendants.
+     *
+     * @param block the parent block whose children (protected children are skipped) will be searched
+     * @param blockClass the class of blocks to collect
+     * @param recurse if true, also search descendants recursively
+     * @param <T> the type of blocks to return
+     * @return a list of child blocks that are instances of {@code blockClass}, in traversal order
      */
     public <T extends Block> List<T> getChildrenByType(Block block, Class<T> blockClass, boolean recurse)
     {
@@ -98,8 +110,10 @@ public class ProtectedBlockFilter implements BlockFilter
     }
 
     /**
+     * Checks whether the given block represents a protected code macro marker.
+     *
      * @param block the block to test
-     * @return true if the passed block is a protected block or false otherwise
+     * @return `true` if the block is a `MacroMarkerBlock` whose id equals `"code"`, `false` otherwise
      */
     private boolean isProtectedBlock(Block block)
     {

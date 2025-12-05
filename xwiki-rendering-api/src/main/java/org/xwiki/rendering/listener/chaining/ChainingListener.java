@@ -31,7 +31,9 @@ import org.xwiki.rendering.listener.Listener;
 public interface ChainingListener extends Listener
 {
     /**
-     * @return the chain this listener is part of
-     */
+ * Access the ListenerChain that contains this listener.
+ *
+ * @return the associated {@link ListenerChain}
+ */
     ListenerChain getListenerChain();
 }

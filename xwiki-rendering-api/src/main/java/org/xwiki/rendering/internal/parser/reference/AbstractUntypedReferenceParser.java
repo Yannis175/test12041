@@ -43,6 +43,16 @@ public abstract class AbstractUntypedReferenceParser extends AbstractResourceRef
     @Named("url")
     private ResourceReferenceTypeParser urlResourceReferenceTypeParser;
 
+    /**
+     * Parse a raw reference string into a ResourceReference, inferring its type when possible.
+     *
+     * In non-wiki mode the input is treated as a URL. In wiki mode the parser will try to interpret
+     * the input as a URL and, if that fails, resolve it to a wiki resource. The returned reference is
+     * marked as untyped.
+     *
+     * @param rawReference the raw reference string to parse
+     * @return the resulting ResourceReference (marked as untyped)
+     */
     @Override
     public ResourceReference parse(String rawReference)
     {
@@ -66,9 +76,11 @@ public abstract class AbstractUntypedReferenceParser extends AbstractResourceRef
     }
 
     /**
-     * @param rawReference the untyped reference string
-     * @return the resource reference that points to a wiki resource
-     */
+ * Resolve an untyped raw reference into a ResourceReference that targets a wiki resource.
+ *
+ * @param rawReference the untyped reference string to resolve into a wiki resource
+ * @return the ResourceReference pointing to the corresponding wiki resource
+ */
     protected abstract ResourceReference getWikiResource(String rawReference);
 
 }

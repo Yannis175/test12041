@@ -33,9 +33,9 @@ import org.xwiki.rendering.listener.Listener;
 public class ListItemBlock extends AbstractBlock
 {
     /**
-     * Constructs a list item Block.
+     * Create a list item block containing the specified child blocks.
      *
-     * @param childrenBlocks the blocks representing the list item content
+     * @param childrenBlocks the child blocks that make up the list item's content
      */
     public ListItemBlock(List<Block> childrenBlocks)
     {
@@ -43,11 +43,10 @@ public class ListItemBlock extends AbstractBlock
     }
 
     /**
-     * Constructs a list item Block.
+     * Create a list item block with the given child blocks and parameters.
      *
-     * @param childrenBlocks the blocks representing the list item content
-     * @param parameters see {@link org.xwiki.rendering.block.AbstractBlock#getParameter(String)} for more details on
-     *            parameters
+     * @param childrenBlocks the blocks representing the list item's content
+     * @param parameters a map of string parameters associated with this block (may be used to store rendering hints)
      * @since 10.0
      */
     public ListItemBlock(List<Block> childrenBlocks, Map<String, String> parameters)
@@ -55,12 +54,22 @@ public class ListItemBlock extends AbstractBlock
         super(childrenBlocks, parameters);
     }
 
+    /**
+     * Notifies the given listener that this list item is starting, providing this block's parameters.
+     *
+     * @param listener the listener to notify of the start of the list item
+     */
     @Override
     public void before(Listener listener)
     {
         listener.beginListItem(getParameters());
     }
 
+    /**
+     * Notifies the provided listener that this list item has ended.
+     *
+     * @param listener the listener to notify; receives this block's parameters with the end event
+     */
     @Override
     public void after(Listener listener)
     {

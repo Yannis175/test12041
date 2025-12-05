@@ -37,9 +37,11 @@ import org.xwiki.rendering.listener.Listener;
 public class MacroBlock extends AbstractMacroBlock
 {
     /**
-     * @param id the id of the macro
-     * @param parameters the parameters of the macro
-     * @param isInline indicate if the macro is located in a inline content (like paragraph, etc.)
+     * Create a MacroBlock with the given id and parameters and no content.
+     *
+     * @param id the macro id
+     * @param parameters the macro parameters (may be null or empty)
+     * @param isInline true if the macro appears inside inline content (e.g., a paragraph)
      */
     public MacroBlock(String id, Map<String, String> parameters, boolean isInline)
     {
@@ -47,16 +49,28 @@ public class MacroBlock extends AbstractMacroBlock
     }
 
     /**
-     * @param id the id of the macro
-     * @param parameters the parameters of the macro
-     * @param content the content of the macro. Null if the macro does not have content
-     * @param isInline indicate if the macro is located in a inline content (like paragraph, etc.)
+     * Create a MacroBlock with the given macro id, parameters, optional content, and inline indicator.
+     *
+     * @param id the macro identifier
+     * @param parameters the macro parameters (may be empty)
+     * @param content the macro content, or {@code null} if the macro has no content
+     * @param isInline {@code true} if the macro appears in inline content (e.g., within a paragraph), {@code false} otherwise
      */
     public MacroBlock(String id, Map<String, String> parameters, String content, boolean isInline)
     {
         super(Collections.<Block>emptyList(), parameters, id, content, isInline);
     }
 
+    /**
+     * Emit a macro event to the given listener and do not traverse or expand the macro here.
+     *
+     * <p>This method notifies the listener with this macro's id, parameters, content, and inline flag
+     * but does not perform macro execution or replace this block; macro evaluation is performed by
+     * the macro transformer in the rendering pipeline. The event is emitted so downstream listeners
+     * (or unit tests) can react to the macro.
+     *
+     * @param listener the listener to receive the macro event
+     */
     @Override
     public void traverse(Listener listener)
     {

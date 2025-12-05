@@ -30,10 +30,10 @@ import org.xwiki.rendering.block.Block;
 public interface BlockMatcher
 {
     /**
-     * True if the provided block is matched.
-     *
-     * @param block the block to match
-     * @return true if the provided block is matched, false otherwise
-     */
+ * Determines whether the given block satisfies the match criteria.
+ *
+ * @param block the Block to evaluate
+ * @return `true` if the block matches, `false` otherwise
+ */
     boolean match(Block block);
 }

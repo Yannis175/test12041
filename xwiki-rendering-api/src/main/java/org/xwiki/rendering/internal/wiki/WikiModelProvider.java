@@ -43,6 +43,11 @@ public class WikiModelProvider implements Provider<WikiModel>
     @Named("context")
     private Provider<ComponentManager> componentManagerProvider;
 
+    /**
+     * Provide a WikiModel implementation from the ComponentManager when one is registered.
+     *
+     * @return the found {@link WikiModel} instance, or {@code null} if no implementation is available
+     */
     @Override
     public WikiModel get()
     {

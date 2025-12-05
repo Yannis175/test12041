@@ -49,11 +49,13 @@ public abstract class AbstractMacroBlock extends AbstractBlock
     private boolean inline;
 
     /**
-     * @param childrenBlocks the list of children blocks of the block to construct
-     * @param parameters the parameters to set
-     * @param id the name of the macro
-     * @param content the content of the macro
-     * @param inline indicate if the macro is located in a inline content
+     * Create a new AbstractMacroBlock with the given children, parameters, identifier, content, and inline flag.
+     *
+     * @param childrenBlocks the list of child blocks for this macro block
+     * @param parameters the macro parameters (name → value)
+     * @param id the macro identifier/name
+     * @param content the macro content, or {@code null} if the macro has no content
+     * @param inline {@code true} if the macro is located inline within surrounding content, {@code false} otherwise
      */
     public AbstractMacroBlock(List<? extends Block> childrenBlocks, Map<String, String> parameters, String id,
         String content, boolean inline)
@@ -66,7 +68,9 @@ public abstract class AbstractMacroBlock extends AbstractBlock
     }
 
     /**
-     * @return the macro content.
+     * The macro's content.
+     *
+     * @return the macro content, or {@code null} if the macro has no content
      */
     public String getContent()
     {
@@ -74,6 +78,8 @@ public abstract class AbstractMacroBlock extends AbstractBlock
     }
 
     /**
+     * Get the macro identifier.
+     *
      * @return the macro identifier.
      */
     public String getId()
@@ -82,13 +88,22 @@ public abstract class AbstractMacroBlock extends AbstractBlock
     }
 
     /**
-     * @return if true the macro is located in a inline content (like paragraph, etc.).
+     * Indicates whether the macro is located inside inline content.
+     *
+     * @return `true` if the macro is inside inline content (for example, a paragraph), `false` otherwise.
      */
     public boolean isInline()
     {
         return inline;
     }
 
+    /**
+     * Determines whether the given object is equal to this macro block.
+     *
+     * @param obj the object to compare with this block
+     * @return {@code true} if {@code obj} is an {@link AbstractMacroBlock} and has the same superclass state,
+     *         content, id, and inline flag as this block; {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -103,6 +118,12 @@ public abstract class AbstractMacroBlock extends AbstractBlock
         return equals((AbstractMacroBlock) obj);
     }
 
+    /**
+     * Determine whether the given AbstractMacroBlock has the same content, id, and inline flag as this block.
+     *
+     * @param obj the other AbstractMacroBlock to compare with
+     * @return `true` if `obj`'s content, id, and inline flag are equal to this block's, `false` otherwise
+     */
     private boolean equals(AbstractMacroBlock obj)
     {
         EqualsBuilder builder = new EqualsBuilder();
@@ -114,6 +135,11 @@ public abstract class AbstractMacroBlock extends AbstractBlock
         return builder.isEquals();
     }
 
+    /**
+     * Compute a hash code that combines the superclass hash with this block's content, id, and inline flag.
+     *
+     * @return the hash code computed from the superclass hash, content, id, and inline flag
+     */
     @Override
     public int hashCode()
     {
